@@ -1,0 +1,19 @@
+# SimpleTrader — Netlify config
+
+[build]
+  publish = "."
+
+# Desactivar procesamiento automático que inyecta scripts
+[build.processing]
+  skip_processing = true
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+
+[[redirects]]
+  from = "/"
+  to = "/simpletrader.html"
+  status = 200
