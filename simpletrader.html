@@ -513,7 +513,7 @@ tbody tr:last-child td{border-bottom:none}
   </div>
   <div class="g2">
     <div class="card"><div class="hd">Posiciones Abiertas<div class="hd-r"><span class="bdg bok" id="pos-cnt"></span></div></div><div class="tw"><table><thead><tr><th>Instr.</th><th>Dir.</th><th>Ctrs.</th><th>Entrada</th><th>Precio</th><th>Ticks</th><th>P&amp;L</th></tr></thead><tbody id="pos-body"></tbody></table></div></div>
-    <div class="card"><div class="hd">Rendimiento Diario — 2 semanas</div><div id="daily-bars" style="display:flex;align-items:flex-end;gap:3px;height:140px;padding:8px 4px 20px;position:relative" ></div></div>
+    <div class="card"><div class="hd">Rendimiento Diario — Últimas 8 semanas</div><div id="daily-heatmap" style="padding:6px 2px"></div></div>
   </div>
 </div>
 
@@ -827,7 +827,7 @@ tbody tr:last-child td{border-bottom:none}
 
 <!-- MARKETS -->
 <div class="sec" id="sec-markets">
-  <div class="wg" id="world-clocks"></div>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:11px" id="world-clocks"></div>
   <div class="card" style="margin-bottom:11px">
     <div class="hd" style="margin-bottom:9px">Sesiones — Hora Madrid</div>
     <div id="tl-rows"></div>
@@ -1075,7 +1075,7 @@ const U={name:'Javier García',email:'trader@simpletrader.app',initials:'JG',pla
 function doLogin(){const em=document.getElementById('li-email').value.trim(),pw=document.getElementById('li-pass').value;document.getElementById('li-ee').style.display='none';document.getElementById('li-ep').style.display='none';if(!em||!/^[^@]+@[^@]+\.[^@]+$/.test(em)){document.getElementById('li-ee').style.display='block';return;}if(pw.length<4){document.getElementById('li-ep').style.display='block';return;}const btn=document.getElementById('li-btn');btn.textContent='Iniciando…';btn.disabled=true;setTimeout(()=>{const pts=em.split('@')[0].replace(/[._-]/g,' ').split(' ');U.name=pts.map(p=>p.charAt(0).toUpperCase()+p.slice(1)).join(' ');U.email=em;U.initials=(pts[0][0]+(pts[1]?pts[1][0]:pts[0][1]||'')).toUpperCase();syncUI();enterApp();btn.textContent='Iniciar sesión';btn.disabled=false;},700);}
 function doDemo(){U.name='Demo Trader';U.email='demo@simpletrader.app';U.initials='DT';U.plan='Pro';U.planCls='pt-p';syncUI();enterApp();}
 function enterApp(){const ls=document.getElementById('ls');ls.style.opacity='0';setTimeout(()=>{ls.style.display='none';document.getElementById('app').style.display='flex';
-setInterval(()=>{const now=new Date();document.getElementById('clk').textContent=now.toLocaleTimeString('es-ES',{timeZone:'Europe/Madrid',hour:'2-digit',minute:'2-digit',second:'2-digit'});Object.values(FUT).forEach(f=>{f.prev=f.p;f.p+=((Math.random()-.5)*f.jit*2);if(f.p<=0)f.p=f.prev;});renderTickers();renderPositions();},900);setTimeout(initDashCharts,200);toast('Bienvenido, '+U.name.split(' ')[0]+' ✓','ok');},340);}
+setTimeout(initDashCharts,200);toast('Bienvenido, '+U.name.split(' ')[0]+' ✓','ok');},340);}
 function syncUI(){const pts=U.name.split(' ');document.getElementById('sb-av').textContent=U.initials;document.getElementById('sb-name').textContent=pts[0]+(pts[1]?' '+pts[1][0]+'.':'');document.getElementById('sb-plan').textContent=U.plan.toUpperCase();document.getElementById('pf-av-txt').textContent=U.initials;document.getElementById('pf-dname').textContent=U.name;document.getElementById('pf-demail').textContent=U.email;const pt=document.getElementById('pf-plan-tag');pt.className='pt '+U.planCls;pt.textContent='⭐ '+U.plan;const pn=document.getElementById('p-name');if(pn)pn.value=pts[0]||'';const pe=document.getElementById('p-email');if(pe)pe.value=U.email;}
 function confirmLogout(){confirm2('¿Cerrar sesión?','',()=>{document.getElementById('app').style.display='none';const ls=document.getElementById('ls');ls.style.display='flex';ls.style.opacity='0';requestAnimationFrame(()=>requestAnimationFrame(()=>ls.style.opacity='1'));});}
 function confirmDeleteAccount(){confirm2('¿Eliminar cuenta?','Esta acción es irreversible.',()=>toast('Solicitud enviada. Confirma por email.','warn',5000));}
@@ -1083,7 +1083,7 @@ function confirmDeleteAccount(){confirm2('¿Eliminar cuenta?','Esta acción es i
 // ─── NAV ───
 const NAV_T={dashboard:'Dashboard — Futures Pro',portfolio:'Portafolio Global',journal:'Journal & Estadísticas',replicator:'Replicador — 5 Maestras · 20 Esclavas',copytrader:'Copy Trader — Social Trading',affiliates:'Programa de Afiliados',risk:'Gestión de Riesgo',planner:'Planner Diario',manager:'Manager Financiero',accounts:'Cuentas de Fondeo',markets:'Mercados & Noticias',profile:'Mi Perfil'};
 const si={};
-function nav(el){const id=el.dataset.s;document.querySelectorAll('.sec').forEach(s=>s.classList.remove('act'));document.querySelectorAll('.ni').forEach(n=>n.classList.remove('act'));const sec=document.getElementById('sec-'+id);if(sec)sec.classList.add('act');el.classList.add('act');document.getElementById('ptitle').textContent=NAV_T[id]||id;if(!si[id]){si[id]=true;initSection(id);}}
+function nav(el){const id=el.dataset.s;document.querySelectorAll('.sec').forEach(s=>s.classList.remove('act'));document.querySelectorAll('.ni').forEach(n=>n.classList.remove('act'));const sec=document.getElementById('sec-'+id);if(sec)sec.classList.add('act');el.classList.add('act');document.getElementById('ptitle').textContent=NAV_T[id]||id;if(!si[id]){si[id]=true;initSection(id);if(id==='dashboard')setTimeout(renderDailyHeatmap,100);}}
 function showSectionSkeleton(id){
   const sec = document.getElementById('sec-'+id);
   if(!sec) return;
@@ -1108,7 +1108,7 @@ function showSectionSkeleton(id){
     }
   });
 }
-function initSection(id){if(id==='journal'){buildJCal();renderJ();}if(id==='markets'){renderClocks();renderTimeline();renderNewsList();}if(id==='planner'){initPlanner();}if(id==='manager'){renderManager();setTimeout(initMgrSVG,100);}if(id==='portfolio'){renderPortKPI();renderPortAccs();setTimeout(initPortfolioSVG,100);}if(id==='accounts'){renderAccounts();}if(id==='affiliates'){initAffiliates();setTimeout(initAffSVG,100);}if(id==='copytrader'){initCopyTrader();}if(id==='replicator'){renderMasterTabs();renderMasterPanel(activeMaster);renderRepCfg();}}
+function initSection(id){if(id==='journal'){buildJCal();renderJ();}if(id==='markets'){renderAllClocks();renderTimeline();renderNewsList();}if(id==='planner'){initPlanner();}if(id==='manager'){renderManager();setTimeout(initMgrSVG,100);}if(id==='portfolio'){renderPortKPI();renderPortAccs();setTimeout(initPortfolioSVG,100);}if(id==='accounts'){renderAccounts();}if(id==='affiliates'){initAffiliates();setTimeout(initAffSVG,100);}if(id==='copytrader'){initCopyTrader();}if(id==='replicator'){renderMasterTabs();renderMasterPanel(activeMaster);renderRepCfg();}}
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.getElementById('pm').classList.remove('open');document.querySelectorAll('[style*="z-index:99998"],[style*="z-index:7000"]').forEach(el=>el.remove());}});
 
 // ─── PRICES ───
@@ -3197,6 +3197,181 @@ function initAffSVG() {
   }
   tick();
   setInterval(tick,1000);
+})();
+
+// ─── DAILY P&L HEATMAP ───────────────────────────────────────────────
+function renderDailyHeatmap() {
+  var el = document.getElementById('daily-heatmap');
+  if (!el) return;
+  var days = ['L','M','X','J','V','S','D'];
+  var weeks = 8;
+  var cells = [];
+  for (var w = 0; w < weeks; w++) {
+    for (var d = 0; d < 7; d++) {
+      var isWeekend = d >= 5;
+      var pnl = isWeekend ? 0 : Math.round((Math.random() - 0.38) * 1200);
+      cells.push({ w: w, d: d, pnl: pnl, weekend: isWeekend });
+    }
+  }
+  var maxAbs = Math.max.apply(null, cells.map(function(c){return Math.abs(c.pnl);})) || 1;
+  
+  var html = '<div style="display:flex;gap:3px">';
+  // Day labels
+  html += '<div style="display:flex;flex-direction:column;gap:3px;margin-right:2px">';
+  days.forEach(function(d) {
+    html += '<div style="height:16px;font-size:7.5px;color:var(--tx3);display:flex;align-items:center;width:10px">' + d + '</div>';
+  });
+  html += '</div>';
+  
+  // Weeks
+  for (var w = 0; w < weeks; w++) {
+    html += '<div style="display:flex;flex-direction:column;gap:3px">';
+    for (var d = 0; d < 7; d++) {
+      var cell = cells[w * 7 + d];
+      var bg, title;
+      if (cell.weekend) {
+        bg = 'var(--b1)';
+        title = 'Fin de semana';
+      } else if (cell.pnl === 0) {
+        bg = 'var(--bg3)';
+        title = 'Sin trades';
+      } else if (cell.pnl > 0) {
+        var intensity = Math.min(1, cell.pnl / maxAbs);
+        var alpha = (0.2 + intensity * 0.75).toFixed(2);
+        bg = 'rgba(34,197,94,' + alpha + ')';
+        title = '+$' + cell.pnl;
+      } else {
+        var intensity = Math.min(1, Math.abs(cell.pnl) / maxAbs);
+        var alpha = (0.2 + intensity * 0.75).toFixed(2);
+        bg = 'rgba(239,68,68,' + alpha + ')';
+        title = '-$' + Math.abs(cell.pnl);
+      }
+      html += '<div style="width:16px;height:16px;border-radius:3px;background:' + bg + ';cursor:default" title="' + title + '"></div>';
+    }
+    html += '</div>';
+  }
+  html += '</div>';
+  
+  // Legend
+  html += '<div style="display:flex;align-items:center;gap:6px;margin-top:8px;justify-content:flex-end">';
+  html += '<span style="font-size:8px;color:var(--tx3)">Pérdida</span>';
+  ['rgba(239,68,68,.2)','rgba(239,68,68,.5)','rgba(239,68,68,.9)','var(--bg3)','rgba(34,197,94,.2)','rgba(34,197,94,.5)','rgba(34,197,94,.9)'].forEach(function(col){
+    html += '<div style="width:12px;height:12px;border-radius:2px;background:'+col+'"></div>';
+  });
+  html += '<span style="font-size:8px;color:var(--tx3)">Ganancia</span></div>';
+  
+  el.innerHTML = html;
+}
+
+// ─── ANALOG CLOCKS ────────────────────────────────────────────────────
+var CLOCKS = [
+  {id:'clk-madrid',    label:'MADRID',    tz:'Europe/Madrid',    prime:true},
+  {id:'clk-ny',        label:'NEW YORK',  tz:'America/New_York'},
+  {id:'clk-london',    label:'LONDRES',   tz:'Europe/London'},
+  {id:'clk-frankfurt', label:'FRÁNCFORT', tz:'Europe/Berlin'},
+  {id:'clk-tokyo',     label:'TOKIO',     tz:'Asia/Tokyo'},
+];
+
+var CLOCK_SESSIONS = {
+  'Europe/Madrid':    {open:8,close:17,  label:'Europea',  color:'#4F6EF7'},
+  'America/New_York': {open:14.5,close:21,label:'NY',      color:'#22C55E'},
+  'Europe/London':    {open:8,close:16.5,label:'Londres',  color:'#F59E0B'},
+  'Europe/Berlin':    {open:8,close:17,  label:'Frankfurt',color:'#8B5CF6'},
+  'Asia/Tokyo':       {open:0,close:6,   label:'Tokio',    color:'#38BDF8'},
+};
+
+function drawAnalogClock(containerId, tz, label, isPrime) {
+  var el = document.getElementById(containerId);
+  if (!el) return;
+  
+  var now = new Date();
+  var timeStr = now.toLocaleTimeString('en-US', {timeZone: tz, hour12: false, hour:'2-digit', minute:'2-digit', second:'2-digit'});
+  var parts = timeStr.split(':');
+  var h = parseInt(parts[0]) % 12, m = parseInt(parts[1]), s = parseInt(parts[2]);
+  
+  var dateStr = now.toLocaleDateString('es-ES', {timeZone: tz, weekday:'short', day:'numeric', month:'short'});
+  var sess = CLOCK_SESSIONS[tz];
+  var hDec = h + parseInt(parts[0])/12 * (parseInt(parts[0])>=12?0:0); // just use raw hour
+  var rawH = parseInt(parts[0]);
+  var isOpen = sess && rawH >= Math.floor(sess.open) && rawH < Math.floor(sess.close);
+  var statusColor = isOpen ? '#22C55E' : '#475569';
+  var statusLabel = isOpen ? '● ABIERTO' : '○ CERRADO';
+  
+  var R = 44, cx = 50, cy = 50;
+  var sAngle = (s/60)*2*Math.PI - Math.PI/2;
+  var mAngle = ((m + s/60)/60)*2*Math.PI - Math.PI/2;
+  var hAngle = ((rawH%12 + m/60)/12)*2*Math.PI - Math.PI/2;
+  
+  var accentColor = isPrime ? '#4F6EF7' : (isOpen ? '#22C55E' : '#252a38');
+  
+  var svg = '<svg width="100" height="100" viewBox="0 0 100 100">';
+  // Outer ring
+  svg += '<circle cx="'+cx+'" cy="'+cy+'" r="'+R+'" fill="var(--card)" stroke="'+accentColor+'" stroke-width="'+(isPrime?2:1.5)+'"/>';
+  // Tick marks
+  for (var i = 0; i < 60; i++) {
+    var angle = (i/60)*2*Math.PI - Math.PI/2;
+    var isHour = i%5===0;
+    var r1 = isHour ? R-6 : R-3, r2 = R-1;
+    var x1 = cx+Math.cos(angle)*r1, y1 = cy+Math.sin(angle)*r1;
+    var x2 = cx+Math.cos(angle)*r2, y2 = cy+Math.sin(angle)*r2;
+    svg += '<line x1="'+x1.toFixed(1)+'" y1="'+y1.toFixed(1)+'" x2="'+x2.toFixed(1)+'" y2="'+y2.toFixed(1)+'" stroke="'+(isHour?'var(--tx2)':'var(--b3)')+'" stroke-width="'+(isHour?1.5:0.8)+'"/>';
+  }
+  // Hour hand
+  var hLen = R*0.52;
+  svg += '<line x1="'+cx+'" y1="'+cy+'" x2="'+(cx+Math.cos(hAngle)*hLen).toFixed(1)+'" y2="'+(cy+Math.sin(hAngle)*hLen).toFixed(1)+'" stroke="var(--tx)" stroke-width="3" stroke-linecap="round"/>';
+  // Minute hand
+  var mLen = R*0.72;
+  svg += '<line x1="'+cx+'" y1="'+cy+'" x2="'+(cx+Math.cos(mAngle)*mLen).toFixed(1)+'" y2="'+(cy+Math.sin(mAngle)*mLen).toFixed(1)+'" stroke="var(--tx2)" stroke-width="2" stroke-linecap="round"/>';
+  // Second hand
+  var sLen = R*0.80;
+  svg += '<line x1="'+(cx-Math.cos(sAngle)*8).toFixed(1)+'" y1="'+(cy-Math.sin(sAngle)*8).toFixed(1)+'" x2="'+(cx+Math.cos(sAngle)*sLen).toFixed(1)+'" y2="'+(cy+Math.sin(sAngle)*sLen).toFixed(1)+'" stroke="'+accentColor+'" stroke-width="1.2" stroke-linecap="round"/>';
+  // Center dot
+  svg += '<circle cx="'+cx+'" cy="'+cy+'" r="3" fill="'+accentColor+'"/>';
+  svg += '</svg>';
+  
+  el.innerHTML = '<div style="background:var(--card);border:1px solid '+(isOpen?accentColor:'var(--b1)')+';border-radius:10px;padding:10px 8px;text-align:center;transition:border-color .3s">'
+    + svg
+    + '<div style="font-size:8px;font-weight:700;color:var(--tx);letter-spacing:1px;margin-top:4px">'+label+'</div>'
+    + '<div style="font-size:8px;color:'+statusColor+';margin-top:1px;font-weight:600">'+statusLabel+'</div>'
+    + '<div style="font-size:7.5px;color:var(--tx3);margin-top:1px">'+dateStr+'</div>'
+    + '</div>';
+}
+
+function renderAllClocks() {
+  var el = document.getElementById('world-clocks');
+  if (!el) return;
+  // Create containers if they don't exist
+  if (!document.getElementById('clk-madrid')) {
+    el.innerHTML = CLOCKS.map(function(clk){
+      return '<div id="'+clk.id+'"></div>';
+    }).join('');
+  }
+  CLOCKS.forEach(function(clk){
+    drawAnalogClock(clk.id, clk.tz, clk.label, clk.prime);
+  });
+}
+
+// ─── UNIFIED CLOCK TICK ──────────────────────────────────────────────
+(function startAllClocks(){
+  function tick(){
+    // Digital topbar clock
+    var clkEl = document.getElementById('clk');
+    if (clkEl) {
+      var now = new Date();
+      clkEl.textContent = now.toLocaleTimeString('es-ES',{timeZone:'Europe/Madrid',hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    }
+    // Analog world clocks (only if markets section is visible)
+    if (document.getElementById('clk-madrid')) {
+      renderAllClocks();
+    }
+    // Heatmap (only redraw once)
+    if (document.getElementById('daily-heatmap') && !document.getElementById('daily-heatmap').dataset.drawn) {
+      document.getElementById('daily-heatmap').dataset.drawn = '1';
+      renderDailyHeatmap();
+    }
+  }
+  tick();
+  setInterval(tick, 1000);
 })();
 
 try{syncUI();}catch(e){console.error(e);}
