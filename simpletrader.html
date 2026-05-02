@@ -112,10 +112,13 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);font-
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
 .topbar{height:46px;min-height:46px;background:var(--bg2);border-bottom:1px solid var(--b1);display:flex;align-items:center;padding:0 14px;gap:0;flex-shrink:0}
 .tb-t{font-size:12.5px;font-weight:600;color:var(--tx);padding-right:14px;border-right:1px solid var(--b1);white-space:nowrap;flex-shrink:0}
-.tickers{flex:1;overflow:hidden;position:relative}
-
-
-100%{transform:translateX(-50%)}}
+.tickers{flex:1;overflow:hidden;position:relative;mask-image:linear-gradient(to right,transparent 0,#000 40px,#000 calc(100% - 40px),transparent 100%);-webkit-mask-image:linear-gradient(to right,transparent 0,#000 40px,#000 calc(100% - 40px),transparent 100%)}
+.tick{display:flex;align-items:center;gap:5px;padding:3px 10px;border-right:1px solid var(--b1);white-space:nowrap;cursor:default}
+.tick-sym{font-size:9.5px;font-weight:700;color:var(--tx2);font-family:var(--mono)}
+.tick-px{font-size:10.5px;font-weight:700;color:var(--tx);font-family:var(--mono)}
+.tick-chg{font-size:9px;font-weight:600;font-family:var(--mono)}
+.tick-chg.up{color:var(--gn)}.tick-chg.dn{color:var(--rd)}
+.tick-arr{font-size:8px}
 
 .ts{color:var(--tx3);font-weight:700;font-size:9.5px}.tp{color:var(--tx);font-weight:500}.td{font-size:9.5px;font-weight:600}
 .tb-r{display:flex;align-items:center;gap:7px;padding-left:10px;flex-shrink:0}
@@ -1121,20 +1124,31 @@ function initSection(id){if(id==='journal'){buildJCal();renderJ();}if(id==='mark
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.getElementById('pm').classList.remove('open');document.querySelectorAll('[style*="z-index:99998"],[style*="z-index:7000"]').forEach(el=>el.remove());}});
 
 // ─── PRICES ───
-const FUT={NQ:{p:19840,prev:19840,dp:0,jit:2,tv:5,tsz:.25},ES:{p:5241,prev:5241,dp:2,jit:.5,tv:12.5,tsz:.25},CL:{p:82.14,prev:82.14,dp:2,jit:.03,tv:10,tsz:.01},GC:{p:2341.5,prev:2341.5,dp:1,jit:.5,tv:10,tsz:.1}};
+const FUT={NQ:{p:19840,prev:19840,dp:0,jit:2,tv:5,tsz:.25},ES:{p:5241,prev:5241,dp:2,jit:.5,tv:12.5,tsz:.25},CL:{p:82.14,prev:82.14,dp:2,jit:.03,tv:10,tsz:.01},GC:{p:2341.5,prev:2341.5,dp:1,jit:.5,tv:10,tsz:.1},MNQ:{p:19840,prev:19840,dp:0,jit:2,tv:.5,tsz:.25},YM:{p:38420,prev:38420,dp:0,jit:5,tv:5,tsz:1},RTY:{p:2018.4,prev:2018.4,dp:1,jit:.5,tv:50,tsz:.1},SI:{p:28.42,prev:28.42,dp:2,jit:.05,tv:2500,tsz:.005},ZB:{p:119.15,prev:119.15,dp:2,jit:.04,tv:1000,tsz:.03125},ZN:{p:112.08,prev:112.08,dp:2,jit:.03,tv:1000,tsz:.015625},BTC:{p:62480,prev:62480,dp:0,jit:80,tv:1,tsz:5},NG:{p:1.84,prev:1.84,dp:3,jit:.005,tv:10000,tsz:.001}};
 
 function renderTickers(){
   var el=document.getElementById('tickers');
   if(!el)return;
   var items=Object.entries(FUT).map(function(e){
-    var s=e[0],f=e[1],chg=f.p-f.prev,up=chg>=0;
+    var s=e[0],f=e[1],chg=+(f.p-f.prev).toFixed(f.dp||2),up=chg>=0;
     var pct=f.prev>0?(Math.abs(chg/f.prev)*100).toFixed(2):'0.00';
-    return '<div class="tick"><span style="font-size:10px;font-weight:700;color:var(--tx);font-family:var(--mono)">'+s+'</span><span style="font-size:11px;font-weight:600;color:var(--tx);font-family:var(--mono);margin-left:3px">'+f.p.toFixed(f.dp||2)+'</span><span style="font-size:9.5px;font-weight:600;color:'+(up?'var(--gn)':'var(--rd)')+'">'+( up?'▲':'▼')+pct+'%</span></div>';
+    var arr=up?'▲':'▼';
+    return '<div class="tick"><span class="tick-sym">'+s+'</span><span class="tick-px">'+f.p.toFixed(f.dp)+'</span><span class="tick-chg '+(up?'up':'dn')+'">'+arr+' '+pct+'%</span></div>';
   }).join('');
   var wrap=el.querySelector('.ticker-wrap');
   if(!wrap){wrap=document.createElement('div');wrap.className='ticker-wrap';el.appendChild(wrap);}
   wrap.innerHTML=items+items;
 }
+
+function updateFUTPrices(){
+  Object.values(FUT).forEach(function(f){
+    var move=(Math.random()-.499)*f.jit*2;
+    f.p=+(f.p+move).toFixed(f.dp);
+  });
+  renderTickers();
+}
+renderTickers();
+setInterval(updateFUTPrices,1800);
 
 function renderPositions(){const b=document.getElementById('pos-body');if(!b)return;b.innerHTML=POS.map(p=>{const c=FUT[p.sym].p,rd=p.dir==='LONG'?c-p.entry:p.entry-c,ticks=Math.round(rd/p.tsz),pnl=ticks*p.tv*p.ctrs,up=pnl>=0;return `<tr class="${up?'flg':'flr'}"><td class="mono cy">${p.sym}</td><td><span class="bdg ${p.dir==='LONG'?'bb':'bs'}">${p.dir}</span></td><td class="mono">${p.ctrs}</td><td class="mono">${p.entry}</td><td class="mono">${c.toFixed(2)}</td><td class="mono ${up?'up':'dn'}">${ticks>=0?'+':''}${ticks}</td><td class="mono ${up?'up':'dn'}" style="font-weight:700">${up?'+':'-'}$${Math.abs(pnl).toFixed(0)}</td></tr>`;}).join('');document.getElementById('pos-cnt').textContent=POS.length+' activas';const lp=POS.reduce((a,p2)=>{const c=FUT[p2.sym].p,d=p2.dir==='LONG'?c-p2.entry:p2.entry-c;return a+Math.round(d/p2.tsz)*p2.tv*p2.ctrs;},0);const el=document.getElementById('eq-live');if(el){el.textContent=(lp>=0?'+':'')+' $'+lp.toFixed(0)+' open';el.className=lp>=0?'up':'dn';}}
 renderPositions();
