@@ -2161,7 +2161,10 @@ function renderAccounts(){
 }
 
 // ─── MT5 Real Account — MetaApi Integration ───
-const MAAPI = 'https://mt-client-api-v1.london.agiliumtrade.ai';
+// Two separate APIs: provisioning (account CRUD) + client (live data)
+const MAAPI_PROV = 'https://mt-provisioning-api-v1.agiliumtrade.agiliumtrade.ai';
+const MAAPI_DATA_BASE = 'https://mt-client-api-v1'; // + .{region}.agiliumtrade.ai
+function maDataUrl(region){ return MAAPI_DATA_BASE + '.' + (region||'london') + '.agiliumtrade.ai'; }
 
 // Restore session from localStorage on load
 (function mt5Restore(){
@@ -2170,6 +2173,7 @@ const MAAPI = 'https://mt-client-api-v1.london.agiliumtrade.ai';
     if(saved && saved.connected && saved.token && saved.accountId){
       MT5.token = saved.token;
       MT5.accountId = saved.accountId;
+      MT5.region = saved.region || 'london';
       MT5.connected = true;
       MT5.account = saved.account || null;
       // Refresh data in background after page loads
@@ -2178,8 +2182,8 @@ const MAAPI = 'https://mt-client-api-v1.london.agiliumtrade.ai';
   } catch(e){}
 })();
 
-async function maCall(token, method, path, body){
-  const res = await fetch(MAAPI + path, {
+async function maCall(baseUrl, token, method, path, body){
+  const res = await fetch(baseUrl + path, {
     method,
     headers: {'Content-Type':'application/json', 'auth-token': token},
     body: body ? JSON.stringify(body) : undefined,
@@ -2191,9 +2195,11 @@ async function maCall(token, method, path, body){
 
 async function mt5FetchAndRender(token, accountId, silent){
   try {
+    const region = MT5.region || 'london';
+    const dataUrl = maDataUrl(region);
     const [info, positions] = await Promise.all([
-      maCall(token, 'GET', `/users/current/accounts/${accountId}/account-information`),
-      maCall(token, 'GET', `/users/current/accounts/${accountId}/positions`),
+      maCall(dataUrl, token, 'GET', `/users/current/accounts/${accountId}/account-information`),
+      maCall(dataUrl, token, 'GET', `/users/current/accounts/${accountId}/positions`),
     ]);
     MT5.account = {
       broker:      info.broker || info.name || '—',
@@ -2220,9 +2226,9 @@ async function mt5FetchAndRender(token, accountId, silent){
       })),
     };
     MT5.connected = true;
-    // Persist session
+    // Persist session (including region for data URL)
     localStorage.setItem('mt5_session', JSON.stringify({
-      connected: true, token, accountId, account: MT5.account
+      connected: true, token, accountId, region: MT5.region||'london', account: MT5.account
     }));
     renderAccounts();
     // Show badge in risk calc
@@ -2398,18 +2404,20 @@ async function connectMT5(btn){
   try {
     // 1. Check for existing account with same login+server
     mt5SetStatus('🔍 Buscando cuenta existente en MetaApi…','info');
-    const accounts = await maCall(token, 'GET', '/users/current/accounts?limit=100&offset=0');
+    const accounts = await maCall(MAAPI_PROV, token, 'GET', '/users/current/accounts?limit=100&offset=0');
     let accountId = null;
+    let region = 'london';
     const existing = (Array.isArray(accounts) ? accounts : accounts.items||[])
       .find(a => String(a.login) === login && a.server === server && a.platform === 'mt5');
 
     if(existing){
       accountId = existing._id || existing.id;
+      region = existing.region || 'london';
       mt5SetStatus(`✓ Cuenta encontrada (${accountId.slice(0,8)}…)`, 'ok');
     } else {
       // 2. Create new MetaApi account
       mt5SetStatus('➕ Registrando cuenta en MetaApi…','info');
-      const created = await maCall(token, 'POST', '/users/current/accounts', {
+      const created = await maCall(MAAPI_PROV, token, 'POST', '/users/current/accounts', {
         login, password: pass, server, platform: 'mt5',
         name: `SimpleTrader-${login}`,
         application: 'MetaApi',
@@ -2419,41 +2427,43 @@ async function connectMT5(btn){
         type: 'cloud',
       });
       accountId = created._id || created.id;
+      region = created.region || 'london';
       mt5SetStatus(`✓ Cuenta creada (${accountId.slice(0,8)}…)`, 'ok');
     }
 
     // 3. Deploy if needed
-    const accInfo = await maCall(token, 'GET', `/users/current/accounts/${accountId}`);
+    const accInfo = await maCall(MAAPI_PROV, token, 'GET', `/users/current/accounts/${accountId}`);
     const state = accInfo.state || accInfo.connectionStatus;
     if(state === 'undeployed' || state === 'created' || state === 'draft'){
       mt5SetStatus('🚀 Desplegando conexión con el broker…','info');
-      await maCall(token, 'POST', `/users/current/accounts/${accountId}/deploy`, {});
+      await maCall(MAAPI_PROV, token, 'POST', `/users/current/accounts/${accountId}/deploy`, {});
     }
 
-    // 4. Wait for deployed (poll up to 3 min)
-    mt5SetStatus('⏳ Conectando con el servidor MT5… (puede tardar ~1 min)','info');
+    // 4. Wait for deployed (poll provisioning API, up to 3 min)
+    mt5SetStatus('⏳ Conectando con el servidor MT5… (puede tardar ~1 min la primera vez)','info');
     let deployed = false;
     for(let i=0; i<36; i++){
       await new Promise(r=>setTimeout(r, 5000));
       try {
-        const s = await maCall(token, 'GET', `/users/current/accounts/${accountId}`);
-        const st = s.connectionStatus || s.state;
+        const s = await maCall(MAAPI_PROV, token, 'GET', `/users/current/accounts/${accountId}`);
+        const st = s.connectionStatus || s.state || '';
         mt5SetStatus(`⏳ Estado: ${st} (${(i+1)*5}s)…`, 'info');
         if(st === 'connected' || st === 'deployed'){
           deployed = true; break;
         }
         if(st === 'error' || st === 'failed'){
-          throw new Error('El broker rechazó la conexión — verifica login, contraseña y servidor');
+          throw new Error('El broker rechazó la conexión — verifica login, contraseña y servidor MT5');
         }
       } catch(pollErr){ if(pollErr.message.includes('rechazó')) throw pollErr; }
     }
     if(!deployed) throw new Error('Timeout: el servidor MT5 no respondió en 3 minutos. Inténtalo de nuevo.');
 
-    // 5. Save token and fetch data
-    localStorage.setItem('mt5_token', token);
+    // 5. Save token, region, accountId and fetch live data
     MT5.token = token;
     MT5.accountId = accountId;
-    mt5SetStatus('✓ Conexión establecida — cargando datos…', 'ok');
+    MT5.region = region;
+    localStorage.setItem('mt5_token', token);
+    mt5SetStatus('✓ Conexión establecida — cargando datos en tiempo real…', 'ok');
 
     await mt5FetchAndRender(token, accountId, false);
     MT5._lastSync = Date.now();
