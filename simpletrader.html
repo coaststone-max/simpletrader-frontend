@@ -61,12 +61,16 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);font-
 .bt-o{padding:5px 16px;border-radius:20px;border:1px solid var(--b2);font-size:11px;font-weight:600;cursor:pointer;background:transparent;color:var(--tx2);font-family:var(--sans);transition:all .12s}
 .bt-o.act{background:var(--cy8);color:var(--cy);border-color:var(--cy)}
 .ann-b{background:rgba(0,204,106,.1);color:var(--gn);font-size:9px;font-weight:700;padding:2px 9px;border-radius:9px;border:1px solid rgba(0,204,106,.22)}
-.pgrd{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-bottom:22px}
-.pc{background:var(--card2);border:1px solid var(--b2);border-radius:12px;padding:20px 17px;position:relative;transition:transform .18s,box-shadow .18s}
-.pc:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.4)}.pc.ft{border-color:var(--cy);background:var(--bg4)}
-.pbd{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--cy);color:#fff;font-size:8.5px;font-weight:800;padding:2px 12px;border-radius:9px;letter-spacing:.8px;white-space:nowrap}
-.pcta{width:100%;padding:9px;border-radius:7px;font-size:11.5px;font-weight:700;cursor:pointer;font-family:var(--sans);border:1px solid}
-.pcta.p{background:var(--cy);color:#fff;border-color:var(--cy)}.pcta.s{background:transparent;color:var(--tx2);border-color:var(--b2)}
+.pgrd{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;align-items:start}
+.pc{background:var(--card2);border:1px solid var(--b1);border-radius:16px;padding:22px 18px;position:relative;transition:transform .2s,box-shadow .2s}
+.pc:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.5)}
+.pc.ft{border-color:var(--cy);background:linear-gradient(160deg,#0e1b3a 0%,#131d40 50%,#160f38 100%);transform:scale(1.04);z-index:2}
+.pc.ft:hover{transform:scale(1.04) translateY(-4px)}
+.pbd{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,var(--cy),#8B5CF6);color:#fff;font-size:9px;font-weight:800;padding:4px 16px;border-radius:20px;letter-spacing:.8px;white-space:nowrap;box-shadow:0 4px 16px rgba(91,124,247,.5)}
+.pcta{width:100%;padding:11px;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--sans);border:none;transition:opacity .15s,transform .12s}
+.pcta:hover{opacity:.88;transform:translateY(-1px)}
+.pcta.p{background:linear-gradient(90deg,var(--cy),#8B5CF6);color:#fff;box-shadow:0 4px 18px rgba(91,124,247,.45)}
+.pcta.s{background:transparent;color:var(--tx2);border:1.5px solid var(--b2)}
 
 .app{display:flex;height:100vh}
 
@@ -384,7 +388,7 @@ tbody tr:last-child td{border-bottom:none}
 .ls-r{border-left:1px solid var(--b1)}
 
 /* ─── PLAN CARD FEATURED GLOW ───────────────────────────────────────── */
-.pc.ft{box-shadow:0 0 0 1px rgba(79,110,247,.3),0 8px 32px rgba(79,110,247,.12)}
+/* .pc.ft glow now set inline via renderPricing() */
 
 /* ─── REPLICATOR MASTER TAB ─────────────────────────────────────────── */
 .mtab.act{border-color:var(--cy);background:rgba(79,110,247,.08)}
@@ -449,13 +453,24 @@ tbody tr:last-child td{border-bottom:none}
 <div id="pm">
   <button class="pm-x" onclick="closePricing()">✕</button>
   <div style="max-width:940px;margin:0 auto">
-    <div style="text-align:center;margin-bottom:22px">
-      <div style="font-size:28px;font-weight:700;color:var(--tx);margin-bottom:5px">Elige tu plan</div>
-      <div style="font-size:12px;color:var(--tx2);margin-bottom:14px">7 días gratis · Sin permanencia</div>
-      <div class="bt-tog"><button class="bt-o act" id="bt-m" onclick="setBilling('m')">Mensual</button><button class="bt-o" id="bt-a" onclick="setBilling('a')">Anual</button><span class="ann-b">-25%</span></div>
+    <div style="text-align:center;margin-bottom:28px">
+      <div style="font-size:11px;font-weight:700;color:var(--cy);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px">💎 Únete a 7.500+ prop traders</div>
+      <div style="font-size:32px;font-weight:900;color:var(--tx);margin-bottom:7px;letter-spacing:-.5px;line-height:1.1">Empieza gratis hoy</div>
+      <div style="font-size:12.5px;color:var(--tx2);margin-bottom:18px">7 días de prueba completa · Sin tarjeta de crédito · Cancela cuando quieras</div>
+      <div style="display:flex;justify-content:center;gap:18px;margin-bottom:14px;flex-wrap:wrap">
+        <span style="font-size:11px;color:var(--tx3);display:flex;align-items:center;gap:4px">✅ Sin permanencia</span>
+        <span style="font-size:11px;color:var(--tx3);display:flex;align-items:center;gap:4px">✅ Datos en tiempo real</span>
+        <span style="font-size:11px;color:var(--tx3);display:flex;align-items:center;gap:4px">✅ Soporte incluido</span>
+      </div>
+      <div class="bt-tog"><button class="bt-o act" id="bt-m" onclick="setBilling('m')">Mensual</button><button class="bt-o" id="bt-a" onclick="setBilling('a')">Anual <span style="font-size:9px;background:rgba(34,197,94,.2);color:var(--gn);padding:1px 5px;border-radius:4px;margin-left:3px">-25%</span></button></div>
     </div>
     <div class="pgrd" id="pgrid"></div>
-    <div style="text-align:center;font-size:11px;color:var(--tx3)">💳 Stripe · 🔄 Cancela cuando quieras · 📧 Soporte incluido</div>
+    <div style="display:flex;justify-content:center;gap:20px;flex-wrap:wrap;font-size:11px;color:var(--tx3);margin-top:4px">
+      <span>💳 Pago seguro con Stripe</span>
+      <span>🔄 Cancela cuando quieras</span>
+      <span>📧 Soporte en español</span>
+      <span>🔒 Datos cifrados</span>
+    </div>
   </div>
 </div>
 
@@ -2709,33 +2724,44 @@ const PLANS=[
   }
 ];
 function renderPricing(){
+  const ICONS={Starter:'🚀',Pro:'⚡',Advanced:'💎',Unlimited:'👑'};
+  const USERS={Starter:'1.200+',Pro:'3.800+',Advanced:'2.100+',Unlimited:'420+'};
   document.getElementById('pgrid').innerHTML=PLANS.map(p=>{
-    const pr=billing==='a'?p.a:p.m,orig=billing==='a'?p.m:null;
-    const border=p.featured?`border-color:${p.color};border-width:2px`:`border-color:var(--b1)`;
-    const headerGrad=p.featured?`background:linear-gradient(135deg,rgba(0,229,255,.06),rgba(157,111,255,.04))`:'';
-    return `<div class="pc ${p.featured?'ft':''}" style="${border}">
-      ${p.badge?`<div class="pbd" style="background:${p.color};color:${p.featured?'#000':'#fff'}">${p.badge}</div>`:''}
-      <div style="${headerGrad};padding:${p.featured?'12px':'0'};border-radius:${p.featured?'7px':'0'};margin-bottom:10px">
-        <div style="font-size:10px;font-weight:700;color:${p.color};letter-spacing:1.2px;text-transform:uppercase;margin-bottom:4px">${p.name}</div>
-        <div style="font-size:9.5px;color:var(--tx2);margin-bottom:8px">${p.subtitle}</div>
-        <div style="display:flex;align-items:baseline;gap:2px;margin-bottom:2px">
-          <span style="font-size:28px;font-weight:800;color:var(--tx);font-family:var(--mono);letter-spacing:-1px">€${pr}</span>
-          <span style="font-size:10px;color:var(--tx3)">/mes</span>
+    const pr=billing==='a'?p.a:p.m;
+    const saveY=billing==='a'?(p.m-p.a)*12:0;
+    const isFt=p.featured;
+    const glowColor=p.color;
+    const borderSt=isFt?`border:2px solid ${glowColor};box-shadow:0 0 0 1px ${glowColor}22,0 16px 56px ${glowColor}44`:`border:1px solid var(--b1)`;
+    return `<div class="pc ${isFt?'ft':''}" style="${borderSt}">
+      ${p.badge?`<div class="pbd">⭐ ${p.badge.toUpperCase()}</div>`:''}
+
+      <div style="text-align:center;margin-bottom:16px;padding-top:${p.badge?'8':'0'}px">
+        <div style="font-size:32px;margin-bottom:6px;line-height:1">${ICONS[p.name]||'💼'}</div>
+        <div style="font-size:13px;font-weight:900;color:${glowColor};letter-spacing:.8px;text-transform:uppercase;margin-bottom:3px">${p.name}</div>
+        <div style="font-size:9.5px;color:var(--tx3);line-height:1.4">${p.subtitle}</div>
+      </div>
+
+      <div style="text-align:center;margin-bottom:14px;padding:12px;background:${isFt?'rgba(91,124,247,.08)':'var(--bg3)'};border-radius:10px;border:1px solid ${isFt?glowColor+'22':'var(--b1)'}">
+        <div style="display:flex;align-items:baseline;justify-content:center;gap:1px;margin-bottom:2px">
+          <span style="font-size:15px;color:var(--tx2);font-weight:700">€</span>
+          <span style="font-size:42px;font-weight:900;color:var(--tx);font-family:var(--mono);letter-spacing:-2px;line-height:1">${pr}</span>
+          <span style="font-size:11px;color:var(--tx3);margin-left:2px">/mes</span>
         </div>
-        <div style="font-size:9px;color:var(--tx3);text-decoration:line-through;height:13px;margin-bottom:8px">${orig?`antes €${orig}/mes`:''}</div>
-        <button class="pcta ${p.s}" style="${p.featured?`background:${p.color};border-color:${p.color};color:#000`:''}" onclick="selectPlan('${p.name}')">${p.cta}</button>
+        ${saveY>0?`<div style="margin-top:5px"><span style="font-size:9px;background:rgba(34,197,94,.15);color:var(--gn);padding:2px 9px;border-radius:8px;border:1px solid rgba(34,197,94,.3);font-weight:700">💰 Ahorras €${saveY} al año</span></div>`:
+        `<div style="font-size:8.5px;color:var(--tx3);margin-top:3px">€${p.a}/mes con plan anual</div>`}
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:8px;background:var(--bg3);border-radius:6px;margin-bottom:10px">
-        <div style="font-size:8.5px;color:var(--tx3)">Cuentas</div><div style="font-size:8.5px;font-weight:600;color:var(--tx);text-align:right">${p.limits.accounts}</div>
-        <div style="font-size:8.5px;color:var(--tx3)">Replicador</div><div style="font-size:8.5px;font-weight:600;color:${p.limits.replicator==='—'?'var(--tx3)':'var(--tx)'};text-align:right">${p.limits.replicator}</div>
-        <div style="font-size:8.5px;color:var(--tx3)">IA</div><div style="font-size:8.5px;font-weight:600;color:${p.limits.ai==='—'?'var(--tx3)':'var(--tx)'};text-align:right">${p.limits.ai}</div>
-        <div style="font-size:8.5px;color:var(--tx3)">Branding</div><div style="font-size:8.5px;font-weight:600;color:${p.limits.brand==='Sin branding'?'var(--tx3)':'var(--cy)'};text-align:right">${p.limits.brand}</div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:4px">
-        ${p.feats.map(f=>`<div style="display:flex;align-items:flex-start;gap:6px;font-size:10px;color:${f.ok?'var(--tx2)':'var(--tx3)'}">
-          <span style="color:${f.ok?p.color:'var(--tx3)'};flex-shrink:0;font-size:11px;line-height:1.4">${f.ok?'✓':'✗'}</span>
-          <span style="line-height:1.4">${f.t}</span>
+
+      <button class="pcta ${isFt?'p':'s'}" style="${isFt?`background:linear-gradient(90deg,${glowColor},#8B5CF6);color:#fff;box-shadow:0 4px 20px ${glowColor}55;border:none`:`color:${glowColor};border:1.5px solid ${glowColor}44;background:${glowColor}11`};margin-bottom:16px" onclick="selectPlan('${p.name}')">${p.cta} →</button>
+
+      <div style="display:flex;flex-direction:column;gap:6px;padding-top:4px">
+        ${p.feats.map(f=>`<div style="display:flex;align-items:flex-start;gap:7px;font-size:10px">
+          <span style="flex-shrink:0;width:15px;height:15px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;margin-top:1px;${f.ok?`background:${glowColor}22;color:${glowColor}`:'background:var(--b1);color:var(--tx3)'}">${f.ok?'✓':'✕'}</span>
+          <span style="color:${f.ok?'var(--tx2)':'var(--tx3)'};line-height:1.4">${f.t}</span>
         </div>`).join('')}
+      </div>
+
+      <div style="margin-top:14px;padding-top:10px;border-top:1px solid ${isFt?glowColor+'22':'var(--b1)'};text-align:center;font-size:8.5px;color:var(--tx3)">
+        👥 ${USERS[p.name]||'500+'} traders activos
       </div>
     </div>`;
   }).join('');
