@@ -1156,6 +1156,7 @@ function updateFUTPrices(){
 renderTickers();
 setInterval(updateFUTPrices,1800);
 
+const POS=[{sym:'NQ',dir:'LONG',ctrs:2,entry:19803,tsz:.25,tv:5},{sym:'ES',dir:'SHORT',ctrs:1,entry:5241,tsz:.25,tv:12.5}];
 function renderPositions(){const b=document.getElementById('pos-body');if(!b)return;b.innerHTML=POS.map(p=>{const c=FUT[p.sym].p,rd=p.dir==='LONG'?c-p.entry:p.entry-c,ticks=Math.round(rd/p.tsz),pnl=ticks*p.tv*p.ctrs,up=pnl>=0;return `<tr class="${up?'flg':'flr'}"><td class="mono cy">${p.sym}</td><td><span class="bdg ${p.dir==='LONG'?'bb':'bs'}">${p.dir}</span></td><td class="mono">${p.ctrs}</td><td class="mono">${p.entry}</td><td class="mono">${c.toFixed(2)}</td><td class="mono ${up?'up':'dn'}">${ticks>=0?'+':''}${ticks}</td><td class="mono ${up?'up':'dn'}" style="font-weight:700">${up?'+':'-'}$${Math.abs(pnl).toFixed(0)}</td></tr>`;}).join('');document.getElementById('pos-cnt').textContent=POS.length+' activas';const lp=POS.reduce((a,p2)=>{const c=FUT[p2.sym].p,d=p2.dir==='LONG'?c-p2.entry:p2.entry-c;return a+Math.round(d/p2.tsz)*p2.tv*p2.ctrs;},0);const el=document.getElementById('eq-live');if(el){el.textContent=(lp>=0?'+':'')+' $'+lp.toFixed(0)+' open';el.className=lp>=0?'up':'dn';}}
 renderPositions();
 
