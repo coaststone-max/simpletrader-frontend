@@ -1,5 +1,7 @@
 {
-  "rewrites": [{"source": "/", "destination": "/simpletrader.html"}],
+  "rewrites": [
+    {"source": "/", "destination": "/simpletrader.html"}
+  ],
   "headers": [
     {
       "source": "/(.*)",
