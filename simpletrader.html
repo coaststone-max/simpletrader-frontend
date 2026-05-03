@@ -2160,112 +2160,207 @@ function renderAccounts(){
   el.innerHTML = html;
 }
 
-// ─── MT5 Real Account ───
+// ─── MT5 Real Account — MetaApi Integration ───
+const MAAPI = 'https://mt-client-api-v1.london.agiliumtrade.ai';
+
+// Restore session from localStorage on load
+(function mt5Restore(){
+  try {
+    const saved = JSON.parse(localStorage.getItem('mt5_session')||'null');
+    if(saved && saved.connected && saved.token && saved.accountId){
+      MT5.token = saved.token;
+      MT5.accountId = saved.accountId;
+      MT5.connected = true;
+      MT5.account = saved.account || null;
+      // Refresh data in background after page loads
+      setTimeout(()=>mt5FetchAndRender(MT5.token, MT5.accountId, true), 1000);
+    }
+  } catch(e){}
+})();
+
+async function maCall(token, method, path, body){
+  const res = await fetch(MAAPI + path, {
+    method,
+    headers: {'Content-Type':'application/json', 'auth-token': token},
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  const data = await res.json().catch(()=>({}));
+  if(!res.ok) throw new Error(data.message || data.error || `HTTP ${res.status}`);
+  return data;
+}
+
+async function mt5FetchAndRender(token, accountId, silent){
+  try {
+    const [info, positions] = await Promise.all([
+      maCall(token, 'GET', `/users/current/accounts/${accountId}/account-information`),
+      maCall(token, 'GET', `/users/current/accounts/${accountId}/positions`),
+    ]);
+    MT5.account = {
+      broker:      info.broker || info.name || '—',
+      server:      info.server || '—',
+      login:       String(info.login || '—'),
+      currency:    info.currency || 'USD',
+      balance:     info.balance || 0,
+      equity:      info.equity  || 0,
+      margin:      info.margin  || 0,
+      freeMargin:  info.freeMargin || 0,
+      marginLevel: info.marginLevel || 0,
+      leverage:    info.leverage || 0,
+      positions: (positions||[]).map(p=>({
+        id:      p.id,
+        symbol:  p.symbol,
+        type:    p.type === 'POSITION_TYPE_BUY' ? 'BUY' : 'SELL',
+        lots:    p.volume,
+        open:    p.openPrice,
+        current: p.currentPrice,
+        pnl:     p.profit || 0,
+        sl:      p.stopLoss || 0,
+        tp:      p.takeProfit || 0,
+        openTime: p.time || p.openTime,
+      })),
+    };
+    MT5.connected = true;
+    // Persist session
+    localStorage.setItem('mt5_session', JSON.stringify({
+      connected: true, token, accountId, account: MT5.account
+    }));
+    renderAccounts();
+    // Show badge in risk calc
+    const capBadge = document.getElementById('mt5-cap-badge');
+    if(capBadge) capBadge.style.display = 'inline-flex';
+    if(!silent) toast('MT5 actualizado','ok');
+  } catch(e){
+    if(!silent) toast('Error MT5: '+e.message,'warn');
+    console.error('MT5 fetch error:', e);
+  }
+}
+
 function renderMT5Block(){
-  if(!MT5.connected){
+  if(!MT5.connected || !MT5.account){
     return `<div class="mt5-card" style="margin-bottom:16px">
       <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
         <div style="width:48px;height:48px;background:rgba(0,168,255,.12);border:1.5px solid rgba(0,168,255,.3);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#00a8ff;font-family:var(--mono);flex-shrink:0">MT5</div>
         <div style="flex:1;min-width:180px">
           <div style="font-size:14px;font-weight:700;color:var(--tx);margin-bottom:3px">Cuenta Real — MetaTrader 5</div>
-          <div style="font-size:11px;color:var(--tx3);line-height:1.5">Conecta tu cuenta real de MT5 para usar el control de riesgo, calculadora de posición y tracking con tu broker real.</div>
+          <div style="font-size:11px;color:var(--tx3);line-height:1.5">Conecta tu cuenta MT5 real vía <strong style="color:#00a8ff">MetaApi</strong> para ver balance, equity y posiciones en tiempo real.</div>
         </div>
         <button class="btn bc" onclick="openMT5Modal()" style="flex-shrink:0;background:rgba(0,168,255,.15);border-color:rgba(0,168,255,.4);color:#00a8ff">⚡ Conectar MT5</button>
       </div>
-      <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
-        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--tx3)"><span style="color:var(--gn)">✓</span> IC Markets · Pepperstone · XM · FTMO Real</div>
-        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--tx3)"><span style="color:var(--gn)">✓</span> Forex · Oro · Índices · Criptos</div>
-        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--tx3)"><span style="color:var(--gn)">✓</span> Modo solo lectura — sin ejecución de órdenes</div>
+      <div style="display:flex;gap:14px;margin-top:14px;flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--tx3)"><span style="color:var(--gn)">✓</span> IC Markets · Pepperstone · XM · FTMO Real y más</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--tx3)"><span style="color:var(--gn)">✓</span> Datos reales vía MetaApi · Solo lectura</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--tx3)"><span style="color:var(--cy)">→</span> <a href="https://app.metaapi.cloud/sign-up" target="_blank" style="color:var(--cy);text-decoration:none">Crea tu token gratuito en metaapi.cloud</a></div>
       </div>
     </div>`;
   }
-  // Connected state
   const acc = MT5.account;
   const mlColor = acc.marginLevel > 200 ? 'var(--gn)' : acc.marginLevel > 100 ? 'var(--am)' : 'var(--rd)';
+  const totalPnl = (acc.positions||[]).reduce((s,p)=>s+p.pnl, 0);
   const posRows = (acc.positions||[]).map(p=>{
-    const pnlColor = p.pnl >= 0 ? 'var(--gn)' : 'var(--rd)';
-    const typeColor = p.type === 'BUY' ? 'var(--gn)' : 'var(--rd)';
+    const pnlC = p.pnl >= 0 ? 'var(--gn)' : 'var(--rd)';
+    const typeC = p.type === 'BUY' ? 'var(--gn)' : 'var(--rd)';
+    const openDate = p.openTime ? new Date(p.openTime).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'}) : '—';
     return `<div class="mt5-pos-row">
       <span style="font-weight:700;color:var(--tx);font-family:var(--mono)">${p.symbol}</span>
-      <span style="color:${typeColor};font-weight:700;font-size:9px">${p.type}</span>
-      <span style="color:var(--tx2)">${p.lots}</span>
-      <span style="font-family:var(--mono);color:var(--tx2)">${p.open}</span>
-      <span style="font-family:var(--mono);color:var(--tx2)">${p.current}</span>
-      <span style="font-family:var(--mono);color:${pnlColor};font-weight:700">${p.pnl>=0?'+':''}$${p.pnl.toFixed(2)}</span>
-      <div style="display:flex;gap:3px">
-        <button style="font-size:8px;padding:2px 5px;border-radius:3px;border:1px solid var(--b2);background:transparent;color:var(--tx3);cursor:pointer" onclick="mt5ClosePos('${p.symbol}')">✕</button>
-      </div>
+      <span style="color:${typeC};font-weight:700;font-size:9px">${p.type}</span>
+      <span style="color:var(--tx2);font-family:var(--mono)">${p.lots}</span>
+      <span style="font-family:var(--mono);color:var(--tx2);font-size:9.5px">${typeof p.open==='number'?p.open.toFixed(5):p.open}</span>
+      <span style="font-family:var(--mono);color:var(--tx2);font-size:9.5px">${typeof p.current==='number'?p.current.toFixed(5):p.current}</span>
+      <span style="font-family:var(--mono);color:${pnlC};font-weight:700">${p.pnl>=0?'+':''}${acc.currency}${p.pnl.toFixed(2)}</span>
+      <span style="font-size:8.5px;color:var(--tx3)">${openDate}</span>
     </div>`;
   }).join('');
-  const totalPnl = (acc.positions||[]).reduce((s,p)=>s+p.pnl,0);
+  const lastSync = MT5._lastSync ? new Date(MT5._lastSync).toLocaleTimeString('es-ES') : '—';
   return `<div class="mt5-card" style="margin-bottom:16px">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
       <div style="width:36px;height:36px;background:rgba(0,168,255,.15);border:1.5px solid rgba(0,168,255,.4);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:9.5px;font-weight:900;color:#00a8ff;font-family:var(--mono)">MT5</div>
       <div style="flex:1;min-width:0">
-        <div style="font-size:13px;font-weight:700;color:var(--tx)">${acc.broker} <span style="font-size:10px;color:var(--tx3);font-weight:400">· Login ${acc.login}</span></div>
-        <div style="font-size:9.5px;color:var(--tx3)">${acc.server}</div>
+        <div style="font-size:13px;font-weight:700;color:var(--tx)">${acc.broker} <span style="font-size:10px;color:var(--tx3);font-weight:400">· ${acc.login}</span></div>
+        <div style="font-size:9.5px;color:var(--tx3)">${acc.server} · ${acc.currency} · 1:${acc.leverage||'—'} · <span style="color:var(--tx3)">sync ${lastSync}</span></div>
       </div>
-      <span class="bdg bok" style="font-size:9px">● Conectado</span>
-      <button class="btn sm" onclick="mt5Sync()" style="font-size:9px">↻ Sync</button>
+      <span class="bdg bok" style="font-size:9px">● Live</span>
+      <button class="btn sm" onclick="mt5Sync()" style="font-size:9px" id="mt5-sync-btn">↻</button>
       <button class="btn br sm" style="font-size:9px" onclick="disconnectMT5()">✕</button>
     </div>
-    <!-- Stats row -->
     <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:14px">
-      <div class="mt5-stat"><div class="sv cy">$${acc.balance.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2})}</div><div class="sl">Balance</div></div>
-      <div class="mt5-stat"><div class="sv" style="color:#00a8ff">$${acc.equity.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2})}</div><div class="sl">Equity</div></div>
-      <div class="mt5-stat"><div class="sv" style="color:var(--am)">$${acc.margin.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2})}</div><div class="sl">Margin</div></div>
-      <div class="mt5-stat"><div class="sv up">$${acc.freeMargin.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2})}</div><div class="sl">Free Margin</div></div>
-      <div class="mt5-stat"><div class="sv" style="color:${mlColor}">${acc.marginLevel.toFixed(0)}%</div><div class="sl">Margin Level</div></div>
+      <div class="mt5-stat"><div class="sv cy">${acc.currency} ${acc.balance.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2})}</div><div class="sl">Balance</div></div>
+      <div class="mt5-stat"><div class="sv" style="color:#00a8ff">${acc.currency} ${acc.equity.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2})}</div><div class="sl">Equity</div></div>
+      <div class="mt5-stat"><div class="sv" style="color:var(--am)">${acc.currency} ${acc.margin.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2})}</div><div class="sl">Margin usado</div></div>
+      <div class="mt5-stat"><div class="sv up">${acc.currency} ${acc.freeMargin.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2})}</div><div class="sl">Free Margin</div></div>
+      <div class="mt5-stat"><div class="sv" style="color:${mlColor}">${acc.marginLevel > 0 ? acc.marginLevel.toFixed(0)+'%' : '∞'}</div><div class="sl">Margin Level</div></div>
     </div>
-    <!-- Use MT5 balance in calc -->
-    <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(0,168,255,.07);border:1px solid rgba(0,168,255,.2);border-radius:7px;margin-bottom:12px;flex-wrap:wrap">
-      <span style="font-size:10px;color:#00a8ff;flex:1">💡 Usa el balance MT5 en la calculadora de posición</span>
-      <button class="btn bc sm" style="font-size:9.5px;background:rgba(0,168,255,.15);border-color:rgba(0,168,255,.4);color:#00a8ff" onclick="useMT5Balance()">⚡ Sincronizar balance → Calculadora</button>
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(0,168,255,.07);border:1px solid rgba(0,168,255,.2);border-radius:7px;margin-bottom:${acc.positions&&acc.positions.length?'12':'0'}px;flex-wrap:wrap">
+      <span style="font-size:10px;color:#00a8ff;flex:1">💡 Usa el balance real de MT5 en la calculadora de posición</span>
+      <button class="btn bc sm" style="font-size:9.5px;background:rgba(0,168,255,.15);border-color:rgba(0,168,255,.4);color:#00a8ff" onclick="useMT5Balance()">⚡ Cargar balance → Calculadora</button>
     </div>
-    <!-- Open positions -->
     ${acc.positions && acc.positions.length ? `
-    <div style="font-size:9px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">Posiciones abiertas · P&L flotante: <span style="${totalPnl>=0?'color:var(--gn)':'color:var(--rd)'}">${totalPnl>=0?'+':''}$${totalPnl.toFixed(2)}</span></div>
-    <div class="mt5-hdr"><span>Par</span><span>Tipo</span><span>Lotes</span><span>Apertura</span><span>Actual</span><span>P&L</span><span></span></div>
-    ${posRows}` : `<div style="font-size:11px;color:var(--tx3);text-align:center;padding:12px 0">Sin posiciones abiertas</div>`}
+    <div style="font-size:9px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;margin-top:12px">
+      Posiciones abiertas (${acc.positions.length}) · P&L flotante:
+      <span style="color:${totalPnl>=0?'var(--gn)':'var(--rd)'}">${totalPnl>=0?'+':''}${acc.currency}${totalPnl.toFixed(2)}</span>
+    </div>
+    <div class="mt5-hdr"><span>Par</span><span>Tipo</span><span>Lotes</span><span>Apertura</span><span>Actual</span><span>P&L</span><span>Hora</span></div>
+    ${posRows}
+    <div style="font-size:8.5px;color:var(--tx3);margin-top:8px;padding:5px 8px">🔒 Solo lectura — para cerrar posiciones usa MetaTrader 5 directamente</div>
+    ` : `<div style="font-size:11px;color:var(--tx3);text-align:center;padding:12px 0;margin-top:12px">Sin posiciones abiertas</div>`}
   </div>`;
 }
 
 function openMT5Modal(){
+  const savedToken = localStorage.getItem('mt5_token') || '';
   const modal = document.createElement('div'); modal.className = 'mm-bg';
   const brokerOpts = MT5_BROKERS.map(b=>`<option value="${b.id}" data-server="${b.server}">${b.name}</option>`).join('');
-  modal.innerHTML = `<div class="mm" style="max-width:480px">
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
+  modal.innerHTML = `<div class="mm" style="max-width:500px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
       <div style="width:40px;height:40px;background:rgba(0,168,255,.12);border:1.5px solid rgba(0,168,255,.3);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#00a8ff;font-family:var(--mono)">MT5</div>
-      <div><div style="font-size:16px;font-weight:700;color:var(--tx)">Conectar MetaTrader 5</div>
-      <div style="font-size:11px;color:var(--tx3)">Modo lectura — no ejecuta órdenes</div></div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:9px">
-      <div style="grid-column:1/-1">
-        <div class="pf-lbl">Broker</div>
-        <select class="mm-in" id="mt5-broker" onchange="mt5UpdateServer(this)">
-          ${brokerOpts}
-        </select>
-      </div>
-      <div style="grid-column:1/-1">
-        <div class="pf-lbl">Servidor MT5</div>
-        <input class="mm-in" id="mt5-server" placeholder="Ej: ICMarkets-Live01" value="ICMarkets-Live01">
-      </div>
       <div>
-        <div class="pf-lbl">Login (número de cuenta)</div>
-        <input class="mm-in" id="mt5-login" type="text" placeholder="12345678">
-      </div>
-      <div>
-        <div class="pf-lbl">Contraseña del inversor</div>
-        <input class="mm-in" id="mt5-pass" type="password" placeholder="••••••••">
-        <div style="font-size:8.5px;color:var(--tx3);margin-top:3px">Usa la contraseña de inversor (solo lectura)</div>
+        <div style="font-size:16px;font-weight:700;color:var(--tx)">Conectar MetaTrader 5 Real</div>
+        <div style="font-size:11px;color:var(--tx3)">Datos reales vía MetaApi · Modo solo lectura</div>
       </div>
     </div>
-    <div style="padding:9px 11px;background:rgba(0,168,255,.06);border:1px solid rgba(0,168,255,.18);border-radius:7px;font-size:9.5px;color:#00a8ff;margin-bottom:16px;line-height:1.6">
-      🔒 <strong>Modo Inversor (solo lectura):</strong> SimpleTrader usa la contraseña de inversor de MT5, que solo permite ver posiciones y balance — nunca puede ejecutar órdenes ni mover fondos.
+
+    <!-- Step 1: MetaApi token -->
+    <div style="background:rgba(0,168,255,.05);border:1px solid rgba(0,168,255,.15);border-radius:9px;padding:12px 14px;margin:14px 0">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
+        <span style="font-size:9px;font-weight:700;background:rgba(0,168,255,.2);color:#00a8ff;padding:2px 7px;border-radius:10px">PASO 1</span>
+        <span style="font-size:11.5px;font-weight:600;color:var(--tx)">Token de MetaApi</span>
+        <a href="https://app.metaapi.cloud/sign-up" target="_blank" style="margin-left:auto;font-size:9.5px;color:var(--cy);text-decoration:none">Crear cuenta gratis →</a>
+      </div>
+      <input class="mm-in" id="mt5-token" type="password" placeholder="Pega aquí tu auth token de metaapi.cloud" value="${savedToken}" style="font-family:var(--mono);font-size:11px">
+      <div style="font-size:8.5px;color:var(--tx3);margin-top:4px">En MetaApi: API access → Auth tokens → Generate token</div>
     </div>
+
+    <!-- Step 2: MT5 credentials -->
+    <div style="background:rgba(255,255,255,.02);border:1px solid var(--b1);border-radius:9px;padding:12px 14px;margin-bottom:12px">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px">
+        <span style="font-size:9px;font-weight:700;background:rgba(0,168,255,.2);color:#00a8ff;padding:2px 7px;border-radius:10px">PASO 2</span>
+        <span style="font-size:11.5px;font-weight:600;color:var(--tx)">Credenciales MT5</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div style="grid-column:1/-1">
+          <div class="pf-lbl">Broker</div>
+          <select class="mm-in" id="mt5-broker" onchange="mt5UpdateServer(this)">${brokerOpts}</select>
+        </div>
+        <div style="grid-column:1/-1">
+          <div class="pf-lbl">Servidor MT5 <span style="color:var(--tx3);font-weight:400">(lo ves en MetaTrader 5 → Herramientas → Opciones)</span></div>
+          <input class="mm-in" id="mt5-server" placeholder="Ej: ICMarkets-Live01" value="ICMarkets-Live01">
+        </div>
+        <div>
+          <div class="pf-lbl">Login (número de cuenta)</div>
+          <input class="mm-in" id="mt5-login" type="text" placeholder="12345678">
+        </div>
+        <div>
+          <div class="pf-lbl">Contraseña del inversor</div>
+          <input class="mm-in" id="mt5-pass" type="password" placeholder="••••••••">
+          <div style="font-size:8.5px;color:var(--tx3);margin-top:3px">Usa la contraseña de inversor (solo lectura) — nunca la contraseña principal</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="mt5-modal-status" style="display:none;padding:10px 12px;border-radius:7px;font-size:10.5px;margin-bottom:12px;line-height:1.6"></div>
+
     <div style="display:flex;gap:7px;justify-content:flex-end">
       <button class="btn sm" onclick="this.closest('.mm-bg').remove()">Cancelar</button>
-      <button class="btn bc sm" id="mt5-connect-btn" onclick="connectMT5(this)" style="background:rgba(0,168,255,.15);border-color:rgba(0,168,255,.4);color:#00a8ff">⚡ Conectar</button>
+      <button class="btn bc sm" id="mt5-connect-btn" onclick="connectMT5(this)" style="background:rgba(0,168,255,.15);border-color:rgba(0,168,255,.4);color:#00a8ff">⚡ Conectar con MetaApi</button>
     </div>
   </div>`;
   document.body.appendChild(modal);
@@ -2277,52 +2372,136 @@ function mt5UpdateServer(sel){
   if(b && b.server) document.getElementById('mt5-server').value = b.server;
 }
 
-function connectMT5(btn){
-  const login = document.getElementById('mt5-login').value.trim();
-  const pass  = document.getElementById('mt5-pass').value.trim();
-  const server= document.getElementById('mt5-server').value.trim();
-  const bId   = document.getElementById('mt5-broker').value;
-  if(!login || !pass || !server){ toast('Completa todos los campos','warn'); return; }
-  const brokerName = MT5_BROKERS.find(b=>b.id===bId)?.name || bId;
-  btn.disabled = true; btn.textContent = '⟳ Conectando…';
-  MT5.connecting = true;
-  setTimeout(()=>{
-    MT5.connecting = false;
-    MT5.connected = true;
-    MT5.account = {
-      broker: brokerName,
-      server: server,
-      login: login,
-      balance: 12480.52,
-      equity: 12543.80,
-      margin: 214.30,
-      freeMargin: 12329.50,
-      marginLevel: 5852.4,
-      pnl: 63.28,
-      positions:[
-        {symbol:'EURUSD', type:'BUY',  lots:0.50, open:'1.08432', current:'1.08521', pnl:44.50},
-        {symbol:'XAUUSD', type:'SELL', lots:0.10, open:'2324.80', current:'2318.50', pnl:63.00},
-        {symbol:'GBPUSD', type:'BUY',  lots:0.30, open:'1.26750', current:'1.26820', pnl:21.00},
-      ],
-    };
+function mt5SetStatus(msg, type){
+  const el = document.getElementById('mt5-modal-status'); if(!el) return;
+  const colors = {info:'rgba(0,168,255,.1)',warn:'rgba(255,179,0,.1)',err:'rgba(255,61,87,.1)',ok:'rgba(0,204,106,.1)'};
+  const textC  = {info:'#00a8ff',warn:'var(--am)',err:'var(--rd)',ok:'var(--gn)'};
+  el.style.display = 'block';
+  el.style.background = colors[type]||colors.info;
+  el.style.color = textC[type]||textC.info;
+  el.style.border = `1px solid ${textC[type]||textC.info}44`;
+  el.textContent = msg;
+}
+
+async function connectMT5(btn){
+  const token  = document.getElementById('mt5-token').value.trim();
+  const login  = document.getElementById('mt5-login').value.trim();
+  const pass   = document.getElementById('mt5-pass').value.trim();
+  const server = document.getElementById('mt5-server').value.trim();
+  const bId    = document.getElementById('mt5-broker').value;
+  if(!token){ mt5SetStatus('Introduce tu auth token de MetaApi','warn'); return; }
+  if(!login || !pass || !server){ mt5SetStatus('Completa todos los campos de MT5','warn'); return; }
+
+  btn.disabled = true;
+  const brokerLabel = MT5_BROKERS.find(b=>b.id===bId)?.name || bId;
+
+  try {
+    // 1. Check for existing account with same login+server
+    mt5SetStatus('🔍 Buscando cuenta existente en MetaApi…','info');
+    const accounts = await maCall(token, 'GET', '/users/current/accounts?limit=100&offset=0');
+    let accountId = null;
+    const existing = (Array.isArray(accounts) ? accounts : accounts.items||[])
+      .find(a => String(a.login) === login && a.server === server && a.platform === 'mt5');
+
+    if(existing){
+      accountId = existing._id || existing.id;
+      mt5SetStatus(`✓ Cuenta encontrada (${accountId.slice(0,8)}…)`, 'ok');
+    } else {
+      // 2. Create new MetaApi account
+      mt5SetStatus('➕ Registrando cuenta en MetaApi…','info');
+      const created = await maCall(token, 'POST', '/users/current/accounts', {
+        login, password: pass, server, platform: 'mt5',
+        name: `SimpleTrader-${login}`,
+        application: 'MetaApi',
+        magic: 0,
+        region: 'london',
+        reliability: 'high',
+        type: 'cloud',
+      });
+      accountId = created._id || created.id;
+      mt5SetStatus(`✓ Cuenta creada (${accountId.slice(0,8)}…)`, 'ok');
+    }
+
+    // 3. Deploy if needed
+    const accInfo = await maCall(token, 'GET', `/users/current/accounts/${accountId}`);
+    const state = accInfo.state || accInfo.connectionStatus;
+    if(state === 'undeployed' || state === 'created' || state === 'draft'){
+      mt5SetStatus('🚀 Desplegando conexión con el broker…','info');
+      await maCall(token, 'POST', `/users/current/accounts/${accountId}/deploy`, {});
+    }
+
+    // 4. Wait for deployed (poll up to 3 min)
+    mt5SetStatus('⏳ Conectando con el servidor MT5… (puede tardar ~1 min)','info');
+    let deployed = false;
+    for(let i=0; i<36; i++){
+      await new Promise(r=>setTimeout(r, 5000));
+      try {
+        const s = await maCall(token, 'GET', `/users/current/accounts/${accountId}`);
+        const st = s.connectionStatus || s.state;
+        mt5SetStatus(`⏳ Estado: ${st} (${(i+1)*5}s)…`, 'info');
+        if(st === 'connected' || st === 'deployed'){
+          deployed = true; break;
+        }
+        if(st === 'error' || st === 'failed'){
+          throw new Error('El broker rechazó la conexión — verifica login, contraseña y servidor');
+        }
+      } catch(pollErr){ if(pollErr.message.includes('rechazó')) throw pollErr; }
+    }
+    if(!deployed) throw new Error('Timeout: el servidor MT5 no respondió en 3 minutos. Inténtalo de nuevo.');
+
+    // 5. Save token and fetch data
+    localStorage.setItem('mt5_token', token);
+    MT5.token = token;
+    MT5.accountId = accountId;
+    mt5SetStatus('✓ Conexión establecida — cargando datos…', 'ok');
+
+    await mt5FetchAndRender(token, accountId, false);
+    MT5._lastSync = Date.now();
+
     btn.closest('.mm-bg').remove();
-    renderAccounts();
-    // Show MT5 badge in risk calculator
+    // Start auto-refresh every 30s
+    mt5StartPolling();
+    // Show badge in risk section
     const capBadge = document.getElementById('mt5-cap-badge');
     if(capBadge) capBadge.style.display = 'inline-flex';
-    toast('✓ MT5 conectado — '+brokerName+' · '+login,'ok');
-    // Auto-switch to MT5 tab
+    toast('✓ MT5 conectado en tiempo real — '+brokerLabel+' · '+login,'ok');
+    // Switch to MT5 tab
     const mt5Tab = document.getElementById('acc-tab-mt5');
     if(mt5Tab){ document.querySelectorAll('#sec-accounts .fb').forEach(b=>b.classList.remove('act')); mt5Tab.classList.add('act'); accFilterMode='mt5'; renderAccounts(); }
-  }, 2000);
+
+  } catch(e){
+    btn.disabled = false;
+    mt5SetStatus('❌ '+e.message, 'err');
+    console.error('MT5 connect error:', e);
+  }
+}
+
+function mt5StartPolling(){
+  mt5StopPolling();
+  MT5._poll = setInterval(async()=>{
+    if(!MT5.connected || !MT5.token || !MT5.accountId) return mt5StopPolling();
+    await mt5FetchAndRender(MT5.token, MT5.accountId, true);
+    MT5._lastSync = Date.now();
+  }, 30000);
+}
+function mt5StopPolling(){ if(MT5._poll){ clearInterval(MT5._poll); MT5._poll = null; } }
+
+async function mt5Sync(){
+  if(!MT5.connected || !MT5.token || !MT5.accountId){ toast('MT5 no conectado','warn'); return; }
+  const btn = document.getElementById('mt5-sync-btn');
+  if(btn){ btn.disabled=true; btn.textContent='…'; }
+  await mt5FetchAndRender(MT5.token, MT5.accountId, false);
+  MT5._lastSync = Date.now();
+  if(btn){ btn.disabled=false; btn.textContent='↻'; }
 }
 
 function disconnectMT5(){
-  confirm2('¿Desconectar cuenta MT5?','Se eliminarán los datos de sesión de MetaTrader 5.', ()=>{
-    MT5 = {connected:false, connecting:false, account:null};
+  confirm2('¿Desconectar cuenta MT5?','Se borrará la sesión local. La cuenta seguirá en MetaApi (puedes borrarla desde app.metaapi.cloud).', ()=>{
+    mt5StopPolling();
+    MT5 = {connected:false, connecting:false, account:null, token:null, accountId:null};
+    localStorage.removeItem('mt5_session');
     const capBadge = document.getElementById('mt5-cap-badge');
     if(capBadge) capBadge.style.display = 'none';
-    // Switch back to all tab
     document.querySelectorAll('#sec-accounts .fb').forEach(b=>b.classList.remove('act'));
     const allTab = document.getElementById('acc-tab-all');
     if(allTab) allTab.classList.add('act');
@@ -2332,31 +2511,11 @@ function disconnectMT5(){
   });
 }
 
-function mt5Sync(){
-  if(!MT5.connected || !MT5.account) return;
-  toast('Sincronizando MT5…','info');
-  setTimeout(()=>{
-    const acc = MT5.account;
-    acc.positions = acc.positions.map(p=>({
-      ...p,
-      pnl: parseFloat((p.pnl + (Math.random()-.4)*5).toFixed(2))
-    }));
-    acc.equity = acc.balance + acc.positions.reduce((s,p)=>s+p.pnl, 0);
-    renderAccounts();
-    toast('MT5 actualizado','ok');
-  }, 1200);
-}
-
-function mt5ClosePos(symbol){
-  toast('Para cerrar posiciones usa MetaTrader 5 directamente — SimpleTrader opera en modo solo lectura','info');
-}
-
 function useMT5Balance(){
   if(!MT5.connected || !MT5.account){ toast('Conecta MT5 primero','warn'); return; }
   const capIn = document.getElementById('rc-cap');
   if(capIn){ capIn.value = MT5.account.balance.toFixed(2); calcF(); }
-  toast('Balance MT5 ($'+MT5.account.balance.toLocaleString('es-ES')+') cargado en la calculadora','ok');
-  // Jump to risk section
+  toast('Balance MT5 ('+MT5.account.currency+' '+MT5.account.balance.toLocaleString('es-ES',{minimumFractionDigits:2})+') cargado en calculadora','ok');
   nav(document.querySelector('[data-s="riesgo"]'));
 }
 
