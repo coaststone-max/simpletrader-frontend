@@ -470,6 +470,9 @@ tbody tr:last-child td{border-bottom:none}
 /* Mobile hamburger in topbar */
 #mob-menu-btn{display:none;padding:6px;border-radius:7px;border:1px solid var(--b2);background:transparent;cursor:pointer;color:var(--tx2);align-items:center;justify-content:center}
 
+/* Swipe zone — fixed left edge, above content, below sidebar */
+#swipe-zone{display:none;position:fixed;top:0;left:0;bottom:0;width:44px;z-index:1998;-webkit-tap-highlight-color:transparent;touch-action:pan-y}
+
 @media (max-width: 768px) {
   /* Hide desktop sidebar */
   .sb{position:fixed;top:0;bottom:0;left:0;z-index:2000;transform:translateX(-100%);transition:transform .28s cubic-bezier(.4,0,.2,1);width:280px!important;min-width:280px!important;box-shadow:4px 0 30px rgba(0,0,0,.5)}
@@ -482,6 +485,7 @@ tbody tr:last-child td{border-bottom:none}
   /* Show mobile elements */
   #mob-tabs{display:flex}
   #mob-menu-btn{display:flex}
+  #swipe-zone{display:block}
 
   /* Main layout — full height minus bottom tabs */
   .app{flex-direction:column}
@@ -873,6 +877,7 @@ try{
 
 <!-- Mobile sidebar overlay -->
 <div id="sb-overlay" onclick="closeMobSB()"></div>
+<div id="swipe-zone"></div>
 
 <!-- Mobile bottom tab bar -->
 <div id="mob-tabs">
@@ -5635,9 +5640,11 @@ var _isMobile = window.innerWidth <= 768;
 window.addEventListener('resize', function(){ _isMobile = window.innerWidth <= 768; });
 
 function openMobSB(){
-  if(!_isMobile) return;
-  document.getElementById('sb').classList.add('mob-open');
-  document.getElementById('sb-overlay').classList.add('show');
+  var sb = document.getElementById('sb');
+  var ov = document.getElementById('sb-overlay');
+  if(!sb) return;
+  sb.classList.add('mob-open');
+  if(ov) ov.classList.add('show');
   document.body.style.overflow = 'hidden';
 }
 function closeMobSB(){
@@ -5674,44 +5681,67 @@ window.nav = function(el){
 };
 
 // Swipe gestures for mobile sidebar
+// Uses a dedicated fixed #swipe-zone div to avoid iOS scroll interference
 (function(){
-  var startX = 0, startY = 0, tracking = false;
-  document.addEventListener('touchstart', function(e){
-    startX = e.touches[0].clientX;
-    startY = e.touches[0].clientY;
-    tracking = true;
-  }, {passive:true});
-  document.addEventListener('touchmove', function(e){
-    if(!tracking || !_isMobile) return;
-    var dx = e.touches[0].clientX - startX;
-    var dy = Math.abs(e.touches[0].clientY - startY);
-    // Open sidebar: swipe right from left 20% of screen
-    if(dx > 8 && dy < 60 && startX < window.innerWidth * 0.2){
-      var sb = document.getElementById('sb');
-      if(sb && !sb.classList.contains('mob-open')){
-        // Show partial drag feedback
-        var progress = Math.min(1, dx / 120);
-        sb.style.transform = 'translateX(calc(-100% + ' + (progress * 40) + 'px))';
+  var sb, zone;
+
+  function initSwipe(){
+    sb   = document.getElementById('sb');
+    zone = document.getElementById('swipe-zone');
+    if(!zone || !sb) return;
+
+    var sx = 0, sy = 0, active = false;
+
+    // ── Open: touch starts on left-edge zone ───────────────────
+    zone.addEventListener('touchstart', function(e){
+      sx = e.touches[0].clientX;
+      sy = e.touches[0].clientY;
+      active = true;
+    }, {passive:true});
+
+    zone.addEventListener('touchmove', function(e){
+      if(!active) return;
+      var dx = e.touches[0].clientX - sx;
+      var dy = Math.abs(e.touches[0].clientY - sy);
+      if(dx > 5 && dy < 100 && !sb.classList.contains('mob-open')){
+        // Drag preview — sidebar peeks in
+        var pct = Math.min(1, dx / 200);
+        sb.style.transition = 'none';
+        sb.style.transform  = 'translateX(calc(-100% + ' + (pct * 100) + '%))';
       }
-    }
-  }, {passive:true});
-  document.addEventListener('touchend', function(e){
-    if(!tracking || !_isMobile){ tracking=false; return; }
-    tracking = false;
-    var dx = e.changedTouches[0].clientX - startX;
-    var dy = Math.abs(e.changedTouches[0].clientY - startY);
-    var sb = document.getElementById('sb');
-    // Reset transform first
-    if(sb) sb.style.transform = '';
-    // Swipe right from left edge → open
-    if(dx > 50 && dy < 80 && startX < window.innerWidth * 0.25){
-      openMobSB();
-    }
-    // Swipe left → close
-    else if(dx < -50 && dy < 80){
-      closeMobSB();
-    }
-  }, {passive:true});
+    }, {passive:true});
+
+    zone.addEventListener('touchend', function(e){
+      if(!active) return;
+      active = false;
+      sb.style.transition = '';
+      sb.style.transform  = '';
+      var dx = e.changedTouches[0].clientX - sx;
+      var dy = Math.abs(e.changedTouches[0].clientY - sy);
+      if(dx > 40 && dy < 120){ openMobSB(); }
+    }, {passive:true});
+
+    // ── Close: swipe left anywhere on the overlay ──────────────
+    var dsx = 0, dsy = 0, dactive = false;
+    document.addEventListener('touchstart', function(e){
+      dsx = e.touches[0].clientX;
+      dsy = e.touches[0].clientY;
+      dactive = true;
+    }, {passive:true});
+    document.addEventListener('touchend', function(e){
+      if(!dactive){ return; }
+      dactive = false;
+      var dx = e.changedTouches[0].clientX - dsx;
+      var dy = Math.abs(e.changedTouches[0].clientY - dsy);
+      if(dx < -50 && dy < 100 && sb.classList.contains('mob-open')){ closeMobSB(); }
+    }, {passive:true});
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', initSwipe);
+  } else {
+    initSwipe();
+  }
 })();
 
 // ═══════════════════════════════════════════
