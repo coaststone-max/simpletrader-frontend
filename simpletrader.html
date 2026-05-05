@@ -418,6 +418,97 @@ tbody tr:last-child td{border-bottom:none}
 .ticker-wrap:hover{animation-play-state:paused}
 @keyframes tscroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
+/* ═══════════════════════════════════════════════════════════
+   SUPPORT SYSTEM — Help Drawer · Onboarding · Chat
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Floating help button ── */
+#help-fab{position:fixed;bottom:24px;right:24px;z-index:7000;width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--cy),#8B5CF6);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(91,124,247,.45);transition:transform .2s,box-shadow .2s;font-size:20px}
+#help-fab:hover{transform:scale(1.1) translateY(-2px);box-shadow:0 8px 30px rgba(91,124,247,.6)}
+#help-fab.has-notif::after{content:'';position:absolute;top:4px;right:4px;width:10px;height:10px;background:#EF4444;border-radius:50%;border:2px solid var(--bg)}
+
+/* ── Help Drawer ── */
+#help-drawer{position:fixed;top:0;right:0;bottom:0;width:400px;max-width:100vw;background:var(--bg2);border-left:1px solid var(--b1);z-index:7100;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);box-shadow:-8px 0 40px rgba(0,0,0,.4)}
+#help-drawer.open{transform:translateX(0)}
+.hd-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:7050;opacity:0;pointer-events:none;transition:opacity .3s}
+.hd-overlay.open{opacity:1;pointer-events:auto}
+.hd-head{padding:18px 20px 14px;border-bottom:1px solid var(--b1);display:flex;align-items:center;gap:10px;flex-shrink:0}
+.hd-head-icon{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--cy),#8B5CF6);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.hd-head-txt{flex:1}.hd-head-txt h3{font-size:14px;font-weight:700;color:var(--tx)}.hd-head-txt p{font-size:10.5px;color:var(--tx2);margin-top:1px}
+.hd-close{width:28px;height:28px;border-radius:6px;border:1px solid var(--b2);background:transparent;cursor:pointer;color:var(--tx2);font-size:15px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.hd-close:hover{background:var(--bg3);color:var(--tx)}
+.hd-tabs{display:flex;padding:10px 14px;gap:6px;border-bottom:1px solid var(--b1);flex-shrink:0}
+.hd-tab{flex:1;padding:7px 4px;border-radius:7px;border:1px solid transparent;background:transparent;font-size:11px;font-weight:600;color:var(--tx2);cursor:pointer;font-family:var(--sans);transition:all .15s;text-align:center}
+.hd-tab.act{background:var(--cy8);color:var(--cy);border-color:rgba(91,124,247,.3)}
+.hd-body{flex:1;overflow-y:auto;padding:14px;scrollbar-width:thin;scrollbar-color:var(--b2) transparent}
+.hd-body::-webkit-scrollbar{width:4px}.hd-body::-webkit-scrollbar-thumb{background:var(--b2);border-radius:4px}
+
+/* FAQ items */
+.hd-section{margin-bottom:18px}
+.hd-section-title{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--tx3);margin-bottom:8px;padding:0 2px}
+.hd-q{width:100%;background:var(--card);border:1px solid var(--b1);border-radius:9px;padding:11px 14px;margin-bottom:6px;cursor:pointer;text-align:left;font-family:var(--sans);transition:all .15s;display:block}
+.hd-q:hover{border-color:var(--b2);background:var(--bg3)}
+.hd-q.open{border-color:var(--cy);border-bottom-left-radius:0;border-bottom-right-radius:0;margin-bottom:0}
+.hd-q-row{display:flex;align-items:center;gap:8px}
+.hd-q-icon{font-size:14px;flex-shrink:0}
+.hd-q-txt{flex:1;font-size:12px;font-weight:600;color:var(--tx)}
+.hd-q-arr{font-size:11px;color:var(--tx3);transition:transform .2s;flex-shrink:0}
+.hd-q.open .hd-q-arr{transform:rotate(180deg);color:var(--cy)}
+.hd-a{background:var(--card);border:1px solid var(--cy);border-top:none;border-bottom-left-radius:9px;border-bottom-right-radius:9px;padding:10px 14px 12px;font-size:11.5px;color:var(--tx2);line-height:1.65;margin-bottom:6px;display:none}
+.hd-a.open{display:block}
+.hd-a a{color:var(--cy);cursor:pointer;text-decoration:none}.hd-a a:hover{text-decoration:underline}
+.hd-a ul{padding-left:16px;margin-top:5px}.hd-a ul li{margin-bottom:3px}
+.hd-a .hd-tip{background:var(--cy8);border:1px solid rgba(91,124,247,.25);border-radius:6px;padding:7px 10px;margin-top:8px;font-size:11px;color:var(--cy)}
+
+/* Chat tab */
+.hd-chat-box{display:flex;flex-direction:column;gap:12px}
+.hd-chat-card{background:var(--card);border:1px solid var(--b1);border-radius:12px;padding:18px 16px;text-align:center}
+.hd-chat-card .cc-icon{font-size:32px;margin-bottom:8px}
+.hd-chat-card h4{font-size:13px;font-weight:700;color:var(--tx);margin-bottom:5px}
+.hd-chat-card p{font-size:11px;color:var(--tx2);line-height:1.55;margin-bottom:12px}
+.hd-chat-card .cc-status{display:inline-flex;align-items:center;gap:5px;font-size:10px;color:var(--gn);margin-bottom:12px}
+.hd-chat-card .cc-status::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--gn)}
+.hd-btn-chat{display:block;width:100%;padding:10px;border-radius:8px;border:none;font-family:var(--sans);font-size:12.5px;font-weight:700;cursor:pointer;transition:all .15s;text-decoration:none;text-align:center}
+.hd-btn-chat.primary{background:linear-gradient(90deg,var(--cy),#8B5CF6);color:#fff;box-shadow:0 4px 16px rgba(91,124,247,.35)}
+.hd-btn-chat.primary:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.hd-btn-chat.secondary{background:transparent;border:1px solid var(--b2);color:var(--tx2);margin-top:8px}
+.hd-btn-chat.secondary:hover{background:var(--bg3);color:var(--tx)}
+.hd-btn-chat.whatsapp{background:#25D366;color:#fff;margin-top:8px}
+.hd-btn-chat.whatsapp:hover{background:#20BD5A}
+
+/* ── Onboarding Wizard ── */
+#ob-modal{position:fixed;inset:0;z-index:8500;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s}
+#ob-modal.open{opacity:1;pointer-events:auto}
+.ob-box{background:var(--bg2);border:1px solid var(--b1);border-radius:20px;width:520px;max-width:100%;overflow:hidden;transform:scale(.95);transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+#ob-modal.open .ob-box{transform:scale(1)}
+.ob-progress{height:3px;background:var(--b1);position:relative}
+.ob-progress-bar{height:100%;background:linear-gradient(90deg,var(--cy),#8B5CF6);border-radius:3px;transition:width .4s cubic-bezier(.4,0,.2,1)}
+.ob-step{display:none;padding:36px 40px}
+.ob-step.act{display:block;animation:ob-in .35s ease forwards}
+@keyframes ob-in{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:translateX(0)}}
+.ob-emoji{font-size:44px;margin-bottom:16px;display:block}
+.ob-step h2{font-size:20px;font-weight:800;color:var(--tx);margin-bottom:8px}
+.ob-step p{font-size:13px;color:var(--tx2);line-height:1.65;margin-bottom:20px}
+.ob-steps-track{display:flex;gap:8px;margin-bottom:24px}
+.ob-dot{width:8px;height:8px;border-radius:50%;background:var(--b2);transition:all .25s;cursor:pointer}
+.ob-dot.act{background:var(--cy);width:22px;border-radius:4px}
+.ob-actions{display:flex;align-items:center;gap:10px;padding-top:8px;border-top:1px solid var(--b1)}
+.ob-skip{background:none;border:none;color:var(--tx3);font-size:11px;cursor:pointer;font-family:var(--sans);padding:4px 8px;transition:color .15s}
+.ob-skip:hover{color:var(--tx2)}
+.ob-actions-r{margin-left:auto;display:flex;gap:8px}
+.ob-btn-back{padding:9px 18px;border-radius:8px;border:1px solid var(--b2);background:transparent;color:var(--tx2);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);transition:all .15s}
+.ob-btn-back:hover{background:var(--bg3);color:var(--tx)}
+.ob-btn-next{padding:9px 22px;border-radius:8px;border:none;background:linear-gradient(90deg,var(--cy),#8B5CF6);color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--sans);box-shadow:0 4px 14px rgba(91,124,247,.35);transition:all .15s}
+.ob-btn-next:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.ob-checklist{list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:18px}
+.ob-checklist li{display:flex;align-items:flex-start;gap:10px;font-size:12px;color:var(--tx2);line-height:1.5}
+.ob-checklist .oc-num{width:22px;height:22px;border-radius:50%;background:var(--cy8);border:1.5px solid var(--cy);color:var(--cy);font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.ob-card{background:var(--card);border:1px solid var(--b1);border-radius:10px;padding:14px 16px;margin-bottom:10px}
+.ob-card-row{display:flex;align-items:center;gap:10px}
+.ob-card-ico{font-size:22px;flex-shrink:0}
+.ob-card-txt h4{font-size:12px;font-weight:700;color:var(--tx);margin-bottom:2px}
+.ob-card-txt p{font-size:10.5px;color:var(--tx2);line-height:1.45}
+
 </style>
 <!-- Supabase JS SDK (UMD — exposes window.supabase) -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
@@ -4830,6 +4921,519 @@ function renderAllClocks() {
 // syncUI is called by hydrateUser after auth — no-op here when not logged in
 try{renderNewsList();}catch(e){console.error(e);}
 setTimeout(renderNotifs,400);
+</script>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SUPPORT SYSTEM
+     ═══════════════════════════════════════════════════════════ -->
+
+<!-- Floating Help Button -->
+<button id="help-fab" onclick="openHelp()" title="Ayuda y soporte" style="display:none">❓</button>
+
+<!-- Overlay -->
+<div class="hd-overlay" id="hd-overlay" onclick="closeHelp()"></div>
+
+<!-- Help Drawer -->
+<div id="help-drawer">
+  <div class="hd-head">
+    <div class="hd-head-icon">💬</div>
+    <div class="hd-head-txt">
+      <h3>Centro de Ayuda</h3>
+      <p>Soporte de SimpleTrader</p>
+    </div>
+    <button class="hd-close" onclick="closeHelp()">✕</button>
+  </div>
+  <div class="hd-tabs">
+    <button class="hd-tab act" onclick="hdTab('faq',this)" id="hd-tab-faq">📖 FAQ</button>
+    <button class="hd-tab" onclick="hdTab('inicio',this)" id="hd-tab-inicio">🚀 Inicio rápido</button>
+    <button class="hd-tab" onclick="hdTab('chat',this)" id="hd-tab-chat">💬 Soporte</button>
+  </div>
+  <div class="hd-body">
+
+    <!-- ── FAQ Tab ── -->
+    <div id="hd-panel-faq">
+
+      <div class="hd-section">
+        <div class="hd-section-title">🚀 Primeros pasos</div>
+
+        <button class="hd-q" onclick="hdToggleQ(this)">
+          <div class="hd-q-row"><span class="hd-q-icon">🔑</span><span class="hd-q-txt">¿Cómo creo mi cuenta en SimpleTrader?</span><span class="hd-q-arr">▼</span></div>
+        </button>
+        <div class="hd-a">
+          Entra en la web de SimpleTrader y haz clic en <b>"Crear cuenta"</b>. Introduce tu email y elige una contraseña. Recibirás un correo de confirmación — haz clic en el enlace y ya puedes acceder.
+          <div class="hd-tip">💡 Si no recibes el email, revisa la carpeta de spam.</div>
+        </div>
+
+        <button class="hd-q" onclick="hdToggleQ(this)">
+          <div class="hd-q-row"><span class="hd-q-icon">🏠</span><span class="hd-q-txt">¿Qué hago primero cuando entro?</span><span class="hd-q-arr">▼</span></div>
+        </button>
+        <div class="hd-a">
+          Te recomendamos seguir este orden:
+          <ul>
+            <li>1. Ve a <b>Cuentas Fondeo</b> y añade tus cuentas de prop firm (Apex, TopstepTrader, etc.)</li>
+            <li>2. Ve a <b>Replicador → Live Trading</b> y conecta tu cuenta Tradovate</li>
+            <li>3. Asigna una cuenta como <b>Maestra</b> y las demás como <b>Esclavas</b></li>
+            <li>4. Explora el <b>Dashboard</b> para ver tus estadísticas</li>
+          </ul>
+        </div>
+
+        <button class="hd-q" onclick="hdToggleQ(this)">
+          <div class="hd-q-row"><span class="hd-q-icon">📱</span><span class="hd-q-txt">¿Funciona en móvil?</span><span class="hd-q-arr">▼</span></div>
+        </button>
+        <div class="hd-a">
+          Sí, SimpleTrader está optimizado para móvil y tablet. Accede desde el navegador de tu smartphone — no necesitas instalar ninguna app.
+        </div>
+      </div>
+
+      <div class="hd-section">
+        <div class="hd-section-title">🔗 Replicador Tradovate</div>
+
+        <button class="hd-q" onclick="hdToggleQ(this)">
+          <div class="hd-q-row"><span class="hd-q-icon">🔗</span><span class="hd-q-txt">¿Cómo conecto mi cuenta de Tradovate?</span><span class="hd-q-arr">▼</span></div>
+        </button>
+        <div class="hd-a">
+          Ve a <b>Replicador → Live Trading</b> y haz clic en <b>"Conectar Tradovate"</b>. Introduce tu usuario y contraseña de Tradovate (los mismos que usas para acceder a trader.tradovate.com). SimpleTrader detectará automáticamente todas tus cuentas.
+          <div class="hd-tip">💡 Tus credenciales se guardan cifradas en tu perfil privado. Nadie más tiene acceso.</div>
+        </div>
+
+        <button class="hd-q" onclick="hdToggleQ(this)">
+          <div class="hd-q-row"><span class="hd-q-icon">🎯</span><span class="hd-q-txt">¿Qué es la cuenta Maestra y las Esclavas?</span><span class="hd-q-arr">▼</span></div>
+        </button>
+        <div class="hd-a">
+          <b>Maestra</b>: la cuenta donde tú operas manualmente (o desde TradingView). Cada trade que haces aquí se copia automáticamente.<br><br>
+          <b>Esclava</b>: cuentas que reciben una copia exacta de cada operación de la maestra, en tiempo real.
+          <div class="hd-tip">💡 Si tienes 3 cuentas de Apex, puedes operar solo en una y las otras 2 se sincronizan solas.</div>
+        </div>
+
+        <button class="hd-q" onclick="hdToggleQ(this)">
+          <div class="hd-q-row"><span class="hd-q-icon">✖️</span><span class="hd-q-txt">¿Para qué sirve el multiplicador?</span><span class="hd-q-arr">▼</span></div>
+        </button>
+        <div class="hd-a">
+          El multiplicador ajusta el tamaño de posición en las cuentas esclavas. Por ejemplo:<br><br>
+          • Multiplicador <b>1×</b>: copia exactamente el mismo número de contratos<br>
+          • Multiplicador <b>2×</b>: el doble de contratos en la esclava<br>
+          • Multiplicador <b>0.5×</b>: la mitad de contratos (posición reducida)
+        </div>
+
+        <button class="hd-q" onclick="hdToggleQ(this)">
+          <div class="hd-q-row"><span class="hd-q-icon">⚡</span><span class="hd-q-txt">¿Con qué velocidad se copian los trades?</span><span class="hd-q-arr">▼</span></div>
+        </button>
+        <div class="hd-a">
+          El servicio de replicación (Railway) hace polling cada <b>2 segundos</b>. En la práctica, el trade esclavo se ejecuta entre 2 y 4 segundos después del maestro. Para futuros intradía esto es más que suficiente.
+        </div>
+
+        <button class="hd-q" onclick="hdToggleQ(this)">
+          <div class="hd-q-row"><span class="hd-q-icon">🔄</span><span class="hd-q-txt">¿Qué pasa si cierro el navegador?</span><span class="hd-q-arr">▼</span></div>
+        </button>
+        <div class="hd-a">
+          <b>Nada</b> — el replicador corre 24/7 en Railway (servidor en la nube). No depende de que tengas el navegador o el ordenador encendido. Puedes cerrar todo y los trades se seguirán copiando.
+        </div>
+      </div>
+
+      <div class="hd-section">
+        <div class="hd-section-title">📊 Cuentas y fondeos</div>
+
+        <button class="hd-q" onclick="hdToggleQ(this)">
+          <div class="hd-q-row"><span class="hd-q-icon">🏦</span><span class="hd-q-txt">¿Qué prop firms son compatibles?</span><span class="hd-q-arr">▼</span></div>
+        </button>
+        <div class="hd-a">
+          Cualquier firma que use <b>Tradovate</b> como plataforma de ejecución:
+          <ul>
+            <li>✅ Apex Trader Funding</li>
+            <li>✅ TopstepTrader</li>
+            <li>✅ Bulenox</li>
+            <li>✅ TradeDay</li>
+            <li>✅ Take Profit Trader</li>
+            <li>✅ Cualquier otra con cuentas Tradovate</li>
+          </ul>
+          Para el journal y seguimiento, también soportamos cuentas MT4/MT5.
+        </div>
+
+        <button class="hd-q" onclick="hdToggleQ(this)">
+          <div class="hd-q-row"><span class="hd-q-icon">🔒</span><span class="hd-q-txt">¿Es seguro poner mis credenciales?</span><span class="hd-q-arr">▼</span></div>
+        </button>
+        <div class="hd-a">
+          Sí. Tus datos se guardan en <b>Supabase</b> con Row Level Security (RLS), lo que significa que solo tú puedes acceder a tu información. La comunicación va siempre cifrada por HTTPS. Ningún empleado de SimpleTrader tiene acceso a tus contraseñas.
+        </div>
+
+        <button class="hd-q" onclick="hdToggleQ(this)">
+          <div class="hd-q-row"><span class="hd-q-icon">📈</span><span class="hd-q-txt">¿Cómo importo mis trades al journal?</span><span class="hd-q-arr">▼</span></div>
+        </button>
+        <div class="hd-a">
+          Ve a <b>Journal</b> y usa el botón <b>"Importar"</b>. Puedes importar desde:
+          <ul>
+            <li>📄 Archivo CSV exportado desde Tradovate o MT4/MT5</li>
+            <li>✏️ Introducción manual de operaciones</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="hd-section">
+        <div class="hd-section-title">⚠️ Problemas frecuentes</div>
+
+        <button class="hd-q" onclick="hdToggleQ(this)">
+          <div class="hd-q-row"><span class="hd-q-icon">❌</span><span class="hd-q-txt">El replicador no copia los trades</span><span class="hd-q-arr">▼</span></div>
+        </button>
+        <div class="hd-a">
+          Comprueba en orden:
+          <ul>
+            <li>1. ¿Tienes al menos una cuenta como <b>Maestra</b> y una como <b>Esclava</b> en el Replicador?</li>
+            <li>2. ¿El servicio de Railway está activo? (Pregunta al soporte)</li>
+            <li>3. ¿Tu sesión de Tradovate está activa? Prueba a desconectar y reconectar en <b>Replicador → Live Trading</b></li>
+          </ul>
+          Si el problema persiste, contacta soporte con tu User ID (lo ves en <b>Mi Perfil</b>).
+        </div>
+
+        <button class="hd-q" onclick="hdToggleQ(this)">
+          <div class="hd-q-row"><span class="hd-q-icon">🔐</span><span class="hd-q-txt">Olvidé mi contraseña</span><span class="hd-q-arr">▼</span></div>
+        </button>
+        <div class="hd-a">
+          En la pantalla de login haz clic en <b>"¿Olvidaste tu contraseña?"</b>. Te enviaremos un email con un enlace para restablecerla. El enlace caduca en 24h.
+        </div>
+
+        <button class="hd-q" onclick="hdToggleQ(this)">
+          <div class="hd-q-row"><span class="hd-q-icon">📧</span><span class="hd-q-txt">No me llega el email de confirmación</span><span class="hd-q-arr">▼</span></div>
+        </button>
+        <div class="hd-a">
+          <ul>
+            <li>1. Revisa la carpeta de <b>spam / correo no deseado</b></li>
+            <li>2. Espera 5 minutos — a veces hay demora</li>
+            <li>3. Si usas Gmail, busca en "Todas las carpetas"</li>
+            <li>4. Si nada funciona, contacta soporte con tu email</li>
+          </ul>
+        </div>
+
+        <button class="hd-q" onclick="hdToggleQ(this)">
+          <div class="hd-q-row"><span class="hd-q-icon">🌐</span><span class="hd-q-txt">La app va lenta o no carga</span><span class="hd-q-arr">▼</span></div>
+        </button>
+        <div class="hd-a">
+          Prueba estos pasos:
+          <ul>
+            <li>1. <b>Recarga la página</b> (Ctrl+F5 / Cmd+Shift+R)</li>
+            <li>2. Borra la caché del navegador</li>
+            <li>3. Prueba en modo incógnito</li>
+            <li>4. Prueba con otro navegador (Chrome recomendado)</li>
+          </ul>
+          Si el problema persiste más de 30 minutos, contacta soporte.
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Inicio Rápido Tab ── -->
+    <div id="hd-panel-inicio" style="display:none">
+      <div style="text-align:center;padding:8px 0 20px">
+        <div style="font-size:36px;margin-bottom:10px">🚀</div>
+        <div style="font-size:15px;font-weight:800;color:var(--tx);margin-bottom:6px">Empieza en 4 pasos</div>
+        <div style="font-size:11.5px;color:var(--tx2)">Configura SimpleTrader en menos de 5 minutos</div>
+      </div>
+
+      <div class="ob-card" style="margin-bottom:10px">
+        <div class="ob-card-row">
+          <span class="ob-card-ico">1️⃣</span>
+          <div class="ob-card-txt">
+            <h4>Añade tus cuentas de fondeo</h4>
+            <p>Ve a <b>Cuentas Fondeo</b> → Añadir cuenta. Pon el nombre, la firma (Apex, Topstep…) y el capital.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="ob-card" style="margin-bottom:10px">
+        <div class="ob-card-row">
+          <span class="ob-card-ico">2️⃣</span>
+          <div class="ob-card-txt">
+            <h4>Conecta Tradovate</h4>
+            <p>Ve a <b>Replicador → Live Trading</b> → Conectar Tradovate. Introduce tus credenciales de Tradovate.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="ob-card" style="margin-bottom:10px">
+        <div class="ob-card-row">
+          <span class="ob-card-ico">3️⃣</span>
+          <div class="ob-card-txt">
+            <h4>Asigna roles Maestra / Esclava</h4>
+            <p>Elige qué cuenta es la Maestra (donde operas) y cuáles son Esclavas (reciben la copia).</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="ob-card" style="margin-bottom:20px">
+        <div class="ob-card-row">
+          <span class="ob-card-ico">4️⃣</span>
+          <div class="ob-card-txt">
+            <h4>¡Opera con normalidad!</h4>
+            <p>Cada trade en tu cuenta Maestra se replica automáticamente 24/7. No necesitas hacer nada más.</p>
+          </div>
+        </div>
+      </div>
+
+      <button class="hd-btn-chat primary" onclick="closeHelp();nav(document.querySelector('[data-s=replicator]'))">
+        Ir al Replicador →
+      </button>
+      <button class="hd-btn-chat secondary" onclick="closeHelp();openOnboarding()">
+        Ver tutorial interactivo
+      </button>
+    </div>
+
+    <!-- ── Chat/Soporte Tab ── -->
+    <div id="hd-panel-chat" style="display:none">
+      <div class="hd-chat-box">
+
+        <div class="hd-chat-card">
+          <div class="cc-icon">💬</div>
+          <h4>Chat en vivo</h4>
+          <div class="cc-status">Soporte disponible</div>
+          <p>Habla con nuestro equipo directamente. Respuesta típica en menos de 2 horas en horario laboral.</p>
+          <button class="hd-btn-chat primary" onclick="openLiveChat()">Iniciar chat</button>
+        </div>
+
+        <div class="hd-chat-card">
+          <div class="cc-icon">📱</div>
+          <h4>WhatsApp</h4>
+          <p>¿Prefieres WhatsApp? Escríbenos y te respondemos lo antes posible.</p>
+          <a class="hd-btn-chat whatsapp" href="https://wa.me/34683167679?text=Hola,%20necesito%20ayuda%20con%20SimpleTrader" target="_blank">
+            Abrir WhatsApp
+          </a>
+        </div>
+
+        <div class="hd-chat-card">
+          <div class="cc-icon">📧</div>
+          <h4>Email</h4>
+          <p>Para consultas no urgentes. Te respondemos en 24-48h.</p>
+          <a class="hd-btn-chat secondary" href="mailto:aptitudfinanciera@gmail.com">
+            aptitudfinanciera@gmail.com
+          </a>
+        </div>
+
+        <div style="background:var(--bg3);border-radius:9px;padding:12px 14px;font-size:10.5px;color:var(--tx3);line-height:1.6">
+          <b style="color:var(--tx2)">Antes de contactar</b>, incluye siempre tu <b>User ID</b> (lo ves en Mi Perfil → copiarlo). Así te ayudamos mucho más rápido.
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /hd-body -->
+</div><!-- /help-drawer -->
+
+<!-- ── Onboarding Wizard ── -->
+<div id="ob-modal">
+  <div class="ob-box">
+    <div class="ob-progress"><div class="ob-progress-bar" id="ob-bar" style="width:25%"></div></div>
+
+    <!-- Step 1: Bienvenida -->
+    <div class="ob-step act" id="ob-s1">
+      <span class="ob-emoji">👋</span>
+      <h2>Bienvenido a SimpleTrader</h2>
+      <p>La plataforma todo-en-uno para traders de futuros y prop firms. En 4 pasos te explicamos cómo sacarle el máximo partido.</p>
+      <div class="ob-steps-track">
+        <div class="ob-dot act" onclick="obGoTo(1)"></div>
+        <div class="ob-dot" onclick="obGoTo(2)"></div>
+        <div class="ob-dot" onclick="obGoTo(3)"></div>
+        <div class="ob-dot" onclick="obGoTo(4)"></div>
+      </div>
+      <div class="ob-actions">
+        <button class="ob-skip" onclick="closeOnboarding()">Saltar tutorial</button>
+        <div class="ob-actions-r">
+          <button class="ob-btn-next" onclick="obGoTo(2)">Empezar →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Cuentas -->
+    <div class="ob-step" id="ob-s2">
+      <span class="ob-emoji">🏦</span>
+      <h2>Añade tus cuentas de fondeo</h2>
+      <p>Registra tus cuentas de Apex, TopstepTrader u otras prop firms para hacer seguimiento de tu capital, resultados y reglas.</p>
+      <ul class="ob-checklist">
+        <li><span class="oc-num">1</span><span>Ve a <b>Cuentas Fondeo</b> en el menú lateral</span></li>
+        <li><span class="oc-num">2</span><span>Haz clic en <b>"+ Añadir cuenta"</b></span></li>
+        <li><span class="oc-num">3</span><span>Rellena el nombre, firma y capital de la cuenta</span></li>
+      </ul>
+      <div class="ob-steps-track">
+        <div class="ob-dot" onclick="obGoTo(1)"></div>
+        <div class="ob-dot act" onclick="obGoTo(2)"></div>
+        <div class="ob-dot" onclick="obGoTo(3)"></div>
+        <div class="ob-dot" onclick="obGoTo(4)"></div>
+      </div>
+      <div class="ob-actions">
+        <button class="ob-skip" onclick="closeOnboarding()">Saltar</button>
+        <div class="ob-actions-r">
+          <button class="ob-btn-back" onclick="obGoTo(1)">← Atrás</button>
+          <button class="ob-btn-next" onclick="obGoTo(3)">Siguiente →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3: Replicador -->
+    <div class="ob-step" id="ob-s3">
+      <span class="ob-emoji">🔗</span>
+      <h2>Conecta el Replicador</h2>
+      <p>El Replicador copia automáticamente cada trade de tu cuenta Maestra a todas las Esclavas — sin que tengas que hacer nada.</p>
+      <ul class="ob-checklist">
+        <li><span class="oc-num">1</span><span>Ve a <b>Replicador → Live Trading</b></span></li>
+        <li><span class="oc-num">2</span><span>Haz clic en <b>"Conectar Tradovate"</b> e introduce tus credenciales</span></li>
+        <li><span class="oc-num">3</span><span>Asigna una cuenta como <b>Maestra 🎯</b> y el resto como <b>Esclavas 📡</b></span></li>
+      </ul>
+      <div class="ob-steps-track">
+        <div class="ob-dot" onclick="obGoTo(1)"></div>
+        <div class="ob-dot" onclick="obGoTo(2)"></div>
+        <div class="ob-dot act" onclick="obGoTo(3)"></div>
+        <div class="ob-dot" onclick="obGoTo(4)"></div>
+      </div>
+      <div class="ob-actions">
+        <button class="ob-skip" onclick="closeOnboarding()">Saltar</button>
+        <div class="ob-actions-r">
+          <button class="ob-btn-back" onclick="obGoTo(2)">← Atrás</button>
+          <button class="ob-btn-next" onclick="obGoTo(4)">Siguiente →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4: Listo -->
+    <div class="ob-step" id="ob-s4">
+      <span class="ob-emoji">🎉</span>
+      <h2>¡Todo listo!</h2>
+      <p>Ya conoces lo esencial. Recuerda que puedes volver a este tutorial desde el botón <b>❓</b> en la esquina inferior derecha.</p>
+      <div class="ob-card" style="margin-bottom:10px">
+        <div class="ob-card-row">
+          <span class="ob-card-ico">💬</span>
+          <div class="ob-card-txt">
+            <h4>¿Tienes alguna duda?</h4>
+            <p>Nuestro equipo de soporte está disponible en el chat. Respuesta en menos de 2 horas.</p>
+          </div>
+        </div>
+      </div>
+      <div class="ob-steps-track">
+        <div class="ob-dot" onclick="obGoTo(1)"></div>
+        <div class="ob-dot" onclick="obGoTo(2)"></div>
+        <div class="ob-dot" onclick="obGoTo(3)"></div>
+        <div class="ob-dot act" onclick="obGoTo(4)"></div>
+      </div>
+      <div class="ob-actions">
+        <div class="ob-actions-r" style="width:100%;justify-content:space-between">
+          <button class="ob-btn-back" onclick="obGoTo(3)">← Atrás</button>
+          <button class="ob-btn-next" onclick="closeOnboarding();hdTab('chat',document.getElementById('hd-tab-chat'));openHelp()">Hablar con soporte 💬</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// SUPPORT SYSTEM JS
+// ═══════════════════════════════════════════
+
+// ── Help Drawer ──────────────────────────────
+function openHelp(){
+  document.getElementById('help-drawer').classList.add('open');
+  document.getElementById('hd-overlay').classList.add('open');
+}
+function closeHelp(){
+  document.getElementById('help-drawer').classList.remove('open');
+  document.getElementById('hd-overlay').classList.remove('open');
+}
+function hdTab(name, btn){
+  ['faq','inicio','chat'].forEach(t=>{
+    document.getElementById('hd-panel-'+t).style.display = t===name ? '' : 'none';
+  });
+  document.querySelectorAll('.hd-tab').forEach(b=>b.classList.remove('act'));
+  if(btn) btn.classList.add('act');
+}
+function hdToggleQ(btn){
+  const isOpen = btn.classList.contains('open');
+  // Close all open questions
+  document.querySelectorAll('.hd-q.open').forEach(q=>{
+    q.classList.remove('open');
+    const a = q.nextElementSibling;
+    if(a && a.classList.contains('hd-a')) a.classList.remove('open');
+  });
+  // Open clicked if it was closed
+  if(!isOpen){
+    btn.classList.add('open');
+    const ans = btn.nextElementSibling;
+    if(ans && ans.classList.contains('hd-a')) ans.classList.add('open');
+  }
+}
+
+// Live chat — integra Crisp (ver instrucciones abajo)
+function openLiveChat(){
+  if(window.$crisp){ window.$crisp.push(['do','chat:open']); closeHelp(); }
+  else { toast('Chat no disponible en este momento — usa WhatsApp o email','warn',3500); }
+}
+
+// ── Onboarding ────────────────────────────────
+let _obStep = 1;
+function openOnboarding(){
+  document.getElementById('ob-modal').classList.add('open');
+  obGoTo(1);
+}
+function closeOnboarding(){
+  document.getElementById('ob-modal').classList.remove('open');
+  try{ localStorage.setItem('st_onboarding_done','1'); }catch(e){}
+}
+function obGoTo(step){
+  _obStep = step;
+  const total = 4;
+  for(let i=1;i<=total;i++){
+    const s = document.getElementById('ob-s'+i);
+    if(s) s.classList.toggle('act', i===step);
+  }
+  const bar = document.getElementById('ob-bar');
+  if(bar) bar.style.width = (step/total*100)+'%';
+}
+
+// Show onboarding on first login
+function maybeShowOnboarding(){
+  try{
+    if(!localStorage.getItem('st_onboarding_done')){
+      setTimeout(openOnboarding, 800);
+    }
+  }catch(e){}
+}
+
+// Show help FAB when logged in
+function showHelpFab(){
+  const fab = document.getElementById('help-fab');
+  if(fab) fab.style.display = 'flex';
+}
+
+// Hook into existing auth flow — called after login
+const _origSyncUI = window.syncUI;
+window.syncUI = function(){
+  if(_origSyncUI) _origSyncUI.apply(this, arguments);
+  showHelpFab();
+  maybeShowOnboarding();
+};
+// Also show if app is already visible (page reload while logged in)
+document.addEventListener('DOMContentLoaded',function(){
+  setTimeout(function(){
+    if(document.getElementById('app') && document.getElementById('app').style.display !== 'none'){
+      showHelpFab();
+    }
+  }, 1200);
+});
+
+/* ──────────────────────────────────────────────────────────────
+   CRISP CHAT WIDGET
+   Para activar:
+   1. Crea cuenta gratuita en https://crisp.chat
+   2. Crea un sitio → copia el WEBSITE_ID (formato UUID)
+   3. Reemplaza 'TU_CRISP_WEBSITE_ID' con tu ID real
+   ────────────────────────────────────────────────────────────── */
+(function(){
+  var CRISP_ID = 'd17773cf-15a2-4c45-8db5-9ea255c38da3';
+  if(!CRISP_ID || CRISP_ID === 'TU_CRISP_WEBSITE_ID') return;
+  window.$crisp=[];
+  window.CRISP_WEBSITE_ID=CRISP_ID;
+  var d=document,s=d.createElement('script');
+  s.src='https://client.crisp.chat/l.js';
+  s.async=1;
+  d.getElementsByTagName('head')[0].appendChild(s);
+  // Ocultar el botón nativo de Crisp (usamos nuestro propio)
+  window.$crisp.push(['config','hide:on:mobile',false]);
+  window.$crisp.push(['safe',true]);
+})();
 </script>
 
 </body>
