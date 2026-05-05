@@ -28,6 +28,13 @@
 <!-- Canonical -->
 <link rel="canonical" href="https://simpletrader.app/">
 
+<!-- PWA -->
+<link rel="manifest" href="/manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="SimpleTrader">
+<link rel="apple-touch-icon" href="/icon-192.png">
+
 
 <script>
 (function(G){
@@ -446,6 +453,103 @@ tbody tr:last-child td{border-bottom:none}
 @keyframes tscroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
 /* ═══════════════════════════════════════════════════════════
+   MOBILE RESPONSIVE & PWA
+   ═══════════════════════════════════════════════════════════ */
+
+/* Mobile overlay for sidebar */
+#sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1999;backdrop-filter:blur(2px)}
+
+/* Bottom tab bar (mobile only) */
+#mob-tabs{display:none;position:fixed;bottom:0;left:0;right:0;z-index:1800;background:var(--bg2);border-top:1px solid var(--b1);padding:6px 4px calc(6px + env(safe-area-inset-bottom));justify-content:space-around;align-items:center;box-shadow:0 -4px 20px rgba(0,0,0,.3)}
+.mob-tab{display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px 10px;border-radius:8px;border:none;background:transparent;cursor:pointer;color:var(--tx3);font-family:var(--sans);transition:all .15s;min-width:52px}
+.mob-tab svg{width:20px;height:20px;stroke:currentColor}
+.mob-tab span{font-size:9px;font-weight:600;white-space:nowrap}
+.mob-tab.act{color:var(--cy)}
+.mob-tab.act svg{filter:drop-shadow(0 0 4px rgba(91,124,247,.5))}
+
+/* Mobile hamburger in topbar */
+#mob-menu-btn{display:none;padding:6px;border-radius:7px;border:1px solid var(--b2);background:transparent;cursor:pointer;color:var(--tx2);align-items:center;justify-content:center}
+
+@media (max-width: 768px) {
+  /* Hide desktop sidebar */
+  .sb{position:fixed;top:0;bottom:0;left:0;z-index:2000;transform:translateX(-100%);transition:transform .28s cubic-bezier(.4,0,.2,1);width:260px!important;min-width:260px!important;box-shadow:4px 0 30px rgba(0,0,0,.5)}
+  .sb.mob-open{transform:translateX(0)}
+  .sb.col{width:260px!important;min-width:260px!important}
+  .sb.col .sb-txt,.sb.col .ni-lbl,.sb.col .nb,.sb.col .u-info,.sb.col .ll,.sb.col .sg,.sb.col .sb-legal-links{opacity:1!important;max-width:none!important;height:auto!important;padding:revert!important;overflow:visible!important;max-height:none!important;margin:revert!important}
+  #sb-overlay{display:block;opacity:0;pointer-events:none;transition:opacity .28s}
+  #sb-overlay.show{opacity:1;pointer-events:auto}
+
+  /* Show mobile elements */
+  #mob-tabs{display:flex}
+  #mob-menu-btn{display:flex}
+
+  /* Main layout adjusts */
+  .app{flex-direction:column}
+  .main{height:100vh;padding-bottom:60px}
+
+  /* Topbar simplification */
+  .topbar{padding:0 12px;gap:8px}
+  .tb-t{font-size:13px!important}
+  .tb-clk{display:none}
+  .tickers{display:none}
+  .ws-p span{display:none}
+  button[onclick="openCMD()"]{min-width:unset!important;padding:5px 9px!important;flex:1}
+  button[onclick="openCMD()"] span{display:none}
+  button[onclick="openCMD()"] kbd{display:none}
+  button[onclick="toggleSB()"]{display:none}
+
+  /* Content padding */
+  .content{padding:10px 10px 16px}
+
+  /* Login screen */
+  #ls{flex-direction:column}
+  .ls-l{display:none}
+  .ls-r{width:100%!important;border-left:none!important;padding:32px 24px!important;justify-content:flex-start!important;padding-top:60px!important}
+
+  /* Cards grid */
+  .g4{grid-template-columns:repeat(2,1fr)!important}
+  .g3{grid-template-columns:repeat(2,1fr)!important}
+  .g2{grid-template-columns:1fr!important}
+  .pgrd{grid-template-columns:repeat(2,1fr)!important}
+
+  /* Modals fullscreen */
+  .mm{width:100%!important;max-width:100%!important;margin:0!important;border-radius:16px 16px 0 0!important;max-height:92vh!important;overflow-y:auto}
+  #pm{padding:0!important;align-items:flex-end!important}
+  .lm-box{width:100%!important;max-height:95vh!important;border-radius:16px 16px 0 0!important}
+  #legal-modal{align-items:flex-end!important}
+  .ob-box{border-radius:16px 16px 0 0!important;max-height:92vh!important}
+  #ob-modal{align-items:flex-end!important}
+
+  /* Help drawer full width */
+  #help-drawer{width:100vw!important}
+
+  /* Cookie banner stacked */
+  #cookie-banner{flex-direction:column;align-items:stretch;gap:10px;padding:16px}
+  .ck-txt{min-width:unset}
+  .ck-btns{justify-content:stretch}
+  .ck-btn{flex:1;text-align:center}
+
+  /* Topbar search */
+  #cmd-box{width:100vw!important;max-width:100vw!important;border-radius:0 0 12px 12px!important;margin-top:0!important}
+
+  /* Table overflow */
+  table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+  /* Help FAB — raise above bottom tabs */
+  #help-fab{bottom:76px}
+
+  /* Onboarding step padding */
+  .ob-step{padding:28px 24px!important}
+}
+
+@media (max-width: 480px) {
+  .g4{grid-template-columns:1fr 1fr!important}
+  .pgrd{grid-template-columns:1fr!important}
+  .ls-r{padding:28px 20px!important;padding-top:50px!important}
+  .ob-step h2{font-size:17px!important}
+}
+
+/* ═══════════════════════════════════════════════════════════
    LEGAL & COMPLIANCE — Cookie Banner · Modals · Disclaimer
    ═══════════════════════════════════════════════════════════ */
 
@@ -717,8 +821,38 @@ try{
   </div>
 </aside>
 
+<!-- Mobile sidebar overlay -->
+<div id="sb-overlay" onclick="closeMobSB()"></div>
+
+<!-- Mobile bottom tab bar -->
+<div id="mob-tabs">
+  <button class="mob-tab act" id="mobt-dashboard" onclick="mobNav('dashboard',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+    <span>Dashboard</span>
+  </button>
+  <button class="mob-tab" id="mobt-journal" onclick="mobNav('journal',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>
+    <span>Journal</span>
+  </button>
+  <button class="mob-tab" id="mobt-replicator" onclick="mobNav('replicator',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><line x1="6" y1="9" x2="6" y2="21"/></svg>
+    <span>Copier</span>
+  </button>
+  <button class="mob-tab" id="mobt-markets" onclick="mobNav('markets',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    <span>Mercados</span>
+  </button>
+  <button class="mob-tab" id="mobt-more" onclick="openMobSB()">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    <span>Más</span>
+  </button>
+</div>
+
 <div class="main">
   <div class="topbar">
+    <button id="mob-menu-btn" onclick="openMobSB()" title="Menú" style="margin-right:6px">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
     <button class="tbtn" onclick="toggleSB()" title="Colapsar/Expandir" style="margin-right:9px;font-size:15px;border:none">☰</button>
     <div class="tb-t" id="ptitle">Dashboard</div>
     <button onclick="openCMD()" style="display:flex;align-items:center;gap:8px;padding:5px 12px;background:var(--bg3);border:1px solid var(--b2);border-radius:7px;color:var(--tx3);font-size:11.5px;font-family:var(--sans);cursor:pointer;min-width:180px;margin:0 10px;transition:all .15s" onmouseover="this.style.borderColor='var(--b3)'" onmouseout="this.style.borderColor='var(--b2)'">
@@ -839,49 +973,38 @@ try{
 
 <!-- COPY TRADER -->
 <div class="sec" id="sec-copytrader">
-  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center;gap:20px;padding:40px 20px">
-    <!-- Icono -->
-    <div style="width:80px;height:80px;border-radius:50%;background:rgba(139,92,246,.12);border:2px solid rgba(139,92,246,.25);display:flex;align-items:center;justify-content:center">
-      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(139,92,246,.8)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-        <circle cx="9" cy="7" r="4"/>
-        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-      </svg>
+  <div style="max-width:660px;margin:0 auto;padding:40px 20px;text-align:center">
+    <div style="width:72px;height:72px;border-radius:20px;background:linear-gradient(135deg,rgba(139,92,246,.2),rgba(91,124,247,.2));border:1.5px solid rgba(139,92,246,.35);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:32px">👥</div>
+    <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.3);border-radius:20px;padding:4px 14px;font-size:10px;color:#a78bfa;font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-bottom:16px">
+      <span style="width:6px;height:6px;border-radius:50%;background:#a78bfa;display:inline-block"></span> En desarrollo
     </div>
-    <!-- Badge -->
-    <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.3);border-radius:20px;padding:4px 14px;font-size:11px;color:#a78bfa;font-weight:600;letter-spacing:.5px">
-      <span style="width:6px;height:6px;border-radius:50%;background:#a78bfa;animation:pulse 2s infinite"></span>
-      PRÓXIMAMENTE
-    </div>
-    <!-- Título -->
-    <div>
-      <div style="font-size:24px;font-weight:700;color:var(--tx1);margin-bottom:8px">Copy Trader</div>
-      <div style="font-size:13px;color:var(--tx3);max-width:420px;line-height:1.7">
-        Copia automáticamente las operaciones de los mejores traders de la plataforma. Configura tu riesgo, selecciona tus maestros y deja que el sistema trabaje por ti.
+    <h2 style="font-size:26px;font-weight:800;color:var(--tx);margin-bottom:12px;line-height:1.2">Copy Trader Social<br><span style="background:linear-gradient(90deg,var(--cy),#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent">está en camino</span></h2>
+    <p style="font-size:13px;color:var(--tx2);line-height:1.7;margin-bottom:28px;max-width:480px;margin-left:auto;margin-right:auto">Sigue a los mejores traders de SimpleTrader y copia sus operaciones automáticamente. Configura tu riesgo, selecciona tus maestros y deja que el sistema trabaje por ti.</p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:32px;text-align:left">
+      <div style="background:var(--card);border:1px solid var(--b1);border-radius:12px;padding:16px 14px">
+        <div style="font-size:22px;margin-bottom:8px">🔍</div>
+        <div style="font-size:12px;font-weight:700;color:var(--tx);margin-bottom:4px">Descubrir traders</div>
+        <div style="font-size:10.5px;color:var(--tx3);line-height:1.5">Filtra por estrategia, instrumento, rendimiento y prop firm</div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--b1);border-radius:12px;padding:16px 14px">
+        <div style="font-size:22px;margin-bottom:8px">⚡</div>
+        <div style="font-size:12px;font-weight:700;color:var(--tx);margin-bottom:4px">Copia en tiempo real</div>
+        <div style="font-size:10.5px;color:var(--tx3);line-height:1.5">Operaciones replicadas al instante con el mismo sistema del Replicador</div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--b1);border-radius:12px;padding:16px 14px">
+        <div style="font-size:22px;margin-bottom:8px">🛡️</div>
+        <div style="font-size:12px;font-weight:700;color:var(--tx);margin-bottom:4px">Control total del riesgo</div>
+        <div style="font-size:10.5px;color:var(--tx3);line-height:1.5">Define límites de pérdida diaria, tamaño de copia y multiplicador</div>
       </div>
     </div>
-    <!-- Features próximas -->
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:520px;margin-top:8px">
-      <div style="background:var(--bg2);border:1px solid var(--b1);border-radius:10px;padding:14px 12px;text-align:center">
-        <div style="font-size:20px;margin-bottom:6px">🔍</div>
-        <div style="font-size:11px;font-weight:600;color:var(--tx1);margin-bottom:3px">Descubrir traders</div>
-        <div style="font-size:10px;color:var(--tx3)">Filtra por estrategia, instrumento y rendimiento</div>
+    <div style="background:linear-gradient(135deg,rgba(139,92,246,.08),rgba(91,124,247,.08));border:1px solid rgba(139,92,246,.25);border-radius:16px;padding:28px 24px">
+      <div style="font-size:15px;font-weight:800;color:var(--tx);margin-bottom:6px">Únete a la lista de espera</div>
+      <div style="font-size:11.5px;color:var(--tx2);margin-bottom:18px">Sé el primero en acceder cuando lancemos. Los de la lista tendrán <b style="color:var(--cy)">1 mes gratis</b>.</div>
+      <div style="display:flex;gap:8px;max-width:400px;margin:0 auto" id="ct-wl-form">
+        <input id="ct-wl-email" type="email" placeholder="tu@email.com" style="flex:1;padding:10px 13px;background:var(--bg3);border:1.5px solid var(--b2);border-radius:8px;color:var(--tx);font-size:12px;font-family:var(--sans);outline:none;transition:border .15s" onfocus="this.style.borderColor=&apos;var(--cy)&apos;" onblur="this.style.borderColor=&apos;var(--b2)&apos;" onkeydown="if(event.key===&apos;Enter&apos;)ctJoinWaitlist()">
+        <button onclick="ctJoinWaitlist()" style="padding:10px 18px;background:linear-gradient(90deg,var(--cy),#8B5CF6);border:none;border-radius:8px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--sans);white-space:nowrap">Apuntarme →</button>
       </div>
-      <div style="background:var(--bg2);border:1px solid var(--b1);border-radius:10px;padding:14px 12px;text-align:center">
-        <div style="font-size:20px;margin-bottom:6px">⚡</div>
-        <div style="font-size:11px;font-weight:600;color:var(--tx1);margin-bottom:3px">Copia automática</div>
-        <div style="font-size:10px;color:var(--tx3)">Operaciones replicadas en tiempo real</div>
-      </div>
-      <div style="background:var(--bg2);border:1px solid var(--b1);border-radius:10px;padding:14px 12px;text-align:center">
-        <div style="font-size:20px;margin-bottom:6px">🛡️</div>
-        <div style="font-size:11px;font-weight:600;color:var(--tx1);margin-bottom:3px">Control de riesgo</div>
-        <div style="font-size:10px;color:var(--tx3)">Define límites de pérdida y tamaño por copia</div>
-      </div>
-    </div>
-    <!-- Nota inferior -->
-    <div style="font-size:10.5px;color:var(--tx3);margin-top:4px">
-      Estamos trabajando en esta funcionalidad. ¡Muy pronto disponible!
+      <div id="ct-wl-ok" style="display:none;color:var(--gn);font-size:12px;font-weight:600;margin-top:12px">✅ ¡Anotado! Te avisamos cuando lancemos.</div>
     </div>
   </div>
 </div>
@@ -5441,6 +5564,87 @@ setTimeout(renderNotifs,400);
 </div>
 
 <script>
+// ── Copy Trader Waitlist ─────────────────────
+async function ctJoinWaitlist(){
+  var emailEl = document.getElementById('ct-wl-email');
+  var email = emailEl ? emailEl.value.trim() : '';
+  if(!email || !email.includes('@')){ toast('Introduce un email válido','err'); return; }
+  try { var wl = JSON.parse(localStorage.getItem('st_waitlist')||'[]'); wl.push({email,feature:'copy_trader',ts:Date.now()}); localStorage.setItem('st_waitlist', JSON.stringify(wl)); } catch(e){}
+  var form = document.getElementById('ct-wl-form');
+  var ok = document.getElementById('ct-wl-ok');
+  if(form) form.style.display='none';
+  if(ok) ok.style.display='block';
+  toast('¡Apuntado a la lista de espera! 🎉','ok',3500);
+}
+
+// ═══════════════════════════════════════════
+// MOBILE RESPONSIVE JS
+// ═══════════════════════════════════════════
+
+var _isMobile = window.innerWidth <= 768;
+window.addEventListener('resize', function(){ _isMobile = window.innerWidth <= 768; });
+
+function openMobSB(){
+  if(!_isMobile) return;
+  document.getElementById('sb').classList.add('mob-open');
+  document.getElementById('sb-overlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeMobSB(){
+  document.getElementById('sb').classList.remove('mob-open');
+  document.getElementById('sb-overlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+// Mobile bottom tab navigation
+function mobNav(section, btn){
+  closeMobSB();
+  // update bottom tabs
+  document.querySelectorAll('.mob-tab').forEach(function(t){ t.classList.remove('act'); });
+  if(btn) btn.classList.add('act');
+  // trigger normal nav
+  var ni = document.querySelector('[data-s="'+section+'"]');
+  if(ni) nav(ni);
+}
+
+// Sync bottom tabs when nav() is called from sidebar
+var _origNav = window.nav;
+window.nav = function(el){
+  if(_origNav) _origNav.call(this, el);
+  if(_isMobile){
+    closeMobSB();
+    var section = el && el.getAttribute('data-s');
+    var mobTabs = ['dashboard','journal','replicator','markets'];
+    document.querySelectorAll('.mob-tab').forEach(function(t){ t.classList.remove('act'); });
+    if(section && mobTabs.includes(section)){
+      var mob = document.getElementById('mobt-'+section);
+      if(mob) mob.classList.add('act');
+    }
+  }
+};
+
+// Swipe to close sidebar on mobile
+(function(){
+  var startX = 0, startY = 0;
+  document.addEventListener('touchstart', function(e){
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+  }, {passive:true});
+  document.addEventListener('touchend', function(e){
+    if(!_isMobile) return;
+    var dx = e.changedTouches[0].clientX - startX;
+    var dy = Math.abs(e.changedTouches[0].clientY - startY);
+    // Swipe right → open sidebar
+    if(dx > 60 && dy < 80 && startX < 30){
+      openMobSB();
+    }
+    // Swipe left → close sidebar
+    if(dx < -60 && dy < 80){
+      closeMobSB();
+    }
+  }, {passive:true});
+})();
+
 // ═══════════════════════════════════════════
 // LEGAL & COMPLIANCE JS
 // ═══════════════════════════════════════════

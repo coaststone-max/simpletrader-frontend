@@ -1,0 +1,21 @@
+{
+  "name": "SimpleTrader — Futures & Prop Firms",
+  "short_name": "SimpleTrader",
+  "description": "Plataforma de gestión y replicación de trades para prop firms",
+  "start_url": "/simpletrader.html",
+  "display": "standalone",
+  "background_color": "#0d0f14",
+  "theme_color": "#5B7CF7",
+  "orientation": "any",
+  "lang": "es",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "categories": ["finance", "productivity"],
+  "shortcuts": [
+    { "name": "Dashboard", "url": "/simpletrader.html#dashboard", "description": "Ver dashboard principal" },
+    { "name": "Journal", "url": "/simpletrader.html#journal", "description": "Ver journal de trading" },
+    { "name": "Replicador", "url": "/simpletrader.html#replicator", "description": "Gestionar replicador" }
+  ]
+}
