@@ -472,9 +472,9 @@ tbody tr:last-child td{border-bottom:none}
 
 @media (max-width: 768px) {
   /* Hide desktop sidebar */
-  .sb{position:fixed;top:0;bottom:0;left:0;z-index:2000;transform:translateX(-100%);transition:transform .28s cubic-bezier(.4,0,.2,1);width:260px!important;min-width:260px!important;box-shadow:4px 0 30px rgba(0,0,0,.5)}
+  .sb{position:fixed;top:0;bottom:0;left:0;z-index:2000;transform:translateX(-100%);transition:transform .28s cubic-bezier(.4,0,.2,1);width:280px!important;min-width:280px!important;box-shadow:4px 0 30px rgba(0,0,0,.5)}
   .sb.mob-open{transform:translateX(0)}
-  .sb.col{width:260px!important;min-width:260px!important}
+  .sb.col{width:280px!important;min-width:280px!important}
   .sb.col .sb-txt,.sb.col .ni-lbl,.sb.col .nb,.sb.col .u-info,.sb.col .ll,.sb.col .sg,.sb.col .sb-legal-links{opacity:1!important;max-width:none!important;height:auto!important;padding:revert!important;overflow:visible!important;max-height:none!important;margin:revert!important}
   #sb-overlay{display:block;opacity:0;pointer-events:none;transition:opacity .28s}
   #sb-overlay.show{opacity:1;pointer-events:auto}
@@ -483,36 +483,65 @@ tbody tr:last-child td{border-bottom:none}
   #mob-tabs{display:flex}
   #mob-menu-btn{display:flex}
 
-  /* Main layout adjusts */
+  /* Main layout — full height minus bottom tabs */
   .app{flex-direction:column}
-  .main{height:100vh;padding-bottom:60px}
+  .main{height:100vh;padding-bottom:64px;overflow:hidden}
 
-  /* Topbar simplification */
-  .topbar{padding:0 12px;gap:8px}
-  .tb-t{font-size:13px!important}
+  /* Topbar — compact */
+  .topbar{padding:0 10px;gap:6px;height:48px;min-height:48px}
+  .tb-t{font-size:13px!important;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .tb-clk{display:none}
   .tickers{display:none}
   .ws-p span{display:none}
-  button[onclick="openCMD()"]{min-width:unset!important;padding:5px 9px!important;flex:1}
+  .ws-p{padding:3px 6px!important}
+  button[onclick="openCMD()"]{min-width:36px!important;padding:5px 8px!important;flex:0 0 auto!important}
   button[onclick="openCMD()"] span{display:none}
   button[onclick="openCMD()"] kbd{display:none}
   button[onclick="toggleSB()"]{display:none}
+  #theme-btn{width:28px!important;height:28px!important;font-size:13px!important}
 
-  /* Content padding */
-  .content{padding:10px 10px 16px}
+  /* Content — allow horizontal scroll inside cards */
+  .content{padding:10px 10px 16px;overflow-y:auto;overflow-x:hidden}
 
   /* Login screen */
   #ls{flex-direction:column}
   .ls-l{display:none}
-  .ls-r{width:100%!important;border-left:none!important;padding:32px 24px!important;justify-content:flex-start!important;padding-top:60px!important}
+  .ls-r{width:100%!important;border-left:none!important;padding:32px 24px!important;justify-content:flex-start!important;padding-top:56px!important}
 
-  /* Cards grid */
+  /* Cards grids */
   .g4{grid-template-columns:repeat(2,1fr)!important}
   .g3{grid-template-columns:repeat(2,1fr)!important}
   .g2{grid-template-columns:1fr!important}
   .pgrd{grid-template-columns:repeat(2,1fr)!important}
 
-  /* Modals fullscreen */
+  /* Tables — horizontal scroll wrapper */
+  .card table,.sec table{display:block!important;overflow-x:auto!important;-webkit-overflow-scrolling:touch!important;width:100%!important}
+  table thead,table tbody,table tr{display:table;width:100%;table-layout:auto}
+  th,td{white-space:nowrap;font-size:10px!important;padding:6px 8px!important}
+
+  /* MT5 rows — scrollable */
+  .mt5-pos-row,.mt5-hdr{min-width:420px}
+  .mt5-card{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+  /* Master tabs — horizontal scroll */
+  .mtab{min-width:140px!important;padding:7px 10px!important}
+  .mtab-add{min-width:90px!important}
+  div[style*="overflow-x"]{-webkit-overflow-scrolling:touch}
+
+  /* Cards content */
+  .card{padding:14px 12px!important}
+  .hd{font-size:11px!important}
+  .mc{padding:12px!important}
+  .mv{font-size:18px!important}
+
+  /* Rules strip — wrap */
+  .rstrip{flex-wrap:wrap;gap:4px}
+  .rp{font-size:9px!important;padding:3px 8px!important}
+
+  /* KPI values — smaller on mobile */
+  .kv,.mv{font-size:18px!important}
+
+  /* Modals fullscreen sheet */
   .mm{width:100%!important;max-width:100%!important;margin:0!important;border-radius:16px 16px 0 0!important;max-height:92vh!important;overflow-y:auto}
   #pm{padding:0!important;align-items:flex-end!important}
   .lm-box{width:100%!important;max-height:95vh!important;border-radius:16px 16px 0 0!important}
@@ -5623,23 +5652,42 @@ window.nav = function(el){
   }
 };
 
-// Swipe to close sidebar on mobile
+// Swipe gestures for mobile sidebar
 (function(){
-  var startX = 0, startY = 0;
+  var startX = 0, startY = 0, tracking = false;
   document.addEventListener('touchstart', function(e){
     startX = e.touches[0].clientX;
     startY = e.touches[0].clientY;
+    tracking = true;
+  }, {passive:true});
+  document.addEventListener('touchmove', function(e){
+    if(!tracking || !_isMobile) return;
+    var dx = e.touches[0].clientX - startX;
+    var dy = Math.abs(e.touches[0].clientY - startY);
+    // Open sidebar: swipe right from left 20% of screen
+    if(dx > 8 && dy < 60 && startX < window.innerWidth * 0.2){
+      var sb = document.getElementById('sb');
+      if(sb && !sb.classList.contains('mob-open')){
+        // Show partial drag feedback
+        var progress = Math.min(1, dx / 120);
+        sb.style.transform = 'translateX(calc(-100% + ' + (progress * 40) + 'px))';
+      }
+    }
   }, {passive:true});
   document.addEventListener('touchend', function(e){
-    if(!_isMobile) return;
+    if(!tracking || !_isMobile){ tracking=false; return; }
+    tracking = false;
     var dx = e.changedTouches[0].clientX - startX;
     var dy = Math.abs(e.changedTouches[0].clientY - startY);
-    // Swipe right → open sidebar
-    if(dx > 60 && dy < 80 && startX < 30){
+    var sb = document.getElementById('sb');
+    // Reset transform first
+    if(sb) sb.style.transform = '';
+    // Swipe right from left edge → open
+    if(dx > 50 && dy < 80 && startX < window.innerWidth * 0.25){
       openMobSB();
     }
-    // Swipe left → close sidebar
-    if(dx < -60 && dy < 80){
+    // Swipe left → close
+    else if(dx < -50 && dy < 80){
       closeMobSB();
     }
   }, {passive:true});
