@@ -494,9 +494,7 @@ tbody tr:last-child td{border-bottom:none}
   .tickers{display:none}
   .ws-p span{display:none}
   .ws-p{padding:3px 6px!important}
-  button[onclick="openCMD()"]{min-width:36px!important;padding:5px 8px!important;flex:0 0 auto!important}
-  button[onclick="openCMD()"] span{display:none}
-  button[onclick="openCMD()"] kbd{display:none}
+  button[onclick="openCMD()"]{display:none!important}
   button[onclick="toggleSB()"]{display:none}
   #theme-btn{width:28px!important;height:28px!important;font-size:13px!important}
 
@@ -569,6 +567,29 @@ tbody tr:last-child td{border-bottom:none}
 
   /* Onboarding step padding */
   .ob-step{padding:28px 24px!important}
+
+  /* Journal filter row — horizontal scroll */
+  .fb{font-size:10px!important;padding:4px 9px!important;white-space:nowrap;flex-shrink:0}
+  /* Override inline flex-wrap:wrap on filter bar */
+  #sec-journal .card > div:first-child,
+  div[style*="flex-wrap:wrap"][style*="margin-bottom:9px"]{flex-wrap:nowrap!important;overflow-x:auto!important;-webkit-overflow-scrolling:touch!important;padding-bottom:4px!important;scrollbar-width:none}
+  #sec-journal .card > div:first-child .srch{min-width:80px!important;max-width:100px!important;flex-shrink:0}
+  #sec-journal .card > div:first-child button[onclick="exportCSV()"]{flex-shrink:0!important}
+
+  /* Journal layout — stack to single column */
+  #sec-journal > div > div[style*="grid-template-columns:1fr 245px"],
+  div[style*="grid-template-columns:1fr 245px"]{grid-template-columns:1fr!important}
+
+  /* Calendar — stack views panel below grid */
+  #cal-card > div[style*="170px"]{grid-template-columns:1fr!important}
+  #cal-card{overflow-x:hidden}
+
+  /* Calendar cells — compact */
+  .cal-g{gap:1px!important}
+
+  /* Calendar header controls — wrap nav to own row */
+  #cal-card > div:first-child{flex-wrap:wrap!important;gap:6px!important}
+  #cal-card > div:first-child > div:last-child{margin-left:0!important;width:100%!important;justify-content:flex-end}
 }
 
 @media (max-width: 480px) {
