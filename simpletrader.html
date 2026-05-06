@@ -5408,9 +5408,9 @@ function renderDailyHeatmap() {
   // Build from real trade data (JTRADES or _calTrades for demo)
   var source = _calTrades.length ? _calTrades : [];
   var tradeMap = {};
-  source.forEach(function(t){ var k=t.dt||''; if(k)tradeMap[k]=(tradeMap[k]||0)++(t.gross-t.comm); });
+  source.forEach(function(t){ var k=t.dt||''; if(k){if(!tradeMap[k])tradeMap[k]=0; tradeMap[k]+=+(t.gross-t.comm);} });
   // Also merge JTRADES (use dt for ISO key, fall back to date)
-  JTRADES.forEach(function(t){ var k=t.dt||''; if(k)tradeMap[k]=(tradeMap[k]||0)++(t.gross-t.comm); });
+  JTRADES.forEach(function(t){ var k=t.dt||''; if(k){if(!tradeMap[k])tradeMap[k]=0; tradeMap[k]+=+(t.gross-t.comm);} });
   var hasData = Object.keys(tradeMap).length > 0;
   // Anchor heatmap to latest trade date (so demo data from 2025 shows properly)
   var allTradeDates = Object.keys(tradeMap).filter(function(k){return /^\d{4}-\d{2}-\d{2}$/.test(k);}).sort();
