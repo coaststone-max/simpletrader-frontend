@@ -598,8 +598,8 @@ tbody tr:last-child td{border-bottom:none}
   #sec-journal .card > div:first-child button[onclick="exportCSV()"]{flex-shrink:0!important}
 
   /* ── Stack ALL two-column layouts with fixed px right column ── */
-  div[style*="grid-template-columns:1fr 245px"],
-  div[style*="grid-template-columns:1fr 170px"],
+  #journal-grid,
+  #cal-grid,
   div[style*="grid-template-columns:1fr 330px"],
   div[style*="grid-template-columns:1fr 310px"],
   div[style*="grid-template-columns:1fr 350px"]{grid-template-columns:1fr!important}
@@ -1000,7 +1000,7 @@ try{
     <div class="mc"><div class="ml">Avg Win</div><div class="mv gr" id="j-kpi-aw">$0</div><div class="ms gr">+0 ticks</div></div>
     <div class="mc"><div class="ml">Avg Loss</div><div class="mv gr" id="j-kpi-al">$0</div><div class="ms gr">-0 ticks</div></div>
   </div>
-  <div style="display:grid;grid-template-columns:1fr 245px;gap:11px">
+  <div id="journal-grid" style="display:grid;grid-template-columns:1fr 245px;gap:11px">
     <div>
       <div class="card" style="margin-bottom:11px">
         <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:9px">
@@ -1025,7 +1025,7 @@ try{
             <button class="tbtn" onclick="calGoToday()" style="font-size:9px;padding:0 6px;width:auto">Hoy</button>
           </div>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 170px;gap:11px">
+        <div id="cal-grid" style="display:grid;grid-template-columns:1fr 170px;gap:11px">
           <div id="cal-main"></div>
           <div id="cal-sidebar" style="display:flex;flex-direction:column;gap:6px"></div>
         </div>
