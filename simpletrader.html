@@ -492,12 +492,12 @@ tbody tr:last-child td{border-bottom:none}
   #swipe-zone{display:block}
   #sb-pull-tab{display:flex}
 
-  /* Main layout — full height minus bottom tabs */
+  /* Main layout */
   .app{flex-direction:column}
-  .main{height:100vh;overflow:hidden;padding-bottom:0}
+  .main{position:relative!important;height:100vh!important;overflow:visible!important;padding:0!important}
 
-  /* Topbar — compact */
-  .topbar{padding:0 10px;gap:6px;height:48px;min-height:48px}
+  /* Topbar — compact, fixed at top */
+  .topbar{position:relative;z-index:10;padding:0 10px;gap:6px;height:48px!important;min-height:48px!important;flex-shrink:0}
   .tb-t{font-size:13px!important;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .tb-clk{display:none}
   .tickers{display:none}
@@ -507,8 +507,20 @@ tbody tr:last-child td{border-bottom:none}
   button[onclick="toggleSB()"]{display:none}
   #theme-btn{width:28px!important;height:28px!important;font-size:13px!important}
 
-  /* Content — scrollable, clear of bottom tabs */
-  .content{padding:10px 10px 80px!important;overflow-y:auto!important;overflow-x:hidden;-webkit-overflow-scrolling:touch;height:calc(100vh - 48px);box-sizing:border-box}
+  /* Content — absolute positioned so iOS scroll works reliably */
+  .content{
+    position:absolute!important;
+    top:48px!important;
+    bottom:64px!important;
+    left:0!important;
+    right:0!important;
+    height:auto!important;
+    overflow-y:scroll!important;
+    overflow-x:hidden!important;
+    -webkit-overflow-scrolling:touch!important;
+    padding:10px 10px 20px!important;
+    box-sizing:border-box!important;
+  }
 
   /* Login screen */
   #ls{flex-direction:column}
