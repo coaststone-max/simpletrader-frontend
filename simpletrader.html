@@ -597,13 +597,12 @@ tbody tr:last-child td{border-bottom:none}
   #sec-journal .card > div:first-child .srch{min-width:80px!important;max-width:100px!important;flex-shrink:0}
   #sec-journal .card > div:first-child button[onclick="exportCSV()"]{flex-shrink:0!important}
 
-  /* Journal layout — stack to single column */
-  #sec-journal > div > div[style*="grid-template-columns:1fr 245px"],
-  div[style*="grid-template-columns:1fr 245px"]{grid-template-columns:1fr!important}
-
-  /* Calendar — stack views panel below grid */
-  #cal-card > div[style*="170px"]{grid-template-columns:1fr!important}
-  #cal-card{overflow-x:hidden}
+  /* ── Stack ALL two-column layouts with fixed px right column ── */
+  div[style*="grid-template-columns:1fr 245px"],
+  div[style*="grid-template-columns:1fr 170px"],
+  div[style*="grid-template-columns:1fr 330px"],
+  div[style*="grid-template-columns:1fr 310px"],
+  div[style*="grid-template-columns:1fr 350px"]{grid-template-columns:1fr!important}
 
   /* Calendar cells — compact */
   .cal-g{gap:1px!important}
@@ -611,6 +610,25 @@ tbody tr:last-child td{border-bottom:none}
   /* Calendar header controls — wrap nav to own row */
   #cal-card > div:first-child{flex-wrap:wrap!important;gap:6px!important}
   #cal-card > div:first-child > div:last-child{margin-left:0!important;width:100%!important;justify-content:flex-end}
+
+  /* World clocks — 2 per row instead of 5 */
+  div[style*="grid-template-columns:repeat(5,1fr)"]{grid-template-columns:repeat(2,1fr)!important}
+
+  /* Copy trader feature cards — 1 per row */
+  div[style*="grid-template-columns:repeat(3,1fr)"]{grid-template-columns:1fr!important}
+
+  /* News rows — horizontal scroll */
+  div[style*="grid-template-columns:52px"]{
+    display:flex!important;
+    overflow-x:auto!important;
+    -webkit-overflow-scrolling:touch!important;
+    gap:6px!important;
+    min-width:0;
+  }
+  div[style*="grid-template-columns:52px"] > *{flex-shrink:0}
+
+  /* Replicador accounts column */
+  div[style*="grid-template-columns:1fr 1fr;gap:9px"]{grid-template-columns:1fr!important}
 }
 
 @media (max-width: 480px) {
