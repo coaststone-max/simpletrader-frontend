@@ -1686,6 +1686,7 @@ function doDemo(){
   LEVELS.splice(0);_DEMO_LEVELS.forEach(l=>LEVELS.push(Object.assign({},l)));
   planHistory.splice(0);_DEMO_planHistory.forEach(p=>planHistory.push(Object.assign({},p)));
   _calTrades.splice(0);_DEMO_CAL_TRADES.forEach(t=>_calTrades.push(Object.assign({},t)));
+  rebuildCALMAP(); // rebuild calendar index after demo data loaded
   pfRules=pfRules.length?pfRules:[...pfRules]; // keep defaults
   U.name='Demo Trader';U.email='demo@simpletrader.app';U.initials='DT';U.plan='Pro';U.planCls='pt-p';
   syncUI();enterApp();
@@ -3365,10 +3366,16 @@ const MT5_BROKERS = [
 
 // Saved accounts: {uid -> {pfId, brokerId, accountNum, planSize, brokerCreds, status, balance, pnl, maxDD, dailyLoss, target}}
 const _DEMO_SAVED_ACCOUNTS = [
+  // Green DD gauge (0% used — profitable day)
   {uid:'a1',pfId:'apex',brokerId:'rithmic',accountNum:'#APX-84729301',planSize:'PA 150K',status:'connected',balance:151840,pnl:1840,broker_user:'jgarcia',phase:'PA Funded',maxDD:3000,dailyLoss:1500,target:9000},
+  // Green DD gauge (0% used — profitable day)
   {uid:'a2',pfId:'apex',brokerId:'rithmic',accountNum:'#APX-23981023',planSize:'PA 50K',status:'connected',balance:51240,pnl:1240,broker_user:'jgarcia',phase:'PA Funded',maxDD:2500,dailyLoss:1000,target:3000},
+  // Amber DD gauge (56% used — caution zone)
   {uid:'a3',pfId:'topstepx',brokerId:'rithmic',accountNum:'#TSX-44918271',planSize:'150K',status:'connected',balance:148320,pnl:-1680,broker_user:'jgarcia',phase:'Funded',maxDD:3000,dailyLoss:2000,target:9000},
-  {uid:'a4',pfId:'bulenox',brokerId:'rithmic',accountNum:'#BULN-99123441',planSize:'150K',status:'error',balance:149100,pnl:-900,broker_user:'jgarcia',phase:'Funded',maxDD:3000,dailyLoss:1500,target:9000},
+  // Red DD gauge (87% used — danger zone, in error/reconectar state)
+  {uid:'a4',pfId:'bulenox',brokerId:'rithmic',accountNum:'#BULN-99123441',planSize:'150K',status:'error',balance:149100,pnl:-2600,broker_user:'jgarcia',phase:'Funded',maxDD:3000,dailyLoss:1500,target:9000},
+  // Disconnected — shows connect button
+  {uid:'a5',pfId:'tradeday',brokerId:'tradovate',accountNum:'#TDF-77341829',planSize:'150K',status:'disconnected',balance:151200,pnl:0,broker_user:'jgarcia',phase:'Funded',maxDD:3000,dailyLoss:1500,target:9000},
 ];
 let SAVED_ACCOUNTS = [];
 
@@ -5159,13 +5166,13 @@ function renderDailyBars() {
     el.innerHTML='<div style="font-size:11px;color:var(--tx3);padding:20px 0;text-align:center">Sin datos de trading aún</div>';
     return;
   }
-  // Group JTRADES by date, last 14 trading days
+  // Group JTRADES by ISO date (t.dt), last 14 trading days
   var map={};
-  JTRADES.forEach(function(t){var d=t.date||'';if(!map[d])map[d]=0;map[d]+=+(t.gross-t.comm).toFixed(0);});
+  JTRADES.forEach(function(t){var d=t.dt||t.date||'';if(!map[d])map[d]=0;map[d]+=+(t.gross-t.comm).toFixed(0);});
   var sorted=Object.entries(map).sort(function(a,b){return a[0]>b[0]?1:-1;}).slice(-14);
   var pnls=sorted.map(function(e){return e[1];});
   var dayNames=['D','L','M','X','J','V','S'];
-  var days=sorted.map(function(e){try{var d=new Date(e[0]);return dayNames[d.getDay()];}catch(ex){return'?';}});
+  var days=sorted.map(function(e){try{var d=new Date(e[0]);return isNaN(d)?'?':dayNames[d.getDay()];}catch(ex){return'?';}});
   var max = Math.max.apply(null, pnls.map(Math.abs)) || 1;
   el.innerHTML = '<div style="display:flex;align-items:flex-end;gap:3px;height:140px;padding-bottom:18px;position:relative">'
     + pnls.map(function(p,i){
@@ -5401,12 +5408,13 @@ function renderDailyHeatmap() {
   // Build from real trade data (JTRADES or _calTrades for demo)
   var source = _calTrades.length ? _calTrades : [];
   var tradeMap = {};
-  source.forEach(function(t){ var k=t.dt||t.date||''; if(!tradeMap[k])tradeMap[k]=0; tradeMap[k]+=+(t.gross-t.comm); });
-  // Also check JTRADES
-  JTRADES.forEach(function(t){ var k=t.date||''; if(!tradeMap[k])tradeMap[k]=0; tradeMap[k]+=+(t.gross-t.comm); });
+  source.forEach(function(t){ var k=t.dt||''; if(k)tradeMap[k]=(tradeMap[k]||0)++(t.gross-t.comm); });
+  // Also merge JTRADES (use dt for ISO key, fall back to date)
+  JTRADES.forEach(function(t){ var k=t.dt||''; if(k)tradeMap[k]=(tradeMap[k]||0)++(t.gross-t.comm); });
   var hasData = Object.keys(tradeMap).length > 0;
-  // Build cells for last 8 weeks ending today
-  var now = new Date();
+  // Anchor heatmap to latest trade date (so demo data from 2025 shows properly)
+  var allTradeDates = Object.keys(tradeMap).filter(function(k){return /^\d{4}-\d{2}-\d{2}$/.test(k);}).sort();
+  var now = allTradeDates.length ? new Date(allTradeDates[allTradeDates.length-1]) : new Date();
   var endDate = new Date(now);
   // Go to end of current week (Sunday)
   endDate.setDate(endDate.getDate() + (7 - endDate.getDay()) % 7);
