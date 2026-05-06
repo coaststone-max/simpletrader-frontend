@@ -494,7 +494,7 @@ tbody tr:last-child td{border-bottom:none}
 
   /* Main layout — full height minus bottom tabs */
   .app{flex-direction:column}
-  .main{height:100vh;padding-bottom:64px;overflow:hidden}
+  .main{height:100vh;overflow:hidden;padding-bottom:0}
 
   /* Topbar — compact */
   .topbar{padding:0 10px;gap:6px;height:48px;min-height:48px}
@@ -507,8 +507,8 @@ tbody tr:last-child td{border-bottom:none}
   button[onclick="toggleSB()"]{display:none}
   #theme-btn{width:28px!important;height:28px!important;font-size:13px!important}
 
-  /* Content — allow horizontal scroll inside cards */
-  .content{padding:10px 10px 16px;overflow-y:auto;overflow-x:hidden}
+  /* Content — scrollable, clear of bottom tabs */
+  .content{padding:10px 10px 80px!important;overflow-y:auto!important;overflow-x:hidden;-webkit-overflow-scrolling:touch;height:calc(100vh - 48px);box-sizing:border-box}
 
   /* Login screen */
   #ls{flex-direction:column}
