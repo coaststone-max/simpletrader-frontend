@@ -519,6 +519,14 @@ tbody tr:last-child td{border-bottom:none}
     position:static!important;
   }
 
+  /* Tables — let them be wider than container so .tw can scroll them */
+  .card table,.sec table{display:table!important;overflow-x:unset!important;width:auto!important;min-width:100%}
+  th,td{white-space:nowrap;font-size:10px!important;padding:6px 8px!important}
+  /* Wrapper scrolls horizontally */
+  .tw{overflow-x:auto!important;-webkit-overflow-scrolling:touch!important;width:100%}
+  /* Also any direct table in a card without .tw */
+  .card{overflow:visible!important}
+
   /* Login screen */
   #ls{flex-direction:column}
   .ls-l{display:none}
@@ -530,14 +538,9 @@ tbody tr:last-child td{border-bottom:none}
   .g2{grid-template-columns:1fr!important}
   .pgrd{grid-template-columns:repeat(2,1fr)!important}
 
-  /* Tables — horizontal scroll wrapper */
-  .card table,.sec table{display:block!important;overflow-x:auto!important;-webkit-overflow-scrolling:touch!important;width:100%!important}
-  table thead,table tbody,table tr{display:table;width:100%;table-layout:auto}
-  th,td{white-space:nowrap;font-size:10px!important;padding:6px 8px!important}
-
   /* MT5 rows — scrollable */
   .mt5-pos-row,.mt5-hdr{min-width:420px}
-  .mt5-card{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .mt5-card{overflow-x:auto!important;-webkit-overflow-scrolling:touch!important}
 
   /* Master tabs — horizontal scroll */
   .mtab{min-width:140px!important;padding:7px 10px!important}
