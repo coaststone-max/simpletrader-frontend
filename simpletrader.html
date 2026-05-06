@@ -2,7 +2,7 @@
 <html lang="es" data-theme="dark">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <title>SimpleTrader — Plataforma de Trading para Futuros y Prop Firms</title>
 <meta name="description" content="SimpleTrader es la plataforma todo-en-uno para traders de futuros y prop firms. Gestiona tus cuentas de Apex, TopstepTrader y más. Replicador automático de trades, journal, gestión de riesgo y estadísticas avanzadas.">
 <meta name="keywords" content="prop firm, futuros, trading, replicador, copy trading, apex trader funding, topstep, journal trading, gestión riesgo, tradovate">
@@ -498,7 +498,7 @@ tbody tr:last-child td{border-bottom:none}
 
   /* Main layout — flex column, height accounts for bottom tabs */
   .app{flex-direction:column!important;height:100vh!important;overflow:hidden!important}
-  .main{flex:1!important;min-height:0!important;display:flex!important;flex-direction:column!important;overflow:hidden!important;height:auto!important;padding-bottom:64px!important;box-sizing:border-box!important}
+  .main{flex:1!important;min-height:0!important;display:flex!important;flex-direction:column!important;overflow:hidden!important;height:auto!important;padding-bottom:calc(64px + env(safe-area-inset-bottom,0px))!important;box-sizing:border-box!important}
 
   /* Topbar */
   .topbar{flex-shrink:0!important;height:48px!important;min-height:48px!important;padding:0 10px;gap:6px}
@@ -518,10 +518,9 @@ tbody tr:last-child td{border-bottom:none}
     overflow-y:auto!important;
     overflow-x:hidden!important;
     -webkit-overflow-scrolling:touch!important;
-    padding:10px 10px 32px!important;
+    padding:10px 10px 24px!important;
     height:auto!important;
     position:static!important;
-    overscroll-behavior-y:contain!important;
   }
 
   /* Tables — let them be wider than container so .tw can scroll them */
