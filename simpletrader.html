@@ -471,7 +471,11 @@ tbody tr:last-child td{border-bottom:none}
 #mob-menu-btn{display:none;padding:6px;border-radius:7px;border:1px solid var(--b2);background:transparent;cursor:pointer;color:var(--tx2);align-items:center;justify-content:center}
 
 /* Swipe zone — fixed left edge, above content, below sidebar */
-#swipe-zone{display:none;position:fixed;top:0;left:0;bottom:0;width:44px;z-index:1998;-webkit-tap-highlight-color:transparent;touch-action:pan-y}
+#swipe-zone{display:none;position:fixed;top:0;left:0;bottom:0;width:44px;z-index:1998;-webkit-tap-highlight-color:transparent;touch-action:none}
+
+/* Pull tab — visible arrow on left edge */
+#sb-pull-tab{display:none;position:fixed;left:0;top:50%;transform:translateY(-50%);z-index:1999;background:var(--cy);color:#fff;border:none;border-radius:0 8px 8px 0;padding:12px 7px;cursor:pointer;box-shadow:2px 0 12px rgba(0,0,0,.4);-webkit-tap-highlight-color:transparent;transition:opacity .2s}
+#sb-pull-tab.hidden{opacity:0;pointer-events:none}
 
 @media (max-width: 768px) {
   /* Hide desktop sidebar */
@@ -486,6 +490,7 @@ tbody tr:last-child td{border-bottom:none}
   #mob-tabs{display:flex}
   #mob-menu-btn{display:flex}
   #swipe-zone{display:block}
+  #sb-pull-tab{display:flex}
 
   /* Main layout — full height minus bottom tabs */
   .app{flex-direction:column}
@@ -878,6 +883,10 @@ try{
 <!-- Mobile sidebar overlay -->
 <div id="sb-overlay" onclick="closeMobSB()"></div>
 <div id="swipe-zone"></div>
+<!-- Visible pull-tab on left edge (mobile only) -->
+<button id="sb-pull-tab" onclick="openMobSB()" aria-label="Abrir menú">
+  <svg width="10" height="18" viewBox="0 0 10 18" fill="none"><path d="M2 2l6 7-6 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
 
 <!-- Mobile bottom tab bar -->
 <div id="mob-tabs">
@@ -5640,16 +5649,22 @@ var _isMobile = window.innerWidth <= 768;
 window.addEventListener('resize', function(){ _isMobile = window.innerWidth <= 768; });
 
 function openMobSB(){
-  var sb = document.getElementById('sb');
-  var ov = document.getElementById('sb-overlay');
+  var sb  = document.getElementById('sb');
+  var ov  = document.getElementById('sb-overlay');
+  var tab = document.getElementById('sb-pull-tab');
   if(!sb) return;
   sb.classList.add('mob-open');
-  if(ov) ov.classList.add('show');
+  if(ov)  ov.classList.add('show');
+  if(tab) tab.classList.add('hidden');
   document.body.style.overflow = 'hidden';
 }
 function closeMobSB(){
-  document.getElementById('sb').classList.remove('mob-open');
-  document.getElementById('sb-overlay').classList.remove('show');
+  var sb  = document.getElementById('sb');
+  var ov  = document.getElementById('sb-overlay');
+  var tab = document.getElementById('sb-pull-tab');
+  if(sb)  sb.classList.remove('mob-open');
+  if(ov)  ov.classList.remove('show');
+  if(tab) tab.classList.remove('hidden');
   document.body.style.overflow = '';
 }
 
