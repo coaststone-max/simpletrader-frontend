@@ -5641,8 +5641,18 @@ function drawAnalogClock(containerId, tz, label, isPrime) {
 }
 
 function renderAllClocks() {
-  // Delegate to renderClocks() which uses the CITIES array
-  renderClocks();
+  var el = document.getElementById('world-clocks');
+  if (!el) return;
+  // Create clock containers if not yet created
+  if (!document.getElementById('clk-madrid')) {
+    el.innerHTML = CLOCKS.map(function(clk){
+      return '<div id="'+clk.id+'"></div>';
+    }).join('');
+  }
+  // Draw each analog clock
+  CLOCKS.forEach(function(clk){
+    drawAnalogClock(clk.id, clk.tz, clk.label, clk.prime);
+  });
 }
 
 // ─── UNIFIED CLOCK TICK ──────────────────────────────────────────────
