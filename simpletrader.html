@@ -470,6 +470,10 @@ tbody tr:last-child td{border-bottom:none}
 /* Mobile hamburger in topbar */
 #mob-menu-btn{display:none;padding:6px;border-radius:7px;border:1px solid var(--b2);background:transparent;cursor:pointer;color:var(--tx2);align-items:center;justify-content:center}
 
+/* Journal & calendar responsive grids */
+.j-grid{display:grid;grid-template-columns:1fr 245px;gap:11px}
+.cal-inner-grid{display:grid;grid-template-columns:1fr 170px;gap:11px}
+
 /* Swipe zone — fixed left edge, above content, below sidebar */
 #swipe-zone{display:none;position:fixed;top:0;left:0;bottom:0;width:44px;z-index:1998;-webkit-tap-highlight-color:transparent;touch-action:none}
 
@@ -597,9 +601,8 @@ tbody tr:last-child td{border-bottom:none}
   #sec-journal .card > div:first-child .srch{min-width:80px!important;max-width:100px!important;flex-shrink:0}
   #sec-journal .card > div:first-child button[onclick="exportCSV()"]{flex-shrink:0!important}
 
-  /* ── Stack ALL two-column layouts with fixed px right column ── */
-  #journal-grid,
-  #cal-grid,
+  /* ── Stack ALL two-column layouts on mobile ── */
+  .j-grid,.cal-inner-grid{grid-template-columns:1fr!important;display:flex!important;flex-direction:column!important}
   div[style*="grid-template-columns:1fr 330px"],
   div[style*="grid-template-columns:1fr 310px"],
   div[style*="grid-template-columns:1fr 350px"]{grid-template-columns:1fr!important}
@@ -1000,7 +1003,7 @@ try{
     <div class="mc"><div class="ml">Avg Win</div><div class="mv gr" id="j-kpi-aw">$0</div><div class="ms gr">+0 ticks</div></div>
     <div class="mc"><div class="ml">Avg Loss</div><div class="mv gr" id="j-kpi-al">$0</div><div class="ms gr">-0 ticks</div></div>
   </div>
-  <div id="journal-grid" style="display:grid;grid-template-columns:1fr 245px;gap:11px">
+  <div id="journal-grid" class="j-grid">
     <div>
       <div class="card" style="margin-bottom:11px">
         <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:9px">
@@ -1025,7 +1028,7 @@ try{
             <button class="tbtn" onclick="calGoToday()" style="font-size:9px;padding:0 6px;width:auto">Hoy</button>
           </div>
         </div>
-        <div id="cal-grid" style="display:grid;grid-template-columns:1fr 170px;gap:11px">
+        <div id="cal-grid" class="cal-inner-grid">
           <div id="cal-main"></div>
           <div id="cal-sidebar" style="display:flex;flex-direction:column;gap:6px"></div>
         </div>
