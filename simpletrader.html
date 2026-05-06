@@ -1063,6 +1063,8 @@ try{
       <div class="card"><div class="hd">P&amp;L por Día de la Semana</div><div id="j-by-dow"></div></div>
       <div class="card"><div class="hd">Mejor Franja Horaria</div><div id="j-by-hour"></div></div>
       <div class="card"><div class="hd">Top Instrumentos</div><div id="j-by-instr"></div></div>
+      <div class="card"><div class="hd">P&amp;L por Emoción</div><div id="j-by-emotion"></div></div>
+      <div class="card"><div class="hd">P&amp;L por Setup</div><div id="j-by-setup"></div></div>
     </div>
   </div>
 </div>
@@ -1808,7 +1810,7 @@ function showSectionSkeleton(id){
     }
   });
 }
-function initSection(id){if(id==='journal'){buildJCal();renderJ();renderJSidebar();renderJournalKPIs();renderSimpleScore();}if(id==='markets'){renderAllClocks();renderTimeline();renderNewsList();}if(id==='planner'){initPlanner();}if(id==='manager'){renderManager();setTimeout(initMgrSVG,100);}if(id==='portfolio'){renderPortKPI();renderPortAccs();setTimeout(initPortfolioSVG,100);}if(id==='accounts'){renderAccounts();}if(id==='live'){renderLive();}if(id==='affiliates'){initAffiliates();setTimeout(initAffSVG,100);}/* copytrader — próximamente, sin init */if(id==='replicator'){renderMasterTabs();renderMasterPanel(activeMaster);renderRepCfg();}if(id==='risk'){renderRules();renderRiskKPI();}}
+function initSection(id){if(id==='journal'){buildJCal();renderJ();renderJSidebar();renderJournalKPIs();renderSimpleScore();}if(id==='markets'){renderAllClocks();renderTimeline();renderNewsList();}if(id==='planner'){initPlanner();}if(id==='manager'){renderManager();setTimeout(initMgrSVG,100);}if(id==='portfolio'){renderPortKPI();renderPortAccs();setTimeout(initPortfolioSVG,100);}if(id==='accounts'){renderAccounts();}if(id==='live'){renderLive();}if(id==='affiliates'){initAffiliates();setTimeout(initAffSVG,100);}/* copytrader — próximamente, sin init */if(id==='replicator'){renderMasterTabs();renderMasterPanel(activeMaster);renderRepCfg();}if(id==='risk'){renderRules();renderRiskKPI();prefillRiskCalc();}}
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.getElementById('pm').classList.remove('open');document.querySelectorAll('[style*="z-index:99998"],[style*="z-index:7000"]').forEach(el=>el.remove());}});
 
 // ─── PRICES ───
@@ -1834,6 +1836,7 @@ function updateFUTPrices(){
     f.p=+(f.p+move).toFixed(f.dp);
   });
   renderTickers();
+  if(POS.length) renderPositions(); // update open P&L on every tick
 }
 renderTickers();
 setInterval(updateFUTPrices,1800);
@@ -1894,7 +1897,7 @@ const JTRADES=[];
 let jFlt=[];
 function renderJ(list){const rows=(list||jFlt);const b=document.getElementById('j-body');if(!b)return;if(!rows.length){b.innerHTML=`<tr><td colspan="14" style="text-align:center;padding:28px;color:var(--tx3);font-size:12px">📋 Sin trades registrados. Añade tu primer trade con el botón "＋ Nuevo trade".</td></tr>`;return;}b.innerHTML=rows.map(t=>{const net=+(t.gross-t.comm).toFixed(0),up=t.gross>=0,rr=(t.gross/(up?100:80)).toFixed(1);const stars=t.stars?'⭐'.repeat(t.stars):'—';const setupBdg=t.setup?`<span class="bdg bb" style="font-size:8px">${esc(t.setup)}</span>`:'—';return `<tr onclick="openTradeDetail(${t.id})" style="cursor:pointer"><td class="mono gr">#${t.id}</td><td style="font-size:10.5px;color:var(--tx2)">${t.date}</td><td class="mono cy">${t.sym}</td><td><span class="bdg ${t.dir==='LONG'?'bb':'bs'}">${t.dir}</span></td><td class="mono">${t.ctrs}</td><td class="mono">${t.entry}</td><td class="mono">${t.exit}</td><td class="mono ${up?'up':'dn'}">${t.ticks>=0?'+':''}${t.ticks}</td><td class="mono ${up?'up':'dn'}">${up?'+':''}$${t.gross}</td><td class="mono gr">$${t.comm.toFixed(2)}</td><td class="mono ${up?'up':'dn'}" style="font-weight:700">${up?'+':'-'}$${Math.abs(net)}</td><td class="mono ${up?'up':'dn'}">${rr}R</td><td style="font-size:9px;white-space:nowrap">${stars}</td><td>${setupBdg}</td></tr>`;}).join('');}
 function jFilter(t,btn){document.querySelectorAll('#sec-journal .fb').forEach(b=>b.classList.remove('act'));btn.classList.add('act');jFlt=t==='all'?[...JTRADES]:t==='long'?JTRADES.filter(x=>x.dir==='LONG'):t==='short'?JTRADES.filter(x=>x.dir==='SHORT'):t==='win'?JTRADES.filter(x=>x.gross>0):JTRADES.filter(x=>x.gross<0);renderJ();}
-function jSearch(q){const ql=q.toLowerCase();renderJ(JTRADES.filter(t=>t.sym.toLowerCase().includes(ql)||t.date.includes(ql)));}
+function jSearch(q){if(!q){renderJ();return;}const ql=q.toLowerCase();const base=jFlt.length&&jFlt.length<JTRADES.length?jFlt:JTRADES;renderJ(base.filter(t=>t.sym.toLowerCase().includes(ql)||t.date.toLowerCase().includes(ql)||(t.setup||'').toLowerCase().includes(ql)||(t.notes||'').toLowerCase().includes(ql)));}
 function exportCSV(){const hd='#,Fecha,Símbolo,Dir,Ctrs,Entrada,Salida,Ticks,Bruto,Comis,Neto';const rows=JTRADES.map(t=>`${t.id},${t.date},${t.sym},${t.dir},${t.ctrs},${t.entry},${t.exit},${t.ticks},${t.gross},${t.comm},${(t.gross-t.comm).toFixed(0)}`);const blob=new Blob([[hd,...rows].join('\n')],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='journal.csv';a.click();toast('Journal exportado','ok');}
 function renderJournalKPIs(){
   const trades=JTRADES;
@@ -2069,6 +2072,32 @@ function renderJSidebar(){
     } else {
       instrEl.innerHTML=`<div style="font-size:11px;color:var(--tx3);padding:8px 0">Sin datos aún</div>`;
     }
+  }
+
+  // ── P&L por Emoción ──
+  const emotionEl=document.getElementById('j-by-emotion');
+  if(emotionEl){
+    const tradesWithEmotion=JTRADES.filter(t=>t.emotion);
+    if(tradesWithEmotion.length){
+      const byEmo={};
+      const EMOTION_ICONS={'Confiado':'😎','Neutral':'😐','Nervioso':'😰','FOMO':'🤯','Revenge':'😤','Ansioso':'😬','Eufórico':'🤩','Tranquilo':'🧘'};
+      tradesWithEmotion.forEach(t=>{if(!byEmo[t.emotion])byEmo[t.emotion]={pnl:0,c:0};byEmo[t.emotion].pnl+=+(t.gross-t.comm).toFixed(0);byEmo[t.emotion].c++;});
+      const sorted=Object.entries(byEmo).sort((a,b)=>b[1].pnl-a[1].pnl);
+      const maxAbs=Math.max(...sorted.map(([,v])=>Math.abs(v.pnl)),1);
+      emotionEl.innerHTML=sorted.map(([emo,d])=>{const up=d.pnl>=0;const pct=(Math.abs(d.pnl)/maxAbs*100).toFixed(0);const ic=EMOTION_ICONS[emo]||'🎭';return `<div style="display:flex;align-items:center;gap:6px;margin-bottom:5px"><span style="font-size:12px;width:18px">${ic}</span><div style="flex:1"><div style="display:flex;justify-content:space-between;font-size:9.5px;margin-bottom:1px"><span style="color:var(--tx2)">${emo}</span><span class="mono ${up?'up':'dn'}">${up?'+':''}$${d.pnl} <span style="color:var(--tx3);font-weight:400">${d.c}t</span></span></div><div class="pb" style="height:5px"><div style="height:100%;width:${pct}%;background:${up?'rgba(34,197,94,.5)':'rgba(239,68,68,.5)'};border-radius:3px"></div></div></div></div>`;}).join('');
+    }else{emotionEl.innerHTML=`<div style="font-size:11px;color:var(--tx3);padding:8px 0">Añade la emoción al registrar trades</div>`;}
+  }
+
+  // ── P&L por Setup ──
+  const setupEl=document.getElementById('j-by-setup');
+  if(setupEl){
+    const tradesWithSetup=JTRADES.filter(t=>t.setup);
+    if(tradesWithSetup.length){
+      const bySetup={};
+      tradesWithSetup.forEach(t=>{if(!bySetup[t.setup])bySetup[t.setup]={pnl:0,c:0,wins:0};bySetup[t.setup].pnl+=+(t.gross-t.comm).toFixed(0);bySetup[t.setup].c++;if(t.gross>0)bySetup[t.setup].wins++;});
+      const sorted=Object.entries(bySetup).sort((a,b)=>b[1].pnl-a[1].pnl);
+      setupEl.innerHTML=sorted.map(([setup,d])=>{const up=d.pnl>=0;const wr=Math.round(d.wins/d.c*100);return `<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--b1)"><div><div style="font-size:10.5px;font-weight:600;color:var(--tx)">${setup}</div><div style="font-size:8.5px;color:var(--tx3)">${d.c} trades · ${wr}% win</div></div><span class="mono ${up?'up':'dn'}" style="font-size:11px;font-weight:700">${up?'+':''}$${d.pnl}</span></div>`;}).join('');
+    }else{setupEl.innerHTML=`<div style="font-size:11px;color:var(--tx3);padding:8px 0">Añade el setup al registrar trades</div>`;}
   }
 }
 renderJSidebar();
@@ -2369,7 +2398,14 @@ function calNav(dir){
   calRender();
 }
 
-function calGoToday(){calYear=2025;calMonth=3;calSelectedDay=null;calRender();}
+function calGoToday(){
+  // If we have cal trades, go to the last month with data; otherwise use real today
+  if(_calTrades.length){
+    const last=_calTrades.slice().sort((a,b)=>a.dt>b.dt?1:-1).pop();
+    if(last&&last.dt){const d=new Date(last.dt);calYear=d.getFullYear();calMonth=d.getMonth();}
+  }else{const n=new Date();calYear=n.getFullYear();calMonth=n.getMonth();}
+  calSelectedDay=null;calRender();
+}
 
 function calRender(){
   const titleEl=document.getElementById('cal-title');
@@ -3198,6 +3234,14 @@ function saveRule(i){pfRules[i].lbl=document.getElementById('re-lbl').value||pfR
 function setAllRules(v){pfRules.forEach(r=>r.on=v);renderRules();toast(v?'Todas activadas':'Todas desactivadas',v?'ok':'warn');}
 function addRule(){pfRules.push({on:true,icon:'📋',lbl:'Nueva regla',val:'0',unit:'',type:'number',desc:'Descripción'});editRule=pfRules.length-1;renderRules();scheduleSave();try{document.querySelector('.content').scrollTo({top:9999,behavior:'smooth'});}catch(e){}}
 try{renderRules();}catch(e){console.error('renderRules error:',e);}
+function prefillRiskCalc(){
+  // Pre-fill capital from first connected account (or biggest balance)
+  const connected=SAVED_ACCOUNTS.filter(a=>a.status==='connected');
+  if(!connected.length)return;
+  const best=connected.reduce((a,b)=>b.balance>a.balance?b:a,connected[0]);
+  const capIn=document.getElementById('rc-cap');
+  if(capIn&&parseFloat(capIn.value)===150000){capIn.value=best.balance.toFixed(0);calcF();const badge=document.getElementById('mt5-cap-badge');if(badge){badge.style.display='inline-flex';badge.textContent='⚡ '+best.accountNum;}}
+}
 function calcF(){const[tv]=document.getElementById('rc-i').value.split(',');const tickVal=parseFloat(tv)||5,cap=parseFloat(document.getElementById('rc-cap').value)||150000,riskPct=parseFloat(document.getElementById('rc-risk').value)||.5,sl=parseFloat(document.getElementById('rc-sl').value)||10,rUSD=cap*(riskPct/100),ctrs=Math.max(1,Math.floor(rUSD/(sl*tickVal)));document.getElementById('rc-ctrs').textContent=ctrs;document.getElementById('rc-usd').textContent='-$'+(ctrs*sl*tickVal).toFixed(0);}
 try{calcF();}catch(e){console.error('calcF error:',e);}
 
@@ -3432,12 +3476,14 @@ function renderAccounts(){
       const pf = PROP_FIRMS_V2.find(p=>p.id===a.pfId)||{};
       const stC = a.status==='connected'?'connected':a.status==='error'?'error-acc':'';
       const stBdg = a.status==='connected'?'<span class="bdg bok" style="font-size:8.5px">● Conectado</span>':a.status==='error'?'<span class="bdg be" style="font-size:8.5px">⚠ Error</span>':'<span class="bdg bof" style="font-size:8.5px">○ Desconectado</span>';
-      // Drawdown gauge
+      // Drawdown gauge + automatic alert
       const maxDD = a.maxDD||0;
       const currentLoss = Math.min(0,a.pnl||0)*-1; // today's loss as positive number
       const ddUsed = maxDD>0?Math.min(100,currentLoss/maxDD*100):0;
       const ddColor = ddUsed>=80?'var(--rd)':ddUsed>=50?'var(--am)':'var(--gn)';
       const ddBufferPct = maxDD>0?Math.max(0,((maxDD-currentLoss)/maxDD*100)).toFixed(0):100;
+      if(ddUsed>=80&&maxDD>0&&!a._ddAlerted){a._ddAlerted=true;setTimeout(()=>toast(`⚠ ${pf.short||a.pfId} ${a.planSize} — DD al ${ddUsed.toFixed(0)}% del límite`,'err',6000),200);}
+      if(ddUsed<80)a._ddAlerted=false;
       const ddGaugeHtml = maxDD>0?`<div style="margin-bottom:7px">
         <div style="display:flex;justify-content:space-between;font-size:8.5px;margin-bottom:2px">
           <span style="color:var(--tx3)">Drawdown Máx. $${maxDD.toLocaleString()}</span>
@@ -4838,7 +4884,7 @@ function globalRefresh(){
   if(si&&si.portfolio){try{renderPortAccs();setTimeout(function(){initPortfolioSVG();},80);}catch(e){}}
   // Dashboard
   if(typeof chartsBuilt!=='undefined'){chartsBuilt.dash=false;}
-  if(si&&si.dashboard){try{renderInstrBars();renderDailyBars();renderDailyHeatmap();renderSimpleScore();}catch(e){}}
+  if(si&&si.dashboard){try{renderDashKPI();renderDashRules();renderInstrBars();renderDailyBars();renderDailyHeatmap();renderSimpleScore();}catch(e){}}
   // Replicador
   if(si&&si.replicator){try{renderMasterTabs();if(MASTERS[activeMaster])renderMasterPanel(activeMaster);renderRepCfg();}catch(e){}}
   // Riesgo
@@ -5130,6 +5176,43 @@ function drawRadar(containerId, data) {
 }
 
 // ─── INSTRUMENT BARS ─────────────────────────────────────────────────
+function renderDashRules(){
+  var el=document.getElementById('dash-rules');
+  if(!el)return;
+  var chips=[];
+  // Daily loss alerts across accounts
+  SAVED_ACCOUNTS.forEach(function(a){
+    if(!a.maxDD||a.status!=='connected')return;
+    var loss=Math.max(0,-(a.pnl||0));
+    var pct=loss/a.maxDD*100;
+    if(pct>=80)chips.push({icon:'🔴',text:(a.accountNum||a.uid)+' DD '+pct.toFixed(0)+'%',cls:'be'});
+    else if(pct>=50)chips.push({icon:'🟡',text:(a.accountNum||a.uid)+' DD '+pct.toFixed(0)+'%',cls:'bof'});
+  });
+  // Active pfRules alerts
+  pfRules.filter(function(r){return r.on;}).slice(0,4).forEach(function(r){
+    chips.push({icon:r.icon,text:r.lbl+': '+(r.type==='money'?'$':'')+r.val+(r.type==='percent'?'%':''),cls:'bb'});
+  });
+  if(!chips.length){el.innerHTML='';return;}
+  el.innerHTML=chips.map(function(c){return '<span class="bdg '+c.cls+'" style="font-size:9.5px;padding:3px 9px">'+c.icon+' '+c.text+'</span>';}).join('');
+}
+function renderDashKPI(){
+  var el=document.getElementById('dash-kpi');
+  if(!el)return;
+  var accs=SAVED_ACCOUNTS.filter(function(a){return a.status==='connected';});
+  var totalPnl=accs.reduce(function(s,a){return s+(a.pnl||0);},0);
+  var totalCap=accs.reduce(function(s,a){return s+(a.balance||0);},0);
+  var score=calcSimpleScore?calcSimpleScore().score:0;
+  var label=calcSimpleScore?calcSimpleScore().label:'—';
+  var scoreColor=score>=80?'var(--gn)':score>=60?'var(--cy)':score>=40?'var(--am)':'var(--rd)';
+  var trades=JTRADES.length;
+  var wins=JTRADES.filter(function(t){return t.gross>0;}).length;
+  var wr=trades?Math.round(wins/trades*100):0;
+  var pnlUp=totalPnl>=0;
+  el.innerHTML='<div class="mc"><div class="ml">P&L Total Hoy</div><div class="mv '+(pnlUp?'up':'dn')+'" style="font-size:18px">'+(pnlUp?'+':'')+' $'+Math.abs(totalPnl).toLocaleString('es-ES')+'</div><div class="ms gr">'+accs.length+' cuentas activas</div></div>'
+  +'<div class="mc"><div class="ml">Capital Gestionado</div><div class="mv cy" style="font-size:18px">$'+(totalCap/1000).toFixed(1)+'K</div><div class="ms gr">'+accs.length+' broker'+(accs.length!==1?'s':'')+'</div></div>'
+  +'<div class="mc"><div class="ml">SimpleScore™</div><div class="mv" style="font-size:18px;color:'+scoreColor+'">'+score+'</div><div class="ms" style="color:'+scoreColor+'">'+label+'</div></div>'
+  +'<div class="mc"><div class="ml">Win Rate Journal</div><div class="mv '+(wr>=55?'up':'am')+'" style="font-size:18px">'+wr+'%</div><div class="ms gr">'+wins+'/'+trades+' trades</div></div>';
+}
 function renderInstrBars() {
   var el = document.getElementById('instr-bars');
   if (!el) return;
@@ -5219,6 +5302,8 @@ function initDashCharts() {
     ];
   }
   drawRadar('radar-chart', radarData);
+  renderDashKPI();
+  renderDashRules();
   renderInstrBars();
   renderDailyBars();
   renderSimpleScore();
@@ -5556,17 +5641,8 @@ function drawAnalogClock(containerId, tz, label, isPrime) {
 }
 
 function renderAllClocks() {
-  var el = document.getElementById('world-clocks');
-  if (!el) return;
-  // Create containers if they don't exist
-  if (!document.getElementById('clk-madrid')) {
-    el.innerHTML = CLOCKS.map(function(clk){
-      return '<div id="'+clk.id+'"></div>';
-    }).join('');
-  }
-  CLOCKS.forEach(function(clk){
-    drawAnalogClock(clk.id, clk.tz, clk.label, clk.prime);
-  });
+  // Delegate to renderClocks() which uses the CITIES array
+  renderClocks();
 }
 
 // ─── UNIFIED CLOCK TICK ──────────────────────────────────────────────
