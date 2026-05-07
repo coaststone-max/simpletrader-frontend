@@ -1030,6 +1030,7 @@ try{
           <input class="srch" placeholder="Buscar…" oninput="jSearch(this.value)">
           <button class="btn sm bc" style="margin-left:auto" onclick="openAddTrade()">＋ Nuevo trade</button>
           <button class="btn sm" onclick="exportCSV()">↓ CSV</button>
+          <button class="btn sm" onclick="exportPDF()" title="Exportar como PDF / Imprimir">🖨 PDF</button>
         </div>
         <div class="tw"><table><thead><tr><th>#</th><th>Fecha</th><th>Instr.</th><th>Dir.</th><th>Ctrs.</th><th>Entrada</th><th>Salida</th><th>Ticks</th><th>Bruto</th><th>Comis.</th><th>Neto</th><th>R:R</th><th>⭐</th><th>Setup</th></tr></thead><tbody id="j-body"></tbody></table></div>
       </div>
@@ -1473,13 +1474,7 @@ try{
         <div style="font-size:9.5px;color:var(--tx3);margin-bottom:12px">Miembro desde <strong style="color:var(--tx)">Enero 2024</strong></div>
         <button class="btn bc" style="width:100%;font-size:11.5px" onclick="openPricing()">💎 Cambiar plan</button>
       </div>
-      <div class="card"><div class="hd">Facturación</div>
-        <div class="nr2"><span style="font-size:11.5px;color:var(--tx2)">Plan</span><span class="mono cy">Unlimited</span></div>
-        <div class="nr2"><span style="font-size:11.5px;color:var(--tx2)">Precio</span><span class="mono">€149/mes</span></div>
-        <div class="nr2"><span style="font-size:11.5px;color:var(--tx2)">Renovación</span><span class="mono">03/05/2026</span></div>
-        <div class="nr2" style="border-bottom:none"><span style="font-size:11.5px;color:var(--tx2)">Pago</span><span style="font-size:11.5px">Visa •••• 4242</span></div>
-        <div style="display:flex;gap:6px;margin-top:11px"><button class="btn sm" style="flex:1" onclick="toast('Facturas enviadas','ok')">📄 Facturas</button><button class="btn sm" style="flex:1" onclick="toast('Redirigiendo a Stripe…','info')">💳 Tarjeta</button></div>
-      </div>
+      <div class="card" id="billing-card"></div>
       <div class="dz">
         <div style="font-size:9px;font-weight:700;color:var(--rd);letter-spacing:.5px;text-transform:uppercase;margin-bottom:9px">⚠ Zona de peligro</div>
         <button class="btn br" style="width:100%;font-size:11.5px;margin-bottom:6px" onclick="confirmLogout()">⏻ Cerrar sesión</button>
@@ -1696,8 +1691,29 @@ function doDemo(){
 
 function enterApp(){
   const ls=document.getElementById('ls');ls.style.opacity='0';
-  setTimeout(()=>{ls.style.display='none';document.getElementById('app').style.display='flex';
-  setTimeout(initDashCharts,200);toast('Bienvenido, '+U.name.split(' ')[0]+' ✓','ok');},340);
+  setTimeout(()=>{
+    ls.style.display='none';document.getElementById('app').style.display='flex';
+    setTimeout(initDashCharts,200);
+    renderBilling();
+    // Handle Stripe redirect URL params
+    try{
+      const sp=new URLSearchParams(window.location.search);
+      const pay=sp.get('payment');
+      if(pay==='success'){
+        const plan=sp.get('plan')||'';
+        const pn=plan?plan[0].toUpperCase()+plan.slice(1):'';
+        toast('🎉 ¡Suscripción activada!'+(pn?' Plan '+pn:''),'ok',7000);
+        window.history.replaceState({},'',window.location.pathname);
+        setTimeout(()=>{navTo('sec-profile');renderBilling();},700);
+      }else if(pay==='cancel'){
+        toast('Pago cancelado. Tu plan no ha cambiado.','warn',4000);
+        window.history.replaceState({},'',window.location.pathname);
+        toast('Bienvenido, '+U.name.split(' ')[0]+' ✓','ok');
+      }else{
+        toast('Bienvenido, '+U.name.split(' ')[0]+' ✓','ok');
+      }
+    }catch(e){toast('Bienvenido, '+U.name.split(' ')[0]+' ✓','ok');}
+  },340);
 }
 
 function showLoginScreen(){
@@ -1719,6 +1735,7 @@ function syncUI(){
   const pn=document.getElementById('p-name');if(pn)pn.value=pts[0]||'';
   const ps=document.getElementById('p-surname');if(ps)ps.value=pts.slice(1).join(' ')||'';
   const pe=document.getElementById('p-email');if(pe)pe.value=U.email;
+  renderBilling();
 }
 
 async function confirmLogout(){
@@ -3411,15 +3428,15 @@ const MT5_BROKERS = [
 // Saved accounts: {uid -> {pfId, brokerId, accountNum, planSize, brokerCreds, status, balance, pnl, maxDD, dailyLoss, target}}
 const _DEMO_SAVED_ACCOUNTS = [
   // Green DD gauge (0% used — profitable day)
-  {uid:'a1',pfId:'apex',brokerId:'rithmic',accountNum:'#APX-84729301',planSize:'PA 150K',status:'connected',balance:151840,pnl:1840,broker_user:'jgarcia',phase:'PA Funded',maxDD:3000,dailyLoss:1500,target:9000},
+  {uid:'a1',pfId:'apex',brokerId:'rithmic',accountNum:'#APX-84729301',planSize:'PA 150K',status:'connected',balance:151840,pnl:1840,broker_user:'jgarcia',phase:'PA Funded',maxDD:3000,dailyLoss:1500,target:9000,spk:[320,580,420,900,750,1100,880,1320,1600,1840]},
   // Green DD gauge (0% used — profitable day)
-  {uid:'a2',pfId:'apex',brokerId:'rithmic',accountNum:'#APX-23981023',planSize:'PA 50K',status:'connected',balance:51240,pnl:1240,broker_user:'jgarcia',phase:'PA Funded',maxDD:2500,dailyLoss:1000,target:3000},
+  {uid:'a2',pfId:'apex',brokerId:'rithmic',accountNum:'#APX-23981023',planSize:'PA 50K',status:'connected',balance:51240,pnl:1240,broker_user:'jgarcia',phase:'PA Funded',maxDD:2500,dailyLoss:1000,target:3000,spk:[200,480,350,700,620,900,820,1050,1180,1240]},
   // Amber DD gauge (56% used — caution zone)
-  {uid:'a3',pfId:'topstepx',brokerId:'rithmic',accountNum:'#TSX-44918271',planSize:'150K',status:'connected',balance:148320,pnl:-1680,broker_user:'jgarcia',phase:'Funded',maxDD:3000,dailyLoss:2000,target:9000},
+  {uid:'a3',pfId:'topstepx',brokerId:'rithmic',accountNum:'#TSX-44918271',planSize:'150K',status:'connected',balance:148320,pnl:-1680,broker_user:'jgarcia',phase:'Funded',maxDD:3000,dailyLoss:2000,target:9000,spk:[400,200,-100,300,-200,-400,-600,-900,-1200,-1680]},
   // Red DD gauge (87% used — danger zone, in error/reconectar state)
-  {uid:'a4',pfId:'bulenox',brokerId:'rithmic',accountNum:'#BULN-99123441',planSize:'150K',status:'error',balance:149100,pnl:-2600,broker_user:'jgarcia',phase:'Funded',maxDD:3000,dailyLoss:1500,target:9000},
+  {uid:'a4',pfId:'bulenox',brokerId:'rithmic',accountNum:'#BULN-99123441',planSize:'150K',status:'error',balance:149100,pnl:-2600,broker_user:'jgarcia',phase:'Funded',maxDD:3000,dailyLoss:1500,target:9000,spk:[-200,-500,-300,-700,-1000,-800,-1300,-1600,-2100,-2600]},
   // Disconnected — shows connect button
-  {uid:'a5',pfId:'tradeday',brokerId:'tradovate',accountNum:'#TDF-77341829',planSize:'150K',status:'disconnected',balance:151200,pnl:0,broker_user:'jgarcia',phase:'Funded',maxDD:3000,dailyLoss:1500,target:9000},
+  {uid:'a5',pfId:'tradeday',brokerId:'tradovate',accountNum:'#TDF-77341829',planSize:'150K',status:'disconnected',balance:151200,pnl:0,broker_user:'jgarcia',phase:'Funded',maxDD:3000,dailyLoss:1500,target:9000,spk:[0,0,0,0,0,0,0,0,0,0]},
 ];
 let SAVED_ACCOUNTS = [];
 
@@ -3507,6 +3524,7 @@ function renderAccounts(){
           <div class="ss2" style="padding:5px"><div class="sv" style="font-size:11px">$${(a.balance/1000).toFixed(1)}K</div><div class="sl">Balance</div></div>
           <div class="ss2" style="padding:5px"><div class="sv ${a.pnl>=0?'up':'dn'}" style="font-size:11px">${a.pnl>=0?'+':''}$${a.pnl}</div><div class="sl">P&L hoy</div></div>
         </div>
+        ${a.spk&&a.spk.length>1?`<div style="margin-bottom:7px">${renderSparkline(a.spk,48,a.pnl>=0?'var(--gn)':'var(--rd)')}</div>`:''}
         ${ddGaugeHtml}
         <div style="display:flex;align-items:center;gap:4px;margin-bottom:8px;padding:5px 7px;background:${brk.colorBg};border-radius:5px;border:1px solid ${brk.color}33">
           <span style="font-size:8.5px;font-weight:700;color:${brk.color};font-family:var(--mono)">${brk.name}</span>
@@ -4581,7 +4599,135 @@ function renderPricing(){
 function setBilling(m){billing=m;document.getElementById('bt-m').classList.toggle('act',m==='m');document.getElementById('bt-a').classList.toggle('act',m==='a');renderPricing();}
 function openPricing(){document.getElementById('pm').classList.add('open');renderPricing();}
 function closePricing(){document.getElementById('pm').classList.remove('open');}
-function selectPlan(n){closePricing();toast('Plan '+n+' seleccionado → Stripe','info',4000);}
+
+// ─── STRIPE INTEGRATION ──────────────────────────────────────────────────────
+
+async function selectPlan(n){
+  if(n==='Starter'){closePricing();toast('El plan Starter es gratuito ✓','info',3000);return;}
+  const isDemoMode=!_stUser;
+  if(isDemoMode){closePricing();toast('Crea una cuenta para suscribirte 🚀','info',4000);return;}
+  if(U.plan===n){closePricing();toast('Ya tienes el plan '+n+' activo','info',3000);return;}
+  closePricing();
+  toast('Redirigiendo a Stripe…','info');
+  try{
+    const r=await fetch('/api/stripe/create-checkout',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({userId:_stUser.id,userEmail:U.email,plan:n.toLowerCase()})
+    });
+    const d=await r.json();
+    if(d.url){window.location.href=d.url;}
+    else throw new Error(d.error||'Error desconocido');
+  }catch(e){toast('Error al conectar con Stripe: '+e.message,'err',5000);}
+}
+
+async function openStripePortal(){
+  if(!_stUser){toast('Inicia sesión primero','warn');return;}
+  const customerId=(_stUser.user_metadata||{}).stripe_customer_id;
+  if(!customerId){
+    toast('Sin suscripción activa en Stripe','warn',3000);
+    setTimeout(()=>openPricing(),600);
+    return;
+  }
+  toast('Abriendo portal de facturación…','info');
+  try{
+    const r=await fetch('/api/stripe/portal',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({customerId})
+    });
+    const d=await r.json();
+    if(d.url){window.open(d.url,'_blank');}
+    else throw new Error(d.error||'Error');
+  }catch(e){toast('Error al abrir portal: '+e.message,'err',5000);}
+}
+
+function renderBilling(){
+  const el=document.getElementById('billing-card');
+  if(!el)return;
+  const meta=(_stUser&&_stUser.user_metadata)||{};
+  const plan=U.plan||'Starter';
+  const planPrices={Starter:0,Pro:29,Advanced:59,Unlimited:99};
+  const price=planPrices[plan]!=null?planPrices[plan]:0;
+  const hasStripe=!!meta.stripe_customer_id;
+  const isFree=plan==='Starter'||price===0;
+  el.innerHTML=`
+    <div class="hd">Facturación</div>
+    <div class="nr2"><span style="font-size:11.5px;color:var(--tx2)">Plan actual</span><span class="mono cy">${plan}</span></div>
+    <div class="nr2"><span style="font-size:11.5px;color:var(--tx2)">Precio</span><span class="mono">${isFree?'<span style="color:var(--gn)">Gratis</span>':'€'+price+'/mes'}</span></div>
+    <div class="nr2" style="border-bottom:none"><span style="font-size:11.5px;color:var(--tx2)">Estado</span><span style="font-size:11px">${hasStripe?'<span style="color:var(--gn)">✓ Suscripción activa</span>':isFree?'<span style="color:var(--tx3)">Plan gratuito</span>':'<span style="color:var(--am)">Sin suscripción</span>'}</span></div>
+    <div style="display:flex;gap:6px;margin-top:11px">
+      ${hasStripe
+        ?`<button class="btn sm" style="flex:1" onclick="openStripePortal()">📄 Facturas</button><button class="btn sm" style="flex:1" onclick="openStripePortal()">💳 Gestionar</button>`
+        :`<button class="btn bc sm" style="flex:1" onclick="openPricing()">🚀 ${isFree?'Mejorar plan':'Suscribirse'}</button>`}
+    </div>`;
+}
+
+// ─── SPARKLINES ──────────────────────────────────────────────────────────────
+
+function renderSparkline(data,h,color){
+  if(!data||data.length<2)return'';
+  const w=data.length*8;
+  const mn=Math.min(...data);const mx=Math.max(...data);
+  const range=mx-mn||1;
+  const pts=data.map((v,i)=>{
+    const x=i*(w/(data.length-1));
+    const y=h-(((v-mn)/range)*(h-4)+2);
+    return x+','+y;
+  }).join(' ');
+  return `<svg width="100%" height="${h}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" style="display:block;overflow:visible">
+    <polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/>
+    <circle cx="${data.length*8-8}" cy="${h-(((data[data.length-1]-mn)/range)*(h-4)+2)}" r="2.5" fill="${color}"/>
+  </svg>`;
+}
+
+// ─── PDF / PRINT EXPORT ──────────────────────────────────────────────────────
+
+function exportPDF(){
+  const trades=jFlt.length&&jFlt.length<JTRADES.length?jFlt:JTRADES;
+  if(!trades.length){toast('No hay trades que exportar','warn');return;}
+  const rows=trades.map(t=>`<tr>
+    <td>${t.id}</td><td>${t.date}</td><td>${t.sym}</td><td>${t.dir}</td>
+    <td>${t.ctrs}</td><td>${t.entry}</td><td>${t.exit}</td><td>${t.ticks}</td>
+    <td style="color:${t.gross>=0?'#22c55e':'#ef4444'}">$${t.gross}</td>
+    <td>$${t.comm}</td><td style="color:${(t.gross-t.comm)>=0?'#22c55e':'#ef4444'}">$${(t.gross-t.comm).toFixed(0)}</td>
+    <td>${t.rr||'—'}</td><td>${t.setup||'—'}</td>
+  </tr>`).join('');
+  const totalNet=trades.reduce((s,t)=>s+(t.gross-t.comm),0);
+  const wins=trades.filter(t=>t.gross>0).length;
+  const wr=trades.length?(wins/trades.length*100).toFixed(1):'0';
+  const w=window.open('','_blank');
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Journal — SimpleTrader</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}body{font-family:system-ui,sans-serif;font-size:11px;color:#111;padding:24px}
+    h1{font-size:16px;margin-bottom:4px}p{color:#666;font-size:10px;margin-bottom:12px}
+    .kpis{display:flex;gap:16px;margin-bottom:16px}
+    .kpi{background:#f5f5f5;border-radius:6px;padding:8px 14px;text-align:center}
+    .kpi b{display:block;font-size:15px;margin-bottom:2px}
+    table{width:100%;border-collapse:collapse;font-size:10px}
+    th{background:#1a1a2e;color:#fff;padding:5px 6px;text-align:left;font-weight:600}
+    td{padding:4px 6px;border-bottom:1px solid #eee}
+    tr:nth-child(even) td{background:#fafafa}
+    tfoot td{font-weight:700;background:#f0f0f0;border-top:2px solid #ccc}
+    @media print{body{padding:12px}h1{font-size:13px}}
+  </style></head><body>
+  <h1>📈 Journal de Trades — ${U.name}</h1>
+  <p>Exportado el ${new Date().toLocaleDateString('es-ES',{day:'2-digit',month:'long',year:'numeric'})} · ${trades.length} operaciones</p>
+  <div class="kpis">
+    <div class="kpi"><b>${wr}%</b>Win Rate</div>
+    <div class="kpi"><b>${wins}/${trades.length}</b>W/T</div>
+    <div class="kpi" style="color:${totalNet>=0?'#16a34a':'#dc2626'}"><b>${totalNet>=0?'+':''}$${totalNet.toFixed(0)}</b>P&L Neto</div>
+  </div>
+  <table><thead><tr><th>#</th><th>Fecha</th><th>Instr.</th><th>Dir.</th><th>Ctrs</th><th>Entrada</th><th>Salida</th><th>Ticks</th><th>Bruto</th><th>Comis.</th><th>Neto</th><th>R:R</th><th>Setup</th></tr></thead>
+  <tbody>${rows}</tbody>
+  <tfoot><tr><td colspan="10" style="text-align:right">Total Neto</td><td style="color:${totalNet>=0?'#16a34a':'#dc2626'}">$${totalNet.toFixed(0)}</td><td colspan="2"></td></tr></tfoot>
+  </table>
+  <script>window.onload=()=>{window.print();}<\/script></body></html>`);
+  w.document.close();
+  toast('Abriendo vista de impresión…','ok');
+}
+
+
 document.getElementById('pm').addEventListener('click',e=>{if(e.target===document.getElementById('pm'))closePricing();});
 
 // ─── CUENTAS LIVE MT4/MT5 ────────────────────────────────────────────────────

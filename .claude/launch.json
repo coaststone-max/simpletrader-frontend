@@ -3,9 +3,10 @@
   "configurations": [
     {
       "name": "simpletrader",
-      "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "4321"],
-      "port": 4321
+      "runtimeExecutable": "bash",
+      "runtimeArgs": ["-c", "cd /Users/yagomartineztorres/Downloads/simpletrader-frontend && python3 -m http.server ${PORT:-4321}"],
+      "port": 4321,
+      "autoPort": true
     }
   ]
 }

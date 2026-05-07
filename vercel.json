@@ -16,10 +16,20 @@
         {"key": "Access-Control-Allow-Origin", "value": "*"},
         {"key": "Access-Control-Allow-Methods", "value": "POST, OPTIONS"}
       ]
+    },
+    {
+      "source": "/api/stripe/(.*)",
+      "headers": [
+        {"key": "Access-Control-Allow-Origin", "value": "*"},
+        {"key": "Access-Control-Allow-Methods", "value": "POST, OPTIONS"}
+      ]
     }
   ],
   "functions": {
-    "api/webhook/tv.js":    {"maxDuration": 30},
-    "api/tradovate/exec.js": {"maxDuration": 15}
+    "api/webhook/tv.js":         {"maxDuration": 30},
+    "api/tradovate/exec.js":     {"maxDuration": 15},
+    "api/stripe/webhook.js":     {"maxDuration": 10},
+    "api/stripe/create-checkout.js": {"maxDuration": 10},
+    "api/stripe/portal.js":      {"maxDuration": 10}
   }
 }
