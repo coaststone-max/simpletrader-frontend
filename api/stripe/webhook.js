@@ -21,6 +21,28 @@
  */
 
 const STRIPE_SECRET    = process.env.STRIPE_SECRET_KEY;
+const BASE_URL         = process.env.SITE_URL || 'https://simpletrader-frontend.vercel.app';
+
+// Fire-and-forget email + push for a user
+async function notifyUser(userId, type, data) {
+  try {
+    const url = `${BASE_URL}/api/notifications/email`;
+    fetch(url, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ userId, type, data }),
+    }).catch(e => console.warn('notify email failed:', e.message));
+    fetch(`${BASE_URL}/api/notifications/push`, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json', 'x-service-key': process.env.SUPABASE_SERVICE_KEY },
+      body:    JSON.stringify({ userId,
+        title: type === 'payment_success' ? '🎉 ¡Suscripción activada!' : '💳 Pago fallido',
+        body:  type === 'payment_success' ? `Plan ${data.plan} activo. ¡Bienvenido!` : 'Actualiza tu método de pago.',
+        url:   '/',
+      }),
+    }).catch(e => console.warn('notify push failed:', e.message));
+  } catch(e) { console.warn('notifyUser error:', e); }
+}
 const WEBHOOK_SECRET   = process.env.STRIPE_WEBHOOK_SECRET;
 const SUPABASE_URL     = process.env.SUPABASE_URL;
 const SUPABASE_SERVICE = process.env.SUPABASE_SERVICE_KEY;
@@ -131,6 +153,8 @@ export default async function handler(req, res) {
 
         await updateUserPlan(userId, capitalise(plan), customerId);
         console.log(`✅ Upgraded user ${userId} to ${plan}`);
+        // Send confirmation email + push
+        notifyUser(userId, 'payment_success', { plan: capitalise(plan) });
         break;
       }
 
@@ -146,9 +170,10 @@ export default async function handler(req, res) {
       }
 
       case 'invoice.payment_failed': {
-        // Just log — optionally send an email here via Resend/SendGrid
-        const inv = event.data.object;
+        const inv  = event.data.object;
+        const user = await findUserByCustomerId(inv.customer);
         console.warn(`💳 Payment failed for customer ${inv.customer}, attempt ${inv.attempt_count}`);
+        if (user) notifyUser(user.id, 'payment_failed', {});
         break;
       }
 

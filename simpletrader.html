@@ -1029,6 +1029,7 @@ try{
           <button class="fb act" onclick="jFilter('all',this)">Todos</button><button class="fb" onclick="jFilter('long',this)">LONG</button><button class="fb" onclick="jFilter('short',this)">SHORT</button><button class="fb" onclick="jFilter('win',this)">Ganados</button><button class="fb" onclick="jFilter('loss',this)">Perdidos</button>
           <input class="srch" placeholder="Buscar…" oninput="jSearch(this.value)">
           <button class="btn sm bc" style="margin-left:auto" onclick="openAddTrade()">＋ Nuevo trade</button>
+          <button class="btn sm" onclick="openBrokerImport()" title="Importar extracto del broker">📥 Importar</button>
           <button class="btn sm" onclick="exportCSV()">↓ CSV</button>
           <button class="btn sm" onclick="exportPDF()" title="Exportar como PDF / Imprimir">🖨 PDF</button>
         </div>
@@ -1475,6 +1476,7 @@ try{
         <button class="btn bc" style="width:100%;font-size:11.5px" onclick="openPricing()">💎 Cambiar plan</button>
       </div>
       <div class="card" id="billing-card"></div>
+      <div class="card" id="notif-settings-card"></div>
       <div class="dz">
         <div style="font-size:9px;font-weight:700;color:var(--rd);letter-spacing:.5px;text-transform:uppercase;margin-bottom:9px">⚠ Zona de peligro</div>
         <button class="btn br" style="width:100%;font-size:11.5px;margin-bottom:6px" onclick="confirmLogout()">⏻ Cerrar sesión</button>
@@ -1691,6 +1693,7 @@ function doDemo(){
 
 function enterApp(){
   const ls=document.getElementById('ls');ls.style.opacity='0';
+  registerSW(); // Service Worker for push notifications
   setTimeout(()=>{
     ls.style.display='none';document.getElementById('app').style.display='flex';
     setTimeout(initDashCharts,200);
@@ -1736,6 +1739,7 @@ function syncUI(){
   const ps=document.getElementById('p-surname');if(ps)ps.value=pts.slice(1).join(' ')||'';
   const pe=document.getElementById('p-email');if(pe)pe.value=U.email;
   renderBilling();
+  renderNotifSettings();
 }
 
 async function confirmLogout(){
@@ -3499,7 +3503,12 @@ function renderAccounts(){
       const ddUsed = maxDD>0?Math.min(100,currentLoss/maxDD*100):0;
       const ddColor = ddUsed>=80?'var(--rd)':ddUsed>=50?'var(--am)':'var(--gn)';
       const ddBufferPct = maxDD>0?Math.max(0,((maxDD-currentLoss)/maxDD*100)).toFixed(0):100;
-      if(ddUsed>=80&&maxDD>0&&!a._ddAlerted){a._ddAlerted=true;setTimeout(()=>toast(`⚠ ${pf.short||a.pfId} ${a.planSize} — DD al ${ddUsed.toFixed(0)}% del límite`,'err',6000),200);}
+      if(ddUsed>=80&&maxDD>0&&!a._ddAlerted){
+        a._ddAlerted=true;
+        setTimeout(()=>toast(`${ddUsed>=90?'🚨':'⚠'} ${pf.short||a.pfId} ${a.planSize} — DD al ${ddUsed.toFixed(0)}% del límite`,'err',6000),200);
+        // Real alert: email + push (only for authenticated users)
+        if(_stUser)sendDDAlert(a,pf,ddUsed,maxDD,a.pnl||0);
+      }
       if(ddUsed<80)a._ddAlerted=false;
       const ddGaugeHtml = maxDD>0?`<div style="margin-bottom:7px">
         <div style="display:flex;justify-content:space-between;font-size:8.5px;margin-bottom:2px">
@@ -4665,6 +4674,130 @@ function renderBilling(){
     </div>`;
 }
 
+// ─── PUSH NOTIFICATIONS ──────────────────────────────────────────────────────
+
+const VAPID_PUBLIC = 'BEuPo2lH1sCZckd0mpARvMcurHrxFyXsinrokg_v0kF10-ea4Zo8LDu3zpTU9pjze7UOBwgJ5RPFyeKzp1mJIH8';
+
+let _swReg = null;
+
+async function registerSW(){
+  if(!('serviceWorker' in navigator)||!('PushManager' in window))return;
+  try{
+    _swReg = await navigator.serviceWorker.register('/sw.js',{scope:'/'});
+    console.log('SW registered');
+  }catch(e){console.warn('SW register failed:',e);}
+}
+
+async function requestNotificationPermission(){
+  if(!('Notification' in window))return false;
+  if(Notification.permission==='granted')return true;
+  const perm=await Notification.requestPermission();
+  return perm==='granted';
+}
+
+async function subscribePush(){
+  if(!_stUser)return;
+  const granted=await requestNotificationPermission();
+  if(!granted){toast('Notificaciones bloqueadas en el navegador','warn',3000);return;}
+  if(!_swReg){toast('Service worker no disponible','warn');return;}
+  try{
+    const sub=await _swReg.pushManager.subscribe({
+      userVisibleOnly:true,
+      applicationServerKey:urlBase64ToUint8Array(VAPID_PUBLIC)
+    });
+    await fetch('/api/notifications/subscribe',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+_stToken},
+      body:JSON.stringify({subscription:sub.toJSON()})
+    });
+    // Store flag locally
+    try{localStorage.setItem('_st_push_ok','1');}catch(e){}
+    toast('🔔 Notificaciones push activadas','ok',3000);
+    renderNotifSettings();
+  }catch(e){toast('Error al activar notificaciones: '+e.message,'err',4000);}
+}
+
+async function unsubscribePush(){
+  if(!_swReg)return;
+  try{
+    const sub=await _swReg.pushManager.getSubscription();
+    if(sub)await sub.unsubscribe();
+    try{localStorage.removeItem('_st_push_ok');}catch(e){}
+    toast('Notificaciones push desactivadas','warn',3000);
+    renderNotifSettings();
+  }catch(e){toast('Error: '+e.message,'err');}
+}
+
+async function isPushSubscribed(){
+  if(!_swReg)return false;
+  try{const s=await _swReg.pushManager.getSubscription();return!!s;}catch{return false;}
+}
+
+function urlBase64ToUint8Array(base64String){
+  const padding='='.repeat((4-base64String.length%4)%4);
+  const base64=(base64String+padding).replace(/-/g,'+').replace(/_/g,'/');
+  const raw=window.atob(base64);
+  return Uint8Array.from([...raw].map(c=>c.charCodeAt(0)));
+}
+
+// Send push + email alert for DD events (called from renderAccounts)
+async function sendDDAlert(account,pf,ddUsed,maxDD,pnl){
+  if(!_stUser||!_stToken)return;
+  const accName=`${pf.short||pf.name||account.pfId} ${account.planSize}`;
+  // Email alert
+  fetch('/api/notifications/email',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+_stToken},
+    body:JSON.stringify({type:'dd_alert',data:{account:accName,pct:ddUsed.toFixed(0),maxDD,pnl}})
+  }).catch(()=>{});
+  // Push alert
+  fetch('/api/notifications/push',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+_stToken},
+    body:JSON.stringify({
+      userId:_stUser.id,
+      title:`${ddUsed>=90?'🚨':'⚠️'} Drawdown al ${ddUsed.toFixed(0)}%`,
+      body:`${accName} — P&L: $${pnl}`,
+      url:'/',tag:'dd-alert-'+account.uid
+    })
+  }).catch(()=>{});
+}
+
+function renderNotifSettings(){
+  const el=document.getElementById('notif-settings-card');
+  if(!el)return;
+  const hasPermission=typeof Notification!=='undefined'&&Notification.permission==='granted';
+  const subscribed=!!localStorage.getItem('_st_push_ok');
+  const supported='serviceWorker' in navigator&&'PushManager' in window;
+  el.innerHTML=`
+    <div class="hd">Notificaciones</div>
+    ${!supported?`<div style="font-size:11px;color:var(--tx3);padding:8px 0">Este navegador no soporta push notifications</div>`:`
+    <div class="nr2"><span style="font-size:11.5px;color:var(--tx2)">Push (navegador)</span>
+      <span style="font-size:11px;color:${subscribed?'var(--gn)':'var(--tx3)'}">${subscribed?'✓ Activadas':'Sin activar'}</span>
+    </div>
+    <div class="nr2" style="border-bottom:none"><span style="font-size:11.5px;color:var(--tx2)">Email alerts</span>
+      <span style="font-size:11px;color:var(--gn)">✓ Activados</span>
+    </div>
+    <div style="display:flex;gap:6px;margin-top:11px">
+      ${subscribed
+        ?`<button class="btn sm br" style="flex:1" onclick="unsubscribePush()">🔕 Desactivar push</button>`
+        :`<button class="btn bc sm" style="flex:1" onclick="subscribePush()">🔔 Activar push</button>`}
+      <button class="btn sm" onclick="testNotification()" title="Enviar notificación de prueba">🧪</button>
+    </div>`}`;
+}
+
+async function testNotification(){
+  if(!_stUser){toast('Inicia sesión primero','warn');return;}
+  const r=await fetch('/api/notifications/push',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+_stToken},
+    body:JSON.stringify({userId:_stUser.id,title:'🧪 Test SimpleTrader',body:'Las notificaciones push funcionan correctamente.',tag:'test'})
+  });
+  const d=await r.json();
+  if(d.ok)toast('Notificación enviada ✓','ok');
+  else toast('Error: '+d.error,'err');
+}
+
 // ─── SPARKLINES ──────────────────────────────────────────────────────────────
 
 function renderSparkline(data,h,color){
@@ -4681,6 +4814,318 @@ function renderSparkline(data,h,color){
     <polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/>
     <circle cx="${data.length*8-8}" cy="${h-(((data[data.length-1]-mn)/range)*(h-4)+2)}" r="2.5" fill="${color}"/>
   </svg>`;
+}
+
+// ─── BROKER STATEMENT IMPORT ─────────────────────────────────────────────────
+
+function openBrokerImport(){
+  if(document.getElementById('broker-import-modal'))return;
+  document.body.insertAdjacentHTML('beforeend',`
+  <div id="broker-import-modal" style="position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9800;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)">
+    <div style="background:var(--bg2);border:1px solid var(--b1);border-radius:16px;width:680px;max-width:95vw;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 24px 80px rgba(0,0,0,.6)">
+      <div style="display:flex;align-items:center;gap:10px;padding:18px 22px;border-bottom:1px solid var(--b1)">
+        <span style="font-size:20px">📥</span>
+        <div style="flex:1">
+          <div style="font-size:14px;font-weight:700;color:var(--tx)">Importar extracto del broker</div>
+          <div style="font-size:10.5px;color:var(--tx3)">Tradovate · NinjaTrader · Rithmic · TopstepX · MT4/MT5 · CSV genérico</div>
+        </div>
+        <button onclick="closeBrokerImport()" style="background:none;border:none;color:var(--tx3);font-size:18px;cursor:pointer;padding:4px 8px">✕</button>
+      </div>
+      <!-- Drop zone -->
+      <div id="bi-dropzone" style="margin:18px 22px;border:2px dashed var(--b1);border-radius:12px;padding:32px;text-align:center;cursor:pointer;transition:.2s"
+           onclick="document.getElementById('bi-file').click()"
+           ondragover="event.preventDefault();this.style.borderColor='var(--ac)'"
+           ondragleave="this.style.borderColor='var(--b1)'"
+           ondrop="event.preventDefault();this.style.borderColor='var(--b1)';handleBrokerFileDrop(event.dataTransfer.files[0])">
+        <div style="font-size:36px;margin-bottom:8px">📂</div>
+        <div style="font-size:13px;font-weight:600;color:var(--tx);margin-bottom:4px">Arrastra tu CSV aquí o haz clic para seleccionar</div>
+        <div style="font-size:10.5px;color:var(--tx3)">Formatos: .csv · .txt · .html · .htm</div>
+        <input id="bi-file" type="file" accept=".csv,.txt,.html,.htm" style="display:none" onchange="handleBrokerFileDrop(this.files[0])">
+      </div>
+      <!-- Format selector -->
+      <div style="padding:0 22px 14px;display:flex;gap:6px;flex-wrap:wrap">
+        <span style="font-size:10.5px;color:var(--tx3);margin-right:4px;line-height:26px">Formato:</span>
+        <button class="fb act" id="bi-fmt-auto" onclick="setBiFormat('auto',this)">Auto-detectar</button>
+        <button class="fb" id="bi-fmt-tradovate" onclick="setBiFormat('tradovate',this)">Tradovate</button>
+        <button class="fb" id="bi-fmt-ninja" onclick="setBiFormat('ninja',this)">NinjaTrader</button>
+        <button class="fb" id="bi-fmt-rithmic" onclick="setBiFormat('rithmic',this)">Rithmic</button>
+        <button class="fb" id="bi-fmt-mt45" onclick="setBiFormat('mt45',this)">MT4/MT5</button>
+        <button class="fb" id="bi-fmt-generic" onclick="setBiFormat('generic',this)">Genérico</button>
+      </div>
+      <!-- Preview area -->
+      <div id="bi-preview" style="flex:1;overflow-y:auto;padding:0 22px 18px;min-height:120px">
+        <div style="text-align:center;padding:30px;color:var(--tx3);font-size:12px">Selecciona un archivo para ver la previsualización</div>
+      </div>
+      <!-- Footer -->
+      <div style="padding:14px 22px;border-top:1px solid var(--b1);display:flex;align-items:center;gap:10px">
+        <span id="bi-status" style="flex:1;font-size:11px;color:var(--tx3)"></span>
+        <button class="btn sm" onclick="closeBrokerImport()">Cancelar</button>
+        <button id="bi-import-btn" class="btn bc sm" style="display:none" onclick="confirmBrokerImport()">✓ Importar trades</button>
+      </div>
+    </div>
+  </div>`);
+}
+
+function closeBrokerImport(){const m=document.getElementById('broker-import-modal');if(m)m.remove();}
+
+let _biParsed=[]; // parsed trades waiting for import
+let _biFmt='auto';
+
+function setBiFormat(fmt,btn){
+  _biFmt=fmt;
+  document.querySelectorAll('#broker-import-modal .fb').forEach(b=>b.classList.remove('act'));
+  btn.classList.add('act');
+  // Re-parse last file if any
+  if(window._biLastFile)handleBrokerFileDrop(window._biLastFile);
+}
+
+function handleBrokerFileDrop(file){
+  if(!file)return;
+  window._biLastFile=file;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const text=e.target.result;
+    const fmt=_biFmt==='auto'?detectBrokerFormat(text,file.name):_biFmt;
+    _biParsed=parseBrokerFile(text,file.name,fmt);
+    renderBiPreview(_biParsed,fmt,file.name);
+  };
+  reader.readAsText(file);
+}
+
+// ── Format detection ─────────────────────────────────────────────────────────
+
+function detectBrokerFormat(text,filename){
+  const low=text.substring(0,2000).toLowerCase();
+  const fn=filename.toLowerCase();
+  // NinjaTrader: "entry time" + "exit time" + "market pos"
+  if(/entry time.*exit time/i.test(text)||/market pos\./i.test(text))return'ninja';
+  // Tradovate: "tradedate" or "realized p&l" or "tradeid"
+  if(/tradeid|realized p&l|tradedate/i.test(text)||(low.includes('buy/sell')&&low.includes('commission')&&low.includes('contract')))return'tradovate';
+  // Rithmic: "exchange" + "buy/sell" + "net profit" or "profit/loss"
+  if(low.includes('exchange')&&(low.includes('net profit')||low.includes('profit/loss')))return'rithmic';
+  // MT4/MT5: html report or "balance" rows
+  if(fn.endsWith('.html')||fn.endsWith('.htm')||low.includes('<html')||/ticket.*type.*symbol.*volume/i.test(text))return'mt45';
+  // SimpleTrader own CSV
+  if(/^#,Fecha,Símbolo/i.test(text)||/^#,fecha,símbolo/i.test(text))return'simpletrader';
+  return'generic';
+}
+
+// ── Parsers ──────────────────────────────────────────────────────────────────
+
+function parseBrokerFile(text,filename,fmt){
+  switch(fmt){
+    case'tradovate':  return parseTradovate(text);
+    case'ninja':      return parseNinjaTrader(text);
+    case'rithmic':    return parseRithmic(text);
+    case'mt45':       return parseMT45Export(text,filename).map(t=>mtTradeToJTrade(t));
+    case'simpletrader':return parseSimpleTraderCSV(text);
+    default:          return parseGenericCSV(text);
+  }
+}
+
+function csvRow(line){return line.split(',').map(c=>c.replace(/^"|"$/g,'').trim());}
+function parseDate(s){
+  // Try various date formats → YYYY-MM-DD
+  if(!s)return'';
+  const m=s.match(/(\d{1,4})[\/\-\.](\d{1,2})[\/\-\.](\d{2,4})/);
+  if(!m)return s.substring(0,10);
+  const [,a,b,c]=m;
+  if(a.length===4)return`${a}-${b.padStart(2,'0')}-${c.padStart(2,'0')}`;
+  // MM/DD/YYYY
+  return`${c.length===2?'20'+c:c}-${a.padStart(2,'0')}-${b.padStart(2,'0')}`;
+}
+function n(v){return parseFloat((v||'').toString().replace(/[^0-9.\-]/g,''))||0;}
+
+function parseTradovate(text){
+  const lines=text.split(/\r?\n/).filter(l=>l.trim());
+  if(!lines.length)return[];
+  // Find header row
+  let hIdx=lines.findIndex(l=>/buy.?sell|tradeid|contract|realized/i.test(l));
+  if(hIdx<0)hIdx=0;
+  const headers=csvRow(lines[hIdx]).map(h=>h.toLowerCase().replace(/[\s\/\-]/g,''));
+  const col=(names)=>{for(const nm of names){const i=headers.findIndex(h=>h.includes(nm));if(i>=0)return i;}return-1;};
+  const iDate=col(['tradedate','date','time']);
+  const iSym=col(['contractname','symbol','contract','instrument']);
+  const iDir=col(['buysell','side','direction','type']);
+  const iQty=col(['qty','quantity','size']);
+  const iEntry=col(['price','entryprice','openprice','avgprice']);
+  const iPnL=col(['realizedpnl','pnl','netprofit','profit']);
+  const iComm=col(['commission','fees','fee']);
+  const trades=[];let id=Date.now();
+  for(const line of lines.slice(hIdx+1)){
+    if(!line.trim())continue;
+    const c=csvRow(line);
+    if(c.length<4)continue;
+    const pnl=iEntry>=0&&iPnL>=0?n(c[iPnL]):0;
+    const comm=iComm>=0?Math.abs(n(c[iComm])):2.5;
+    const dir=(c[iDir]||'').toLowerCase().includes('sell')?'SHORT':'LONG';
+    const sym=normSymbol(c[iSym]||'');
+    const dt=iDate>=0?parseDate(c[iDate]):'';
+    if(!sym||!dt)continue;
+    trades.push({id:id++,date:dt,dt,sym,dir,ctrs:Math.abs(n(c[iQty]))||1,entry:n(c[iEntry])||0,exit:n(c[iEntry])||0,ticks:0,gross:pnl+comm,comm,rr:'',setup:'',notes:'Importado: Tradovate'});
+  }
+  return trades;
+}
+
+function parseNinjaTrader(text){
+  const lines=text.split(/\r?\n/).filter(l=>l.trim());
+  if(!lines.length)return[];
+  let hIdx=lines.findIndex(l=>/entry time/i.test(l));
+  if(hIdx<0)hIdx=0;
+  const headers=csvRow(lines[hIdx]).map(h=>h.toLowerCase().replace(/[\s\.\/]/g,''));
+  const col=(names)=>{for(const nm of names){const i=headers.findIndex(h=>h.includes(nm));if(i>=0)return i;}return-1;};
+  const iEntryT=col(['entrytime','entry']);
+  const iSym=col(['instrument','symbol','contract']);
+  const iDir=col(['marketpos','direction','side','position']);
+  const iQty=col(['qty','quantity','size']);
+  const iEP=col(['entryprice','open']);
+  const iXP=col(['exitprice','close']);
+  const iProfit=col(['profit','pnl','net','realized']);
+  const iComm=col(['commission','fees']);
+  const trades=[];let id=Date.now();
+  for(const line of lines.slice(hIdx+1)){
+    if(!line.trim())continue;
+    const c=csvRow(line);
+    if(c.length<6)continue;
+    const profit=iProfit>=0?n(c[iProfit]):0;
+    const comm=iComm>=0?Math.abs(n(c[iComm])):2.08;
+    const gross=profit+comm;
+    const dir=(c[iDir]||'').toLowerCase().includes('short')?'SHORT':'LONG';
+    const sym=normSymbol(c[iSym]||'');
+    const dt=iEntryT>=0?parseDate(c[iEntryT]):'';
+    if(!sym)continue;
+    const ep=n(c[iEP]||'');const xp=n(c[iXP]||'');
+    const ctrs=Math.abs(n(c[iQty]))||1;
+    const ticks=ep&&xp?Math.round(Math.abs(xp-ep)/0.25):0;
+    trades.push({id:id++,date:dt,dt,sym,dir,ctrs,entry:ep,exit:xp,ticks,gross,comm,rr:'',setup:'',notes:'Importado: NinjaTrader'});
+  }
+  return trades;
+}
+
+function parseRithmic(text){
+  const lines=text.split(/\r?\n/).filter(l=>l.trim());
+  if(!lines.length)return[];
+  let hIdx=lines.findIndex(l=>/symbol|exchange|buy.?sell/i.test(l));
+  if(hIdx<0)hIdx=0;
+  const headers=csvRow(lines[hIdx]).map(h=>h.toLowerCase().replace(/[\s\/\-\.]/g,''));
+  const col=(names)=>{for(const nm of names){const i=headers.findIndex(h=>h.includes(nm));if(i>=0)return i;}return-1;};
+  const iSym=col(['symbol','instrument']);
+  const iDir=col(['buysell','side','type']);
+  const iQty=col(['qty','quantity','size','vol']);
+  const iPrice=col(['price','avgprice']);
+  const iPnL=col(['netprofit','profitloss','profit','pnl']);
+  const iComm=col(['commission','fees']);
+  const iDate=col(['date','tradedate','time']);
+  const trades=[];let id=Date.now();
+  for(const line of lines.slice(hIdx+1)){
+    if(!line.trim())continue;
+    const c=csvRow(line);if(c.length<4)continue;
+    const pnl=iPnL>=0?n(c[iPnL]):0;
+    const comm=iComm>=0?Math.abs(n(c[iComm])):2.5;
+    const dir=(c[iDir]||'').toLowerCase().includes('sell')?'SHORT':'LONG';
+    const sym=normSymbol(c[iSym]||'');
+    const dt=iDate>=0?parseDate(c[iDate]):'';
+    if(!sym)continue;
+    trades.push({id:id++,date:dt,dt,sym,dir,ctrs:Math.abs(n(c[iQty]))||1,entry:n(c[iPrice])||0,exit:n(c[iPrice])||0,ticks:0,gross:pnl+comm,comm,rr:'',setup:'',notes:'Importado: Rithmic'});
+  }
+  return trades;
+}
+
+function parseSimpleTraderCSV(text){
+  // Format: #,Fecha,Símbolo,Dir,Ctrs,Entrada,Salida,Ticks,Bruto,Comis,Neto
+  const lines=text.split(/\r?\n/).filter(l=>l.trim());
+  const trades=[];let id=Date.now();
+  for(const line of lines.slice(1)){
+    const c=csvRow(line);if(c.length<11)continue;
+    if(!/^\d+$/.test(c[0]))continue;
+    trades.push({id:id++,date:c[1],dt:c[1],sym:c[2],dir:c[3],ctrs:n(c[4]),entry:n(c[5]),exit:n(c[6]),ticks:n(c[7]),gross:n(c[8]),comm:n(c[9]),rr:'',setup:'',notes:'Reimportado desde CSV'});
+  }
+  return trades;
+}
+
+function parseGenericCSV(text){
+  // Best-effort: detect P&L + symbol columns
+  const lines=text.split(/\r?\n/).filter(l=>l.trim());
+  if(!lines.length)return[];
+  const hIdx=0;
+  const headers=csvRow(lines[hIdx]).map(h=>h.toLowerCase().replace(/[\s\/\-\.]/g,''));
+  const iSym=headers.findIndex(h=>/sym|inst|contr|ticker|asset/.test(h));
+  const iDir=headers.findIndex(h=>/dir|side|pos|buy|sell/.test(h));
+  const iPnL=headers.findIndex(h=>/pnl|profit|net|gain|result/.test(h));
+  const iDate=headers.findIndex(h=>/date|time|when/.test(h));
+  const iQty=headers.findIndex(h=>/qty|vol|size|quant/.test(h));
+  const trades=[];let id=Date.now();
+  for(const line of lines.slice(hIdx+1)){
+    const c=csvRow(line);if(c.length<3)continue;
+    const pnl=iPnL>=0?n(c[iPnL]):0;
+    if(!pnl&&pnl!==0)continue;
+    const sym=iSym>=0?normSymbol(c[iSym]):'FUT';
+    const dir=iDir>=0&&(c[iDir]||'').toLowerCase().includes('sell')?'SHORT':'LONG';
+    const dt=iDate>=0?parseDate(c[iDate]):'';
+    trades.push({id:id++,date:dt,dt,sym,dir,ctrs:iQty>=0?Math.abs(n(c[iQty]))||1:1,entry:0,exit:0,ticks:0,gross:pnl+2.5,comm:2.5,rr:'',setup:'',notes:'Importado: CSV genérico'});
+  }
+  return trades;
+}
+
+function mtTradeToJTrade(t){
+  const dir=((t.type||'').toLowerCase().includes('sell')||t.type==='1')?'SHORT':'LONG';
+  const gross=+(t.pnl||0);const comm=2.08;
+  const dt=parseDate(t.openTime||'');
+  return{id:Date.now()+Math.random(),date:dt,dt,sym:normSymbol(t.symbol||''),dir,ctrs:+(t.volume||1),entry:+(t.openPrice||0),exit:+(t.closePrice||0),ticks:0,gross:gross+comm,comm,rr:'',setup:'',notes:'Importado: MT4/MT5'};
+}
+
+// ── Preview ──────────────────────────────────────────────────────────────────
+
+function renderBiPreview(trades,fmt,filename){
+  const prev=document.getElementById('bi-preview');
+  const status=document.getElementById('bi-status');
+  const btn=document.getElementById('bi-import-btn');
+  if(!trades||!trades.length){
+    prev.innerHTML=`<div style="text-align:center;padding:24px;color:var(--rd);font-size:12px">⚠ No se detectaron trades en este archivo.<br><span style="color:var(--tx3);font-size:10.5px">Prueba a cambiar el formato manualmente.</span></div>`;
+    if(status)status.textContent='';
+    if(btn)btn.style.display='none';
+    return;
+  }
+  const totalNet=trades.reduce((s,t)=>s+(t.gross-t.comm),0);
+  const wins=trades.filter(t=>t.gross>0).length;
+  const fmtLabels={tradovate:'Tradovate',ninja:'NinjaTrader',rithmic:'Rithmic',mt45:'MT4/MT5',simpletrader:'SimpleTrader CSV',generic:'Genérico',auto:'Auto'};
+  if(status)status.innerHTML=`<strong>${trades.length}</strong> trades detectados · Formato: <strong>${fmtLabels[fmt]||fmt}</strong> · P&L neto: <strong style="color:${totalNet>=0?'var(--gn)':'var(--rd)'}">${totalNet>=0?'+':''}$${totalNet.toFixed(0)}</strong> · Win rate: <strong>${trades.length?(wins/trades.length*100).toFixed(0):0}%</strong>`;
+  if(btn)btn.style.display='';
+  const preview=trades.slice(0,15);
+  prev.innerHTML=`
+    <div class="tw" style="font-size:10px">
+      <table><thead><tr>
+        <th>Fecha</th><th>Símbolo</th><th>Dir.</th><th>Ctrs</th><th>Entrada</th><th>Salida</th><th>Bruto</th><th>Comis</th><th>Neto</th>
+      </tr></thead><tbody>
+        ${preview.map(t=>`<tr>
+          <td>${t.date||'—'}</td>
+          <td style="font-weight:700">${t.sym}</td>
+          <td><span class="${t.dir==='LONG'?'up':'dn'}" style="font-size:9px;font-weight:700">${t.dir}</span></td>
+          <td>${t.ctrs}</td>
+          <td class="mono">${t.entry||'—'}</td>
+          <td class="mono">${t.exit||'—'}</td>
+          <td class="${t.gross>=0?'up':'dn'}">${t.gross>=0?'+':''}$${t.gross.toFixed(0)}</td>
+          <td>$${t.comm.toFixed(2)}</td>
+          <td class="${(t.gross-t.comm)>=0?'up':'dn'}">${(t.gross-t.comm)>=0?'+':''}$${(t.gross-t.comm).toFixed(0)}</td>
+        </tr>`).join('')}
+      </tbody></table>
+    </div>
+    ${trades.length>15?`<div style="text-align:center;padding:8px;font-size:10.5px;color:var(--tx3)">… y ${trades.length-15} trades más</div>`:''}`;
+}
+
+function confirmBrokerImport(){
+  if(!_biParsed||!_biParsed.length){toast('No hay trades para importar','warn');return;}
+  const existing=new Set(JTRADES.map(t=>`${t.date}_${t.sym}_${t.dir}_${t.gross}`));
+  const newTrades=_biParsed.filter(t=>!existing.has(`${t.date}_${t.sym}_${t.dir}_${t.gross}`));
+  if(!newTrades.length){toast('Todos los trades ya existen en el journal','warn');closeBrokerImport();return;}
+  // Re-index IDs to avoid conflicts
+  const maxId=JTRADES.length?Math.max(...JTRADES.map(t=>+t.id||0)):0;
+  newTrades.forEach((t,i)=>{t.id=maxId+i+1;});
+  JTRADES.push(...newTrades);
+  jFlt=[...JTRADES];
+  renderJ();renderJournalKPIs();renderJSidebar();calRender();scheduleSave();
+  closeBrokerImport();
+  toast(`✓ ${newTrades.length} trades importados al journal`,'ok',4000);
 }
 
 // ─── PDF / PRINT EXPORT ──────────────────────────────────────────────────────
