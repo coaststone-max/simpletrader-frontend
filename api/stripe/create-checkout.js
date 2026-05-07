@@ -18,9 +18,12 @@ const STRIPE_SECRET = process.env.STRIPE_SECRET_KEY;
 const SITE_URL      = process.env.SITE_URL || 'https://simpletrader-frontend.vercel.app';
 
 const PRICES = {
-  pro:       process.env.STRIPE_PRICE_PRO,
-  advanced:  process.env.STRIPE_PRICE_ADVANCED,
-  unlimited: process.env.STRIPE_PRICE_UNLIMITED,
+  pro:              process.env.STRIPE_PRICE_PRO,
+  advanced:         process.env.STRIPE_PRICE_ADVANCED,
+  unlimited:        process.env.STRIPE_PRICE_UNLIMITED,
+  'pro-annual':     process.env.STRIPE_PRICE_PRO_ANNUAL,
+  'advanced-annual':process.env.STRIPE_PRICE_ADVANCED_ANNUAL,
+  'unlimited-annual':process.env.STRIPE_PRICE_UNLIMITED_ANNUAL,
 };
 
 export default async function handler(req, res) {

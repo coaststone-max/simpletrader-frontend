@@ -4581,7 +4581,7 @@ function renderPricing(){
         `<div style="font-size:8.5px;color:var(--tx3);margin-top:3px">€${p.a}/mes con plan anual</div>`}
       </div>
 
-      <button class="pcta ${isFt?'p':'s'}" style="${isFt?`background:linear-gradient(90deg,${glowColor},#8B5CF6);color:#fff;box-shadow:0 4px 20px ${glowColor}55;border:none`:`color:${glowColor};border:1.5px solid ${glowColor}44;background:${glowColor}11`};margin-bottom:16px" onclick="selectPlan('${p.name}')">${p.cta} →</button>
+      <button class="pcta ${isFt?'p':'s'}" style="${isFt?`background:linear-gradient(90deg,${glowColor},#8B5CF6);color:#fff;box-shadow:0 4px 20px ${glowColor}55;border:none`:`color:${glowColor};border:1.5px solid ${glowColor}44;background:${glowColor}11`};margin-bottom:16px" onclick="selectPlan('${p.name}',billing)">${p.cta} →</button>
 
       <div style="display:flex;flex-direction:column;gap:6px;padding-top:4px">
         ${p.feats.map(f=>`<div style="display:flex;align-items:flex-start;gap:7px;font-size:10px">
@@ -4602,18 +4602,20 @@ function closePricing(){document.getElementById('pm').classList.remove('open');}
 
 // ─── STRIPE INTEGRATION ──────────────────────────────────────────────────────
 
-async function selectPlan(n){
+async function selectPlan(n,bill){
   if(n==='Starter'){closePricing();toast('El plan Starter es gratuito ✓','info',3000);return;}
   const isDemoMode=!_stUser;
   if(isDemoMode){closePricing();toast('Crea una cuenta para suscribirte 🚀','info',4000);return;}
   if(U.plan===n){closePricing();toast('Ya tienes el plan '+n+' activo','info',3000);return;}
   closePricing();
   toast('Redirigiendo a Stripe…','info');
+  const isAnnual=(bill||billing)==='a';
+  const planKey=n.toLowerCase()+(isAnnual?'-annual':'');
   try{
     const r=await fetch('/api/stripe/create-checkout',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({userId:_stUser.id,userEmail:U.email,plan:n.toLowerCase()})
+      body:JSON.stringify({userId:_stUser.id,userEmail:U.email,plan:planKey})
     });
     const d=await r.json();
     if(d.url){window.location.href=d.url;}
