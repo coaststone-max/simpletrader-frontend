@@ -4327,6 +4327,12 @@ async function submitRegister(btn){
       }
     }catch(e){console.warn('profile insert:',e);}
     btn.closest('.mm-bg').remove();
+    // Send branded welcome email via Resend (fire-and-forget)
+    fetch('/api/notifications/email',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({to:email,type:'welcome',data:{name:full_name,plan}})
+    }).catch(()=>{});
     showConfirmEmailModal(name,email);
   }catch(err){
     const msg=err.message||'Error al crear cuenta';
