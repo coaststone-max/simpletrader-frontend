@@ -33,6 +33,9 @@
     "api/stripe/portal.js":                 {"maxDuration": 10},
     "api/notifications/subscribe.js":       {"maxDuration": 10},
     "api/notifications/push.js":            {"maxDuration": 10},
-    "api/notifications/email.js":           {"maxDuration": 15}
+    "api/notifications/email.js":           {"maxDuration": 15},
+    "api/backtest/candles.js":              {"maxDuration": 15},
+    "api/mt5/tick.js":                      {"maxDuration": 10},
+    "api/mt5/manage.js":                    {"maxDuration": 10}
   }
 }
