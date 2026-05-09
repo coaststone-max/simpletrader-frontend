@@ -8162,6 +8162,77 @@ function _loadLiveConnections(){
   }catch(e){_liveConnections=[];}
 }
 
+// ── Sync live MT5 accounts → Dashboard / Portfolio / Journal ──────────────────
+function _syncLiveToApp(){
+  // 1. Remove previously injected live entries
+  var i=SAVED_ACCOUNTS.length;
+  while(i--){if(SAVED_ACCOUNTS[i]._isLive)SAVED_ACCOUNTS.splice(i,1);}
+  var j=ALL_ACCS.length;
+  while(j--){if(ALL_ACCS[j]._isLive)ALL_ACCS.splice(j,1);}
+
+  // 2. Inject one entry per online live connection
+  _liveConnections.forEach(function(conn){
+    var st=_liveStates[conn.token];
+    if(!st||!st.isOnline)return;
+    var acct=st.account||{};
+    var bal=parseFloat(acct.balance||0);
+    var eq=parseFloat(acct.equity||bal);
+    var pnl=parseFloat(acct.profit||0);
+    var label=st.label||conn.label||conn.platform||'Live';
+    var broker=acct.broker||acct.company||conn.platform||'MT5';
+    var dd=bal>0?Math.max(0,(bal-eq)/bal*100):0;
+
+    // SAVED_ACCOUNTS entry (used by Dashboard KPI + risk rules)
+    SAVED_ACCOUNTS.push({
+      _isLive:true,
+      uid:'live_'+conn.token,
+      pfId:'live',
+      brokerId:conn.platform==='MT4'?'mt4':'mt5',
+      accountNum:acct.number?'#'+acct.number:conn.token.slice(0,8),
+      planSize:label,
+      status:'connected',
+      balance:bal,
+      equity:eq,
+      pnl:pnl,
+      broker:broker,
+      maxDD:bal*0.1||1000,
+      dailyLoss:bal*0.05||500,
+      target:bal*0.1||1000,
+      spk:[],
+      _token:conn.token,
+    });
+
+    // ALL_ACCS entry (used by Portfolio)
+    var ab=(label.match(/\b\w/g)||[label[0]||'L']).slice(0,2).join('').toUpperCase();
+    ALL_ACCS.push({
+      _isLive:true,
+      uid:'live_'+conn.token,
+      firm:label,
+      sz:broker,
+      bal:bal,
+      pnl:pnl,
+      dd:dd,
+      ab:ab,
+    });
+  });
+
+  // 3. Re-render affected sections (only if already visible / built)
+  try{renderDashKPI();}catch(e){}
+  try{renderDashRules();}catch(e){}
+  try{renderPortKPI();}catch(e){}
+  try{renderPortAccs();}catch(e){}
+  try{if(typeof renderRiskKPI==='function')renderRiskKPI();}catch(e){}
+  // Update equity live badge in dashboard header
+  try{
+    var totalEq=_liveConnections.reduce(function(s,c){
+      var st=_liveStates[c.token];
+      return s+(st&&st.isOnline?parseFloat((st.account||{}).equity||0):0);
+    },0);
+    var el=document.getElementById('eq-live');
+    if(el&&totalEq>0)el.textContent='🟢 $'+totalEq.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2});
+  }catch(e){}
+}
+
 // Start polling state from API for a given token
 function startLivePoller(token){
   if(_livePollers[token])return; // already running
@@ -8172,9 +8243,11 @@ function startLivePoller(token){
         const data=await r.json();
         if(data.ok){
           _liveStates[token]=data;
-          // Refresh only the live section if it's active
+          // Refresh live section if active
           const sec=document.getElementById('sec-live');
           if(sec&&sec.classList.contains('act'))renderLive();
+          // Always sync to Dashboard / Portfolio / Journal
+          _syncLiveToApp();
         }
       }
     }catch(e){}
