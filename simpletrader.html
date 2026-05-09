@@ -2276,6 +2276,172 @@ html[data-theme=light] .sr:hover{background:rgba(74,104,240,.07) !important}
 #j-body tr:hover td{background:rgba(91,124,247,.07) !important}
 #j-body tr td{padding:8px 10px !important;border-bottom:1px solid rgba(255,255,255,.04) !important}
 
+/* ═══════════════════════════════════════════════════════════
+   VISUAL DESIGN v2 — PREMIUM OVERHAUL
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Root: richer color palette ── */
+:root{
+  --glow-cy:rgba(91,124,247,.22);
+  --glow-gn:rgba(34,197,94,.18);
+  --glow-rd:rgba(239,68,68,.18);
+  --glow-am:rgba(245,158,11,.16);
+  --card-shine:rgba(255,255,255,.03);
+}
+
+/* ── Login screen: dramatic hero left panel ── */
+#ls{background:radial-gradient(ellipse 130% 90% at 30% 60%, rgba(91,124,247,.09) 0%, rgba(139,92,246,.05) 40%, transparent 70%), var(--bg)}
+.ls-l{background:none}
+.ls-g{background-image:linear-gradient(rgba(91,124,247,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(91,124,247,.035) 1px,transparent 1px);background-size:48px 48px}
+.ls-gl{background:radial-gradient(circle at 50% 50%, rgba(91,124,247,.12) 0%, rgba(139,92,246,.07) 35%, transparent 65%);width:600px;height:600px}
+/* Animated orbs on login hero */
+.ls-l::after{content:'';position:absolute;width:320px;height:320px;background:radial-gradient(circle,rgba(91,124,247,.06),transparent 65%);top:15%;right:10%;border-radius:50%;pointer-events:none;animation:orbFloat 8s ease-in-out infinite}
+.ls-l::before{content:'';position:absolute;width:220px;height:220px;background:radial-gradient(circle,rgba(139,92,246,.06),transparent 65%);bottom:20%;left:15%;border-radius:50%;pointer-events:none;animation:orbFloat 11s ease-in-out infinite reverse}
+@keyframes orbFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-22px) scale(1.04)}}
+
+/* Login form panel: glassmorphism */
+.ls-r{background:rgba(18,21,28,.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-left:1px solid rgba(255,255,255,.07);box-shadow:-24px 0 80px rgba(0,0,0,.45)}
+html[data-theme=light] .ls-r{background:rgba(255,255,255,.94);backdrop-filter:blur(24px);border-left:1px solid rgba(74,104,240,.12);box-shadow:-20px 0 60px rgba(15,23,42,.08)}
+
+/* Login inputs: cleaner focus ring */
+.lf-i{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);transition:border-color .2s,box-shadow .2s,background .2s}
+.lf-i:focus{background:rgba(91,124,247,.06);border-color:var(--cy);box-shadow:0 0 0 3px rgba(91,124,247,.18)}
+html[data-theme=light] .lf-i{background:rgba(74,104,240,.04);border-color:var(--b2)}
+html[data-theme=light] .lf-i:focus{background:rgba(74,104,240,.06)}
+
+/* Login button: gradient + shimmer */
+.btn-pri{background:linear-gradient(135deg,#4f6ef7 0%,#6d52e8 100%);border:none;border-radius:8px;position:relative;overflow:hidden;box-shadow:0 4px 18px rgba(79,110,247,.38)}
+.btn-pri::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.12) 50%,transparent 100%);transform:translateX(-100%);transition:transform .6s ease}
+.btn-pri:hover::after{transform:translateX(100%)}
+.btn-pri:hover{filter:brightness(1.1);transform:translateY(-2px);box-shadow:0 8px 28px rgba(79,110,247,.48)}
+.btn-pri:active{transform:translateY(0);box-shadow:0 4px 14px rgba(79,110,247,.3)}
+
+/* ── KPI Metric cards: richer gradients + glow ── */
+.mc{background:var(--card);border:1px solid var(--b2);border-radius:10px;overflow:hidden;transition:border-color .2s,box-shadow .25s,transform .2s}
+.mc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent 0%,rgba(91,124,247,.6) 40%,rgba(139,92,246,.5) 70%,transparent 100%);opacity:.7}
+.mc:hover{border-color:rgba(91,124,247,.3);box-shadow:0 6px 28px rgba(0,0,0,.4),0 0 0 1px rgba(91,124,247,.08);transform:translateY(-2px)}
+.mc::after{content:'';position:absolute;top:-40px;right:-40px;width:90px;height:90px;background:radial-gradient(circle,rgba(91,124,247,.07),transparent 65%);pointer-events:none;border-radius:50%}
+.mv{font-size:22px;font-weight:800;font-family:var(--mono);line-height:1.2;margin-top:5px;letter-spacing:-.5px}
+.mv.up{text-shadow:0 0 20px rgba(34,197,94,.25)}
+.mv.dn{text-shadow:0 0 20px rgba(239,68,68,.25)}
+.mv.cy{text-shadow:0 0 20px rgba(91,124,247,.3)}
+.ml{font-size:9.5px;color:var(--tx3);font-weight:700;letter-spacing:1px;text-transform:uppercase;display:flex;align-items:center;gap:5px}
+
+/* ── Sidebar: premium active state ── */
+.ni.act{background:linear-gradient(90deg,rgba(91,124,247,.15) 0%,rgba(91,124,247,.05) 100%);color:var(--cy);border-color:rgba(91,124,247,.25);border-left:2.5px solid var(--cy);padding-left:9px;font-weight:600;box-shadow:inset 0 0 20px rgba(91,124,247,.06)}
+.ni.act svg{opacity:1;filter:drop-shadow(0 0 4px rgba(91,124,247,.4))}
+.ni:hover{background:var(--bg4);color:var(--tx);border-color:var(--b2);transform:translateX(2px)}
+.sb-mark{background:linear-gradient(135deg,#5B7CF7 0%,#7C5CF6 100%);box-shadow:0 3px 12px rgba(91,124,247,.35)}
+
+/* ── Sidebar: user row ── */
+.up-row{transition:all .18s}
+.up-row:hover{background:rgba(91,124,247,.08);border-color:rgba(91,124,247,.2);transform:translateY(-1px)}
+.uav{background:linear-gradient(135deg,#6366F1,#5B7CF7,#38BDF8);box-shadow:0 2px 10px rgba(91,124,247,.25)}
+
+/* ── Toast notifications: glassmorphism ── */
+.tst{background:rgba(12,16,28,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,.6),0 2px 8px rgba(0,0,0,.4)}
+.tst.ok{background:rgba(10,22,16,.92);border:1px solid rgba(34,197,94,.3);color:#4ade80;box-shadow:0 8px 32px rgba(0,0,0,.6),0 0 20px rgba(34,197,94,.08)}
+.tst.err{background:rgba(22,10,10,.92);border:1px solid rgba(239,68,68,.3);color:#f87171;box-shadow:0 8px 32px rgba(0,0,0,.6),0 0 20px rgba(239,68,68,.08)}
+.tst.warn{background:rgba(22,17,6,.92);border:1px solid rgba(245,158,11,.3);color:#fbbf24;box-shadow:0 8px 32px rgba(0,0,0,.6),0 0 20px rgba(245,158,11,.08)}
+.tst.info{background:rgba(10,14,26,.92);border:1px solid rgba(91,124,247,.3);color:var(--tx);box-shadow:0 8px 32px rgba(0,0,0,.6),0 0 20px rgba(91,124,247,.08)}
+html[data-theme=light] .tst{background:rgba(255,255,255,.95);backdrop-filter:blur(20px)}
+html[data-theme=light] .tst.ok{background:rgba(240,253,244,.97);color:var(--gn)}
+html[data-theme=light] .tst.err{background:rgba(254,242,242,.97);color:var(--rd)}
+html[data-theme=light] .tst.warn{background:rgba(255,251,235,.97);color:var(--am)}
+html[data-theme=light] .tst.info{background:rgba(240,244,255,.97);color:var(--cy)}
+
+/* ── Main cards: glassmorphism upgrade ── */
+.card{background:rgba(22,26,38,.95);border:1px solid rgba(255,255,255,.06);border-radius:10px;position:relative;overflow:hidden;box-shadow:0 2px 16px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.03)}
+.card:hover{border-color:rgba(255,255,255,.1);box-shadow:0 6px 28px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.04);transform:translateY(-1px)}
+html[data-theme=light] .card{background:rgba(255,255,255,.97);border-color:rgba(74,104,240,.1);box-shadow:0 2px 12px rgba(15,23,42,.08),inset 0 1px 0 rgba(255,255,255,.9)}
+html[data-theme=light] .card:hover{border-color:rgba(74,104,240,.2);box-shadow:0 6px 20px rgba(15,23,42,.12)}
+
+/* ── Topbar: subtle gradient border ── */
+.topbar{background:rgba(18,21,28,.98);border-bottom:1px solid rgba(255,255,255,.06);backdrop-filter:blur(8px)}
+html[data-theme=light] .topbar{background:rgba(255,255,255,.98);border-bottom:1px solid rgba(74,104,240,.1)}
+
+/* ── Section transitions: smoother ── */
+.sec.act{animation:si .22s cubic-bezier(.16,1,.3,1)}
+
+/* ── Action buttons: premium gradient ── */
+.btn.bc{background:linear-gradient(135deg,rgba(91,124,247,.15),rgba(91,124,247,.08));color:var(--cy);border-color:rgba(91,124,247,.35);position:relative;overflow:hidden}
+.btn.bc::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(91,124,247,.12),transparent);transform:translateX(-100%);transition:transform .5s}
+.btn.bc:hover::after{transform:translateX(100%)}
+.btn.bc:hover{background:linear-gradient(135deg,rgba(91,124,247,.25),rgba(91,124,247,.15));border-color:rgba(91,124,247,.55);box-shadow:0 0 16px rgba(91,124,247,.2);transform:translateY(-1px)}
+.btn.bg2:hover{background:rgba(34,197,94,.18);box-shadow:0 0 16px rgba(34,197,94,.12)}
+.btn.br:hover{background:rgba(239,68,68,.18);box-shadow:0 0 16px rgba(239,68,68,.12)}
+
+/* ── Table headers: cleaner ── */
+th{background:rgba(255,255,255,.015);border-bottom:1px solid rgba(255,255,255,.07)}
+html[data-theme=light] th{background:rgba(74,104,240,.04);border-bottom-color:rgba(74,104,240,.1)}
+
+/* ── Account cards: colored glow on hover ── */
+.acc-card.connected:hover{box-shadow:0 6px 24px rgba(34,197,94,.1),0 0 0 1px rgba(34,197,94,.12);transform:translateY(-2px)}
+.acc-card.error-acc:hover{box-shadow:0 6px 24px rgba(239,68,68,.1),0 0 0 1px rgba(239,68,68,.1)}
+
+/* ── Portfolio account cards ── */
+.pacc{background:linear-gradient(145deg,rgba(18,21,32,.95),rgba(14,17,26,.95));border:1px solid rgba(255,255,255,.06);box-shadow:0 4px 24px rgba(0,0,0,.5)}
+.pacc:hover{box-shadow:0 10px 40px rgba(0,0,0,.55),0 0 30px rgba(34,197,94,.07);border-color:rgba(255,255,255,.1)}
+
+/* ── Section header ── */
+.sec-header{border-bottom:1px solid rgba(255,255,255,.05)}
+.sec-title{font-size:17px;font-weight:800;letter-spacing:-.3px}
+html[data-theme=light] .sec-header{border-bottom-color:rgba(74,104,240,.08)}
+
+/* ── Progress bars: gradient fill ── */
+.pfg{background:linear-gradient(90deg,#22C55E,#4ade80)}
+.pfr{background:linear-gradient(90deg,#DC2626,#ef4444)}
+.pfa{background:linear-gradient(90deg,#d97706,#f59e0b)}
+.pfc{background:linear-gradient(90deg,#4f6ef7,#818cf8)}
+
+/* ── Badge improvements ── */
+.bdg{border-radius:4px;font-size:9px;letter-spacing:.3px}
+.bb{background:rgba(91,124,247,.15);border-color:rgba(91,124,247,.4)}
+.bs{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.4)}
+.bok{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.35)}
+
+/* ── Command palette: premium glass ── */
+#cmd-box{background:rgba(14,17,26,.97);backdrop-filter:blur(28px);border-color:rgba(91,124,247,.25);box-shadow:0 24px 72px rgba(0,0,0,.8),0 0 0 1px rgba(91,124,247,.08)}
+#cmd-input{border-bottom-color:rgba(255,255,255,.06)}
+.cmd-item:hover,.cmd-item.sel{background:rgba(91,124,247,.1)}
+html[data-theme=light] #cmd-box{background:rgba(255,255,255,.97)}
+
+/* ── Pricing cards ── */
+.pc{background:rgba(18,22,34,.97);border:1px solid rgba(255,255,255,.07);box-shadow:0 4px 20px rgba(0,0,0,.5)}
+.pc.ft{border-color:rgba(91,124,247,.5);background:linear-gradient(145deg,rgba(14,21,50,.97),rgba(16,14,45,.97));box-shadow:0 8px 40px rgba(91,124,247,.2),0 0 0 1px rgba(91,124,247,.2)}
+html[data-theme=light] .pc{background:rgba(255,255,255,.98);border-color:rgba(74,104,240,.1)}
+html[data-theme=light] .pc.ft{background:linear-gradient(145deg,rgba(240,244,255,1),rgba(246,240,255,1));border-color:rgba(74,104,240,.4)}
+
+/* ── MT5 / Live connection card ── */
+.mt5-card{box-shadow:0 4px 24px rgba(0,168,255,.06)}
+
+/* ── Scrollbar: slightly wider + colored ── */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-thumb{background:rgba(91,124,247,.25);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:rgba(91,124,247,.4)}
+
+/* ── Skeleton: slightly lighter shimmer ── */
+.skel::after{background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.05) 50%,transparent 100%)}
+
+/* ── Toggle: refined track ── */
+.tog input:checked+.tgt{background:linear-gradient(90deg,var(--cy),#22C55E)}
+
+/* ── Focus ring ── */
+*:focus-visible{outline:2px solid rgba(91,124,247,.7);outline-offset:3px;border-radius:5px}
+
+/* ── Number micro-animation on load ── */
+.mv{transition:color .3s,text-shadow .3s}
+
+/* ── Pill filter buttons ── */
+.fb.act{background:linear-gradient(135deg,rgba(91,124,247,.18),rgba(91,124,247,.08));border-color:rgba(91,124,247,.45);box-shadow:0 0 12px rgba(91,124,247,.12)}
+
+/* ── Risk/Status pills ── */
+.rpg{box-shadow:0 0 8px rgba(34,197,94,.07)}
+.rpe{box-shadow:0 0 8px rgba(239,68,68,.07)}
+
+/* ── Topbar buttons ── */
+.tbtn:hover{background:rgba(91,124,247,.1);border-color:rgba(91,124,247,.3);color:var(--cy)}
+
 </style>
 <script>
 /* ── Section hero header animation ── */
