@@ -2529,7 +2529,7 @@ try{
     </button>
     <button class="ni" data-s="backtesting" onclick="nav(this)" style="position:relative">
       <svg viewBox="0 0 24 24" width="16" height="16"><rect x="3" y="9" width="3.5" height="7" rx="1" fill="currentColor" opacity=".35"/><line x1="4.75" y1="6" x2="4.75" y2="9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="4.75" y1="16" x2="4.75" y2="19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><rect x="10.25" y="5" width="3.5" height="10" rx="1" fill="currentColor"/><line x1="12" y1="2.5" x2="12" y2="5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="15" x2="12" y2="18.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><rect x="17.5" y="11" width="3.5" height="5" rx="1" fill="currentColor" opacity=".55"/><line x1="19.25" y1="8" x2="19.25" y2="11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="19.25" y1="16" x2="19.25" y2="19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-      <span class="ni-lbl">Backtesting</span><span class="nb nb-c">Nuevo</span><span class="ni-tip">Backtesting</span>
+      <span class="ni-lbl">Backtesting</span><span class="nb nb-c" id="nb-backtesting">Nuevo</span><span class="ni-tip">Backtesting</span>
     </button>
     <button class="ni" data-s="journal" onclick="nav(this)" style="position:relative">
       <svg viewBox="0 0 24 24" width="16" height="16"><rect x="5" y="2" width="14" height="20" rx="2.5" fill="currentColor" opacity=".2"/><rect x="5" y="2" width="5" height="20" rx="2.5" fill="currentColor" opacity=".5"/><rect x="5" y="2" width="14" height="20" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".4"/><line x1="12" y1="8" x2="16" y2="8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="12" x2="16" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="16" x2="15" y2="16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
@@ -2538,7 +2538,7 @@ try{
     <div class="sg">Herramientas</div>
     <button class="ni" data-s="replicator" onclick="nav(this)" style="position:relative">
       <svg viewBox="0 0 24 24" width="16" height="16"><circle cx="5" cy="5" r="3" fill="currentColor"/><circle cx="19" cy="19" r="3" fill="currentColor" opacity=".45"/><circle cx="19" cy="5" r="3" fill="currentColor" opacity=".7"/><path d="M8 5h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M5 8v8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="2 2"/><path d="M19 8v8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-      <span class="ni-lbl">Replicador</span><span class="nb nb-g" id="rep-badge">0M·0E</span><span class="ni-tip">Replicador</span>
+      <span class="ni-lbl">Replicador</span><span class="nb nb-g" id="rep-badge">0M·0E</span><span id="nb-replicator"></span><span class="ni-tip">Replicador</span>
     </button>
     <button class="ni" data-s="copytrader" onclick="nav(this)" style="position:relative;opacity:.6">
       <svg viewBox="0 0 24 24" width="16" height="16"><circle cx="8" cy="7" r="4" fill="currentColor"/><path d="M2 21a6 6 0 0 1 12 0" fill="currentColor" opacity=".4"/><circle cx="17" cy="8" r="3" fill="currentColor" opacity=".5"/><path d="M14 21a5 5 0 0 1 8 0" fill="currentColor" opacity=".25"/></svg>
@@ -3526,6 +3526,39 @@ document.addEventListener('DOMContentLoaded',function(){_syncThemeBtn();});
 let sbOpen=true;
 function toggleSB(){sbOpen=!sbOpen;document.getElementById('sb').classList.toggle('col',!sbOpen);}
 
+// ─── PLAN FEATURE GATING ─────────────────────────────────────────────────────
+const PLAN_FEATURES={
+  Starter:{liveConnections:0,copyTrading:false,remoteTrading:false,riskEnforcement:false,backtesting:false,replicador:false,maxJournalTrades:50,maxPortfolioAccounts:2,maxMasters:0},
+  Pro:    {liveConnections:2,copyTrading:false,remoteTrading:'basic',riskEnforcement:true,backtesting:true,replicador:true,maxJournalTrades:Infinity,maxPortfolioAccounts:5,maxMasters:3},
+  Advanced:{liveConnections:Infinity,copyTrading:true,remoteTrading:'full',riskEnforcement:true,backtesting:true,replicador:true,maxJournalTrades:Infinity,maxPortfolioAccounts:Infinity,maxMasters:Infinity},
+  Unlimited:{liveConnections:Infinity,copyTrading:true,remoteTrading:'full',riskEnforcement:true,backtesting:true,replicador:true,maxJournalTrades:Infinity,maxPortfolioAccounts:Infinity,maxMasters:Infinity},
+};
+function planF(){return PLAN_FEATURES[U.plan]||PLAN_FEATURES.Advanced;}
+function planLimit(k){return planF()[k]??Infinity;}
+function canUse(k){const v=planF()[k];return v===true||v==='full'||v==='basic'||(typeof v==='number'&&v>0);}
+
+// Show upgrade popup
+function upgradeBump(featureLabel,requiredPlan){
+  const colors={Pro:'#F59E0B',Advanced:'#5B7CF7'};
+  const clr=colors[requiredPlan]||'#5B7CF7';
+  const icons={Pro:'⭐',Advanced:'💎'};
+  const ic=icons[requiredPlan]||'💎';
+  const prices={Pro:'$59/mes',Advanced:'$99/mes'};
+  const el=document.createElement('div');
+  el.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:99999;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px)';
+  el.innerHTML=`<div style="background:var(--card);border:1px solid ${clr}44;border-radius:16px;padding:28px 24px;max-width:360px;width:100%;text-align:center;position:relative">
+    <div style="width:52px;height:52px;border-radius:50%;background:${clr}18;border:2px solid ${clr}44;display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto 14px">${ic}</div>
+    <div style="font-size:16px;font-weight:800;color:var(--tx);margin-bottom:6px">${featureLabel}</div>
+    <div style="font-size:11px;color:var(--tx3);margin-bottom:20px;line-height:1.7">Esta función requiere el plan <b style="color:${clr}">${requiredPlan}</b>.<br>Actualiza para desbloquearla.</div>
+    <div style="display:flex;gap:8px">
+      <button onclick="this.closest('div[style*=inset]').remove()" style="flex:1;padding:10px;border-radius:9px;border:1px solid var(--b2);background:transparent;color:var(--tx2);font-size:12px;font-weight:600;cursor:pointer">Ahora no</button>
+      <button onclick="this.closest('div[style*=inset]').remove();openPricing()" style="flex:1;padding:10px;border-radius:9px;border:none;background:${clr};color:#fff;font-size:12px;font-weight:700;cursor:pointer">${ic} Ver planes →</button>
+    </div>
+  </div>`;
+  document.body.appendChild(el);
+  el.addEventListener('click',e=>{if(e.target===el)el.remove();});
+}
+
 // ─── AUTH (REST puro — sin depender del SDK de Supabase) ────────────────────
 const U={name:'',email:'',initials:'',plan:'Pro',planCls:'pt-p'};
 let _stToken=null; // access token del usuario actual
@@ -3721,6 +3754,30 @@ function syncUI(){
   const pe=document.getElementById('p-email');if(pe)pe.value=U.email;
   renderBilling();
   renderNotifSettings();
+  // Update plan lock badges in sidebar
+  _applyPlanBadges();
+}
+
+function _applyPlanBadges(){
+  // Backtesting badge
+  const nbBt=document.getElementById('nb-backtesting');
+  if(nbBt){
+    if(!canUse('backtesting')){nbBt.className='nb';nbBt.style.cssText='background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.35);color:#fbbf24';nbBt.textContent='🔒 Pro';}
+    else{nbBt.className='nb nb-c';nbBt.style.cssText='';nbBt.textContent='Nuevo';}
+  }
+  // Replicador badge
+  const nbRep=document.getElementById('nb-replicator');
+  if(nbRep){
+    if(!canUse('replicador')){nbRep.className='nb';nbRep.style.cssText='background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.35);color:#fbbf24';nbRep.textContent='🔒 Pro';}
+    else nbRep.textContent='';
+  }
+  // Live section — show connection count info
+  const liveBtn=document.querySelector('[data-s="live"]');
+  if(liveBtn){
+    const max=planLimit('liveConnections');
+    let tip=liveBtn.querySelector('.ni-tip');
+    if(tip)tip.textContent=max===0?'Live — 🔒 Plan Pro':max===Infinity?'Live MT5/MT4':'Live ('+_liveConnections.length+'/'+max+')';
+  }
 }
 
 async function confirmLogout(){
@@ -3787,7 +3844,19 @@ const si={};
 // ─── RIESGO STATE — inicializado aquí para evitar TDZ si hay crash posterior ───
 let pfRules=[{on:true,icon:'💸',lbl:'Daily Loss Limit',val:'3000',unit:'$',type:'money',desc:'Pérdida máxima diaria'},{on:true,icon:'📉',lbl:'Trailing DD Mínimo',val:'142500',unit:'$',type:'money',desc:'Balance mínimo permitido'},{on:true,icon:'📊',lbl:'Máx. contratos',val:'5',unit:'ctrs',type:'number',desc:'Contratos simultáneos'},{on:true,icon:'📰',lbl:'Sin operar en noticias',val:'FOMC, NFP, CPI',unit:'',type:'text',desc:'5 min antes/después'},{on:true,icon:'⚠️',lbl:'Riesgo por trade',val:'0.5',unit:'%',type:'percent',desc:'% del balance'},{on:true,icon:'🛑',lbl:'Pausar tras N pérdidas',val:'3',unit:'trades',type:'number',desc:'Parar y revisar'},{on:false,icon:'🕐',lbl:'Horario (Madrid)',val:'15:30-22:00',unit:'',type:'text',desc:'Ventana operativa'},{on:true,icon:'🎯',lbl:'Profit Target',val:'1000',unit:'$',type:'money',desc:'Cerrar al alcanzar'}];
 let editRule=null;
-function nav(el){const id=el.dataset.s;document.querySelectorAll('.sec').forEach(s=>s.classList.remove('act'));document.querySelectorAll('.ni').forEach(n=>n.classList.remove('act'));const sec=document.getElementById('sec-'+id);if(sec)sec.classList.add('act');el.classList.add('act');document.getElementById('ptitle').textContent=NAV_T[id]||id;if(!si[id]){si[id]=true;initSection(id);if(id==='dashboard')setTimeout(renderDailyHeatmap,100);}}
+function nav(el){
+  const id=el.dataset.s;
+  // Plan gates for nav sections
+  if(id==='backtesting'&&!canUse('backtesting')){upgradeBump('Backtesting & Replay','Pro');return;}
+  if(id==='replicator'&&!canUse('replicador')){upgradeBump('Replicador de trades','Pro');return;}
+  if(id==='copytrader'&&!canUse('copyTrading')){upgradeBump('Copy Trader','Advanced');return;}
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('act'));
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('act'));
+  const sec=document.getElementById('sec-'+id);if(sec)sec.classList.add('act');
+  el.classList.add('act');
+  document.getElementById('ptitle').textContent=NAV_T[id]||id;
+  if(!si[id]){si[id]=true;initSection(id);if(id==='dashboard')setTimeout(renderDailyHeatmap,100);}
+}
 function showSectionSkeleton(id){
   const sec = document.getElementById('sec-'+id);
   if(!sec) return;
@@ -4570,6 +4639,8 @@ function submitAddTrade(btn){
   const isoDate=date.match(/(\d+)\s+(\w+)/)?((()=>{const mon={Ene:0,Feb:1,Mar:2,Abr:3,May:4,Jun:5,Jul:6,Ago:7,Sep:8,Oct:9,Nov:10,Dic:11};const m=date.match(/(\d+)\s+(\w+)/);return m?`2025-${String((mon[m[2]]||0)+1).padStart(2,'0')}-${String(parseInt(m[1])).padStart(2,'0')}`:'2025-01-01';})()):'2025-01-01';
   const id=(JTRADES.length?Math.max(...JTRADES.map(t=>t.id))+1:1);
   const trade={id,date,dt:isoDate,sym,dir,ctrs,entry,exit,ticks,gross,comm,setup,emotion,stars:stars||undefined,notes:notes||undefined};
+  const maxJ=planLimit('maxJournalTrades');
+  if(JTRADES.length>=maxJ){upgradeBump(`El plan Starter tiene un límite de ${maxJ} trades en el journal`,'Pro');return;}
   JTRADES.unshift(trade);
   jFlt=[...JTRADES];
   _calTrades.push({dt:isoDate,sym,dir,ctrs,gross,comm,entry,exit});
@@ -5051,6 +5122,13 @@ function accToMasterObj(a){
 let _masterModalSelUid=null;
 
 function openAddMaster(){
+  if(!canUse('replicador')){upgradeBump('Replicador de trades','Pro');return;}
+  const maxM=planLimit('maxMasters');
+  if(MASTERS.length>=maxM){
+    if(U.plan==='Pro')upgradeBump(`El plan Pro admite máximo ${maxM} cuentas maestras`,'Advanced');
+    else toast('Máximo '+maxM+' cuentas maestras','err');
+    return;
+  }
   if(MASTERS.length>=5){toast('Máximo 5 cuentas maestras','err');return;}
   const modal=document.createElement('div');modal.className='mm-bg';
   const usedUids=new Set(MASTERS.map(m=>m._uid).filter(Boolean));
@@ -7652,6 +7730,7 @@ async function sendLiveCommand(token,command,label){
 
 // Save risk rules binding for a connection
 async function saveCardRules(token){
+  if(!planF().riskEnforcement){upgradeBump('Enforcement automático de reglas de riesgo','Pro');return;}
   const checks=document.querySelectorAll(`.rule-check-${token.slice(0,8)}`);
   const rulesCopy=(pfRules||[]).map((r,i)=>({...r,on:checks[i]?checks[i].checked:r.on}));
   try{
@@ -7905,42 +7984,34 @@ function renderLive(){
 
     // ── Tab: Trade (Remote Orders) ────────────────────────────────────────────
     else if(tab==='trade'){
-      tabContent=`
+      const rt=planF().remoteTrading; // false | 'basic' | 'full'
+      if(!rt){
+        tabContent=`<div style="text-align:center;padding:24px 0">
+          <div style="font-size:28px;margin-bottom:10px">🔒</div>
+          <div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:6px">Órdenes remotas</div>
+          <div style="font-size:11px;color:var(--tx3);margin-bottom:16px">Disponible desde el plan Pro.</div>
+          <button onclick="upgradeBump('Órdenes remotas','Pro')" style="padding:8px 20px;border-radius:9px;border:none;background:#F59E0B;color:#fff;font-size:11px;font-weight:700;cursor:pointer">⭐ Ver planes →</button>
+        </div>`;
+      } else {
+        const canOpen=rt==='full';
+        tabContent=`
         <div style="font-size:11px;color:var(--tx3);margin-bottom:12px">Abre, modifica o cierra órdenes directamente en MetaTrader desde aquí.</div>
-        <!-- Open new order -->
+        ${canOpen?`<!-- Open new order -->
         <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:14px;margin-bottom:10px">
           <div style="font-size:11px;font-weight:700;color:var(--tx);margin-bottom:10px">📤 Nueva orden</div>
           <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:8px;align-items:end">
-            <div>
-              <div style="font-size:9px;color:var(--tx3);margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.5px">Símbolo</div>
-              <input id="ro-symbol-${tid}" class="pf-in" placeholder="EURUSD" style="font-family:var(--mono);text-transform:uppercase">
-            </div>
-            <div>
-              <div style="font-size:9px;color:var(--tx3);margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.5px">Dirección</div>
-              <select id="ro-dir-${tid}" class="pf-in">
-                <option value="BUY">BUY</option>
-                <option value="SELL">SELL</option>
-              </select>
-            </div>
-            <div>
-              <div style="font-size:9px;color:var(--tx3);margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.5px">Volumen</div>
-              <input id="ro-vol-${tid}" type="number" class="pf-in" placeholder="0.01" step="0.01" min="0.01" max="10" style="font-family:var(--mono)">
-            </div>
-            <div>
-              <div style="font-size:9px;color:var(--tx3);margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.5px">SL</div>
-              <input id="ro-sl-${tid}" type="number" class="pf-in" placeholder="0" step="0.00001" style="font-family:var(--mono)">
-            </div>
-            <div>
-              <div style="font-size:9px;color:var(--tx3);margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.5px">TP</div>
-              <input id="ro-tp-${tid}" type="number" class="pf-in" placeholder="0" step="0.00001" style="font-family:var(--mono)">
-            </div>
+            <div><div style="font-size:9px;color:var(--tx3);margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.5px">Símbolo</div><input id="ro-symbol-${tid}" class="pf-in" placeholder="EURUSD" style="font-family:var(--mono);text-transform:uppercase"></div>
+            <div><div style="font-size:9px;color:var(--tx3);margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.5px">Dirección</div><select id="ro-dir-${tid}" class="pf-in"><option value="BUY">BUY</option><option value="SELL">SELL</option></select></div>
+            <div><div style="font-size:9px;color:var(--tx3);margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.5px">Volumen</div><input id="ro-vol-${tid}" type="number" class="pf-in" placeholder="0.01" step="0.01" min="0.01" max="10" style="font-family:var(--mono)"></div>
+            <div><div style="font-size:9px;color:var(--tx3);margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.5px">SL</div><input id="ro-sl-${tid}" type="number" class="pf-in" placeholder="0" step="0.00001" style="font-family:var(--mono)"></div>
+            <div><div style="font-size:9px;color:var(--tx3);margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.5px">TP</div><input id="ro-tp-${tid}" type="number" class="pf-in" placeholder="0" step="0.00001" style="font-family:var(--mono)"></div>
           </div>
           <div style="margin-top:10px;display:flex;align-items:center;justify-content:space-between">
             <div style="font-size:9.5px;color:var(--tx3)">⚠ Se ejecutará en el próximo tick del EA (~5s). Límite: 10 lotes.</div>
             <button onclick="submitRemoteOrder('${tok}')" style="padding:7px 20px;border-radius:8px;border:none;background:linear-gradient(135deg,#22C55E,#16A34A);color:#fff;font-size:11px;font-weight:700;cursor:pointer">Enviar orden →</button>
           </div>
-        </div>
-        <!-- Quick close actions -->
+        </div>`:`<div style="background:rgba(91,124,247,.06);border:1px solid rgba(91,124,247,.15);border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:10.5px;color:var(--tx3)">💎 <b style="color:var(--cy)">Advanced</b> — Desbloquea apertura de nuevas órdenes y modificación de SL/TP. <button onclick="upgradeBump('Abrir órdenes y modificar SL/TP','Advanced')" style="background:none;border:none;color:var(--cy);font-size:10.5px;font-weight:700;cursor:pointer;text-decoration:underline">Actualizar →</button></div>`}
+        <!-- Quick close actions — available for Pro+ -->
         <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:14px">
           <div style="font-size:11px;font-weight:700;color:var(--tx);margin-bottom:10px">⚡ Acciones rápidas</div>
           <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
@@ -7949,10 +8020,19 @@ function renderLive(){
             <button onclick="sendLiveCommand('${tok}','close_loss','🔴 Cerrando pérdidas…')" style="padding:8px;border-radius:8px;border:1px solid rgba(239,68,68,.25);background:rgba(239,68,68,.05);color:#f87171;font-size:10.5px;font-weight:600;cursor:pointer">🔴 Cerrar pérdidas</button>
           </div>
         </div>`;
+      }
     }
 
     // ── Tab: Copy Trading ─────────────────────────────────────────────────────
     else if(tab==='copy'){
+      if(!planF().copyTrading){
+        tabContent=`<div style="text-align:center;padding:24px 0">
+          <div style="font-size:28px;margin-bottom:10px">🔒</div>
+          <div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:6px">Copy Trading</div>
+          <div style="font-size:11px;color:var(--tx3);margin-bottom:16px">Disponible en el plan Advanced.</div>
+          <button onclick="upgradeBump('Copy Trading entre cuentas','Advanced')" style="padding:8px 20px;border-radius:9px;border:none;background:#5B7CF7;color:#fff;font-size:11px;font-weight:700;cursor:pointer">💎 Ver planes →</button>
+        </div>`;
+      } else {
       if(!_cardCopy[tok])setTimeout(()=>loadCardCopy(tok),50);
       const cp=_cardCopy[tok]||{role:null,master_token:'',ratio:1};
       tabContent=`
@@ -7989,6 +8069,7 @@ function renderLive(){
         <div style="display:flex;justify-content:flex-end">
           <button onclick="saveCardCopy('${tok}')" style="padding:7px 18px;border-radius:8px;border:none;background:var(--cy);color:#fff;font-size:11px;font-weight:700;cursor:pointer">Guardar →</button>
         </div>`;
+      } // end copyTrading gate
     }
 
     return `<div class="live-card" style="margin-bottom:16px">
@@ -8479,6 +8560,14 @@ function _renderWizard(){
 }
 
 async function _wizardGenerateToken(){
+  // Plan gate: check live connection limit
+  const maxConn=planLimit('liveConnections');
+  if(maxConn===0){upgradeBump('Conexiones Live MT5/MT4','Pro');return;}
+  const existing=_liveConnections.length;
+  if(existing>=maxConn){
+    upgradeBump(`Has alcanzado el límite de ${maxConn} conexiones de tu plan ${U.plan}`,'Advanced');
+    return;
+  }
   if(!_wizardLabel.trim()){
     const lbl=document.getElementById('wiz-label');
     if(lbl)lbl.style.borderColor='var(--rd)';
