@@ -2851,6 +2851,28 @@ html[data-theme=light] .pacc{background:#fff !important;border-color:rgba(74,104
 /* REDUCED MOTION */
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important}}
 
+/* LOGIN SCREEN — sell version */
+#ls{background:radial-gradient(ellipse 110% 80% at 18% 55%,rgba(74,104,240,.12) 0%,rgba(124,91,246,.07) 40%,transparent 65%),#07090F !important}
+.ls-l{padding:40px 36px 36px !important;align-items:center !important;justify-content:center !important}
+.ls-r{width:460px !important;min-width:460px !important;background:rgba(10,13,22,.97) !important;border-left:1px solid rgba(255,255,255,.07) !important;padding:48px 44px !important;box-shadow:-32px 0 80px rgba(0,0,0,.55) !important;backdrop-filter:blur(32px) !important;-webkit-backdrop-filter:blur(32px) !important;justify-content:center !important}
+.ls-g{background-image:linear-gradient(rgba(91,124,247,.038) 1px,transparent 1px),linear-gradient(90deg,rgba(91,124,247,.038) 1px,transparent 1px) !important;background-size:54px 54px !important}
+.ls-gl{background:radial-gradient(circle,rgba(74,104,240,.16) 0%,rgba(124,91,246,.09) 35%,transparent 65%) !important;width:750px !important;height:750px !important}
+.ls-l::after{content:'' !important;position:absolute !important;width:380px !important;height:380px !important;background:radial-gradient(circle,rgba(74,104,240,.09),transparent 65%) !important;top:8% !important;right:4% !important;border-radius:50% !important;pointer-events:none !important;animation:orbFloat 10s ease-in-out infinite !important}
+.ls-l::before{content:'' !important;position:absolute !important;width:260px !important;height:260px !important;background:radial-gradient(circle,rgba(124,91,246,.08),transparent 65%) !important;bottom:12% !important;left:6% !important;border-radius:50% !important;pointer-events:none !important;animation:orbFloat 14s ease-in-out infinite reverse !important}
+@keyframes orbFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-30px) scale(1.05)}}
+.lf-i{background:rgba(255,255,255,.04) !important;border:1px solid rgba(255,255,255,.09) !important;border-radius:9px !important;padding:12px 14px !important;font-size:13.5px !important;color:#EEF2FF !important;transition:all .15s !important}
+.lf-i:focus{background:rgba(91,124,247,.07) !important;border-color:rgba(91,124,247,.5) !important;box-shadow:0 0 0 3px rgba(91,124,247,.14) !important}
+.lf-i::placeholder{color:#1F2D47 !important}
+.lf-l{font-size:9px !important;font-weight:700 !important;color:#3D5075 !important;letter-spacing:1.2px !important;text-transform:uppercase !important;margin-bottom:5px !important;display:block !important}
+.lf-g{margin-bottom:14px !important}
+.lf-e{font-size:10px !important;color:#f87171 !important;margin-top:4px !important;display:none !important}
+.ls-div-l{background:rgba(255,255,255,.06) !important}
+.ls-div span{color:#1F2D47 !important}
+html[data-theme=light] #ls{background:radial-gradient(ellipse 110% 80% at 18% 55%,rgba(74,104,240,.09) 0%,transparent 60%),#F0F4FC !important}
+html[data-theme=light] .ls-r{background:rgba(255,255,255,.98) !important;border-left:1px solid rgba(74,104,240,.1) !important;box-shadow:-20px 0 60px rgba(15,23,42,.08) !important}
+html[data-theme=light] .lf-i{background:rgba(74,104,240,.04) !important;border-color:rgba(74,104,240,.15) !important;color:#0F172A !important}
+html[data-theme=light] .lf-i:focus{background:rgba(74,104,240,.07) !important;border-color:rgba(74,104,240,.5) !important}
+
 </style>
 <script>
 /* ── Section hero header animation ── */
@@ -3021,41 +3043,179 @@ try{
 
 <!-- LOGIN -->
 <div id="ls">
+  <!-- Hero left -->
   <div class="ls-l">
     <div class="ls-g"></div><div class="ls-gl"></div>
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:26px">
-      <div style="width:50px;height:50px;background:var(--cy);border-radius:11px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:700;font-size:20px;color:#fff">ST</div>
-      <div><div style="font-size:28px;font-weight:700;color:var(--tx)">Simple<span style="color:var(--cy)">Trader</span></div><div style="font-size:9px;color:var(--tx3);letter-spacing:1.5px;text-transform:uppercase;margin-top:1px">Futures · Prop Firms · <kbd style="background:var(--b1);border:1px solid var(--b2);border-radius:3px;padding:1px 4px;font-size:8px">⌘K</kbd></div></div>
+
+    <!-- Logo -->
+    <div style="position:absolute;top:28px;left:36px;display:flex;align-items:center;gap:10px">
+      <div style="width:34px;height:34px;background:linear-gradient(135deg,#4f6ef7,#7c5bf6);border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff;font-family:var(--mono);box-shadow:0 4px 14px rgba(91,124,247,.45)">ST</div>
+      <span style="font-size:15px;font-weight:700;color:var(--tx);letter-spacing:-.3px">Simple<span style="color:#7C9BFF">Trader</span></span>
     </div>
-    <div style="font-size:21px;font-weight:700;color:var(--tx);text-align:center;line-height:1.3;margin-bottom:8px;max-width:420px">Terminal profesional para traders de futuros en fondeo</div>
-    <div style="font-size:12.5px;color:var(--tx2);text-align:center;line-height:1.65;max-width:360px;margin-bottom:26px">5 cuentas maestras, 20 esclavas cada una, análisis IA, portafolio y control financiero completo.</div>
-    <div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:24px">
-      <span style="padding:4px 11px;background:var(--cy8);border:1px solid var(--cy);border-radius:20px;font-size:10px;color:var(--cy);font-weight:500">⚡ 5×20 Replicador</span>
-      <span style="padding:4px 11px;background:var(--cy8);border:1px solid var(--cy);border-radius:20px;font-size:10px;color:var(--cy);font-weight:500">📊 Journal</span>
-      <span style="padding:4px 11px;background:var(--cy8);border:1px solid var(--cy);border-radius:20px;font-size:10px;color:var(--cy);font-weight:500">🧠 Análisis IA</span>
-      <span style="padding:4px 11px;background:var(--cy8);border:1px solid var(--cy);border-radius:20px;font-size:10px;color:var(--cy);font-weight:500">💼 Portafolio</span>
-      <span style="padding:4px 11px;background:var(--cy8);border:1px solid var(--cy);border-radius:20px;font-size:10px;color:var(--cy);font-weight:500">📋 Manager</span>
-      <span style="padding:4px 11px;background:var(--cy8);border:1px solid var(--cy);border-radius:20px;font-size:10px;color:var(--cy);font-weight:500">🌙 Modo día/noche</span>
+
+    <!-- Social proof bar top -->
+    <div style="position:absolute;top:32px;right:36px;display:flex;align-items:center;gap:6px;padding:5px 12px;background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);border-radius:20px">
+      <span style="width:6px;height:6px;background:#4ade80;border-radius:50%;box-shadow:0 0 6px #4ade80;animation:lp 2s infinite;flex-shrink:0"></span>
+      <span style="font-size:10px;font-weight:600;color:#4ade80">+7.500 traders activos</span>
     </div>
-    <div style="display:flex;gap:28px">
-      <div style="text-align:center"><div style="font-size:24px;font-weight:700;font-family:var(--mono);color:var(--cy)">100</div><div style="font-size:9px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px">Cuentas</div></div>
-      <div style="text-align:center"><div style="font-size:24px;font-weight:700;font-family:var(--mono);color:var(--cy)">&lt;10ms</div><div style="font-size:9px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px">Latencia</div></div>
-      <div style="text-align:center"><div style="font-size:24px;font-weight:700;font-family:var(--mono);color:var(--cy)">24/7</div><div style="font-size:9px;color:var(--tx3);text-transform:uppercase;letter-spacing:.5px">Monitorización</div></div>
+
+    <!-- Main content -->
+    <div style="max-width:480px;text-align:center">
+
+      <!-- Eyebrow -->
+      <div style="display:inline-flex;align-items:center;gap:6px;padding:4px 12px;background:rgba(91,124,247,.1);border:1px solid rgba(91,124,247,.25);border-radius:20px;font-size:10px;font-weight:700;color:#7C9BFF;letter-spacing:.8px;text-transform:uppercase;margin-bottom:22px">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        Centro de Alto Rendimiento para Traders
+      </div>
+
+      <!-- Headline -->
+      <h1 style="font-size:42px;font-weight:800;color:#EEF2FF;line-height:1.1;letter-spacing:-2px;margin-bottom:18px">
+        Deja de <span style="color:#f87171">perder</span> dinero<br>por <span style="background:linear-gradient(135deg,#7C9BFF,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">errores evitables</span>
+      </h1>
+
+      <!-- Subheadline -->
+      <p style="font-size:15px;color:#7E95C0;line-height:1.65;margin-bottom:30px;max-width:400px;margin-left:auto;margin-right:auto">
+        SimpleTrader analiza tu comportamiento, detecta tus patrones destructivos y te convierte en un trader consistente — no más suerte, sino método.
+      </p>
+
+      <!-- Benefits list -->
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:32px;text-align:left;max-width:340px;margin-left:auto;margin-right:auto">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:20px;height:20px;background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.25);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <span style="font-size:13px;color:#8B9FC4">Detecta revenge trading, FOMO y overtrade en tiempo real</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:20px;height:20px;background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.25);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <span style="font-size:13px;color:#8B9FC4">Replica tus mejores setups en múltiples cuentas automáticamente</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:20px;height:20px;background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.25);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <span style="font-size:13px;color:#8B9FC4">Journal con IA que te dice exactamente qué mejorar cada día</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:20px;height:20px;background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.25);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <span style="font-size:13px;color:#8B9FC4">Control de riesgo automático — nunca más reventar una cuenta</span>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div style="display:flex;gap:0;border:1px solid rgba(255,255,255,.07);border-radius:12px;overflow:hidden;background:rgba(255,255,255,.025);max-width:360px;margin:0 auto">
+        <div style="flex:1;padding:14px 16px;border-right:1px solid rgba(255,255,255,.07);text-align:center">
+          <div style="font-size:22px;font-weight:800;color:#7C9BFF;font-family:var(--mono);letter-spacing:-1px;line-height:1">+100</div>
+          <div style="font-size:9px;color:#3D5075;text-transform:uppercase;letter-spacing:.8px;margin-top:3px;font-weight:600">Cuentas</div>
+        </div>
+        <div style="flex:1;padding:14px 16px;border-right:1px solid rgba(255,255,255,.07);text-align:center">
+          <div style="font-size:22px;font-weight:800;color:#4ade80;font-family:var(--mono);letter-spacing:-1px;line-height:1">&lt;10ms</div>
+          <div style="font-size:9px;color:#3D5075;text-transform:uppercase;letter-spacing:.8px;margin-top:3px;font-weight:600">Latencia</div>
+        </div>
+        <div style="flex:1;padding:14px 16px;text-align:center">
+          <div style="font-size:22px;font-weight:800;color:#a78bfa;font-family:var(--mono);letter-spacing:-1px;line-height:1">24/7</div>
+          <div style="font-size:9px;color:#3D5075;text-transform:uppercase;letter-spacing:.8px;margin-top:3px;font-weight:600">Monitorización</div>
+        </div>
+      </div>
+
+      <!-- Testimonial -->
+      <div style="margin-top:24px;padding:16px 20px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.06);border-radius:12px;text-align:left;max-width:380px;margin-left:auto;margin-right:auto">
+        <div style="font-size:12px;color:#7E95C0;line-height:1.6;margin-bottom:10px;font-style:italic">"Pasé de perder 3 de cada 5 retos de prop firm a aprobar los últimos 4 seguidos. El journal con IA cambió todo."</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="width:28px;height:28px;background:linear-gradient(135deg,#4f6ef7,#7c5bf6);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0">MR</div>
+          <div>
+            <div style="font-size:11px;font-weight:600;color:#EEF2FF">Miguel R.</div>
+            <div style="font-size:9px;color:#3D5075">Trader en Apex · Pro Plan</div>
+          </div>
+          <div style="margin-left:auto;display:flex;gap:1px">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
+
+  <!-- Login right -->
   <div class="ls-r">
-    <div style="font-size:22px;font-weight:700;color:var(--tx);margin-bottom:4px">Bienvenido de nuevo</div>
-    <div style="font-size:12px;color:var(--tx3);margin-bottom:22px">Accede a tu terminal profesional</div>
-    <div class="lf-g"><label class="lf-l">Email</label><input class="lf-i" type="email" id="li-email" placeholder="tu@email.com" autocomplete="email"><div class="lf-e" id="li-ee">Email inválido</div></div>
-    <div class="lf-g"><label class="lf-l">Contraseña</label><input class="lf-i" type="password" id="li-pass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"><div class="lf-e" id="li-ep">Credenciales incorrectas</div></div>
-    <div style="display:flex;justify-content:flex-end;margin:-4px 0 10px"><a style="font-size:10px;color:var(--cy);cursor:pointer" onclick="forgotPassword()">¿Olvidaste la contraseña?</a></div>
-    <button class="btn-pri" id="li-btn" onclick="doLogin()">Iniciar sesión</button>
-    <div class="ls-div"><div class="ls-div-l"></div><span>o</span><div class="ls-div-l"></div></div>
-    <button class="btn-ghost" onclick="doDemo()">🚀 Entrar en modo demo</button>
-    <div class="ls-ft">¿Sin cuenta? <a onclick="openRegister()">Crear cuenta gratis →</a> · <a onclick="openPricing()">Ver planes</a></div>
-    <div style="margin-top:16px;padding:9px 12px;background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.18);border-radius:7px">
-      <p style="font-size:9.5px;color:var(--am);line-height:1.6;margin:0;text-align:center">⚠️ SimpleTrader es una herramienta de gestión. <b>No constituye asesoramiento financiero.</b> El trading de futuros conlleva riesgo de pérdida. <a style="color:var(--am);cursor:pointer;text-decoration:underline" onclick="openLegal('disclaimer')">Aviso legal completo</a></p>
+
+    <!-- Header -->
+    <div style="margin-bottom:28px">
+      <div style="font-size:24px;font-weight:800;color:#EEF2FF;letter-spacing:-.6px;margin-bottom:5px">Accede a tu cuenta</div>
+      <div style="font-size:13px;color:#4A5780;line-height:1.5">¿Primera vez? <a onclick="openRegister()" style="color:#7C9BFF;cursor:pointer;font-weight:600;text-decoration:none">Crea tu cuenta gratis →</a></div>
     </div>
+
+    <!-- Form -->
+    <div class="lf-g">
+      <label class="lf-l">Email</label>
+      <input class="lf-i" type="email" id="li-email" placeholder="tu@email.com" autocomplete="email">
+      <div class="lf-e" id="li-ee">Email inválido</div>
+    </div>
+    <div class="lf-g">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+        <label class="lf-l" style="margin-bottom:0">Contraseña</label>
+        <a style="font-size:10px;color:#4A5780;cursor:pointer;transition:color .15s" onmouseover="this.style.color='#7C9BFF'" onmouseout="this.style.color='#4A5780'" onclick="forgotPassword()">¿La olvidaste?</a>
+      </div>
+      <input class="lf-i" type="password" id="li-pass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+      <div class="lf-e" id="li-ep">Credenciales incorrectas</div>
+    </div>
+
+    <!-- CTA -->
+    <button class="btn-pri" id="li-btn" onclick="doLogin()" style="width:100%;padding:13px;font-size:14px;margin-top:4px;border-radius:9px">
+      Iniciar sesión
+    </button>
+
+    <!-- Divider -->
+    <div class="ls-div" style="margin:18px 0">
+      <div class="ls-div-l"></div>
+      <span style="font-size:10px;color:#2A3A56;font-weight:500;padding:0 4px">o continúa con</span>
+      <div class="ls-div-l"></div>
+    </div>
+
+    <!-- Demo CTA -->
+    <button onclick="doDemo()" style="width:100%;padding:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:9px;color:#7E95C0;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--sans);transition:all .15s;display:flex;align-items:center;justify-content:center;gap:8px" onmouseover="this.style.background='rgba(255,255,255,.08)';this.style.color='#EEF2FF'" onmouseout="this.style.background='rgba(255,255,255,.04)';this.style.color='#7E95C0'">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      Ver demo interactiva — sin registro
+    </button>
+
+    <!-- Trust signals -->
+    <div style="margin-top:22px;display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;align-items:center;justify-content:center;gap:16px">
+        <div style="display:flex;align-items:center;gap:5px;color:#2A3A56;font-size:10px;font-weight:500">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          SSL seguro
+        </div>
+        <div style="display:flex;align-items:center;gap:5px;color:#2A3A56;font-size:10px;font-weight:500">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Datos cifrados
+        </div>
+        <div style="display:flex;align-items:center;gap:5px;color:#2A3A56;font-size:10px;font-weight:500">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Cancela cuando quieras
+        </div>
+      </div>
+
+      <div style="text-align:center;margin-top:4px">
+        <a onclick="openPricing()" style="font-size:11px;color:#2A3A56;cursor:pointer;font-weight:500;transition:color .15s;text-decoration:underline;text-underline-offset:3px" onmouseover="this.style.color='#7C9BFF'" onmouseout="this.style.color='#2A3A56'">Ver todos los planes y precios</a>
+      </div>
+    </div>
+
+    <!-- Legal footnote — small, not scary -->
+    <div style="margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,.05)">
+      <p style="font-size:9px;color:#1F2D47;line-height:1.6;margin:0;text-align:center">
+        SimpleTrader es una herramienta de gestión. No constituye asesoramiento financiero.<br>
+        <a style="color:#1F2D47;cursor:pointer;text-decoration:underline" onclick="openLegal('disclaimer')">Aviso legal</a> · <a style="color:#1F2D47;cursor:pointer;text-decoration:underline" onclick="openLegal('privacy')">Privacidad</a>
+      </p>
+    </div>
+
   </div>
 </div>
 
