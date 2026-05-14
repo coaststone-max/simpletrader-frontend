@@ -3048,183 +3048,157 @@ try{
 }catch(e){console.error('Supabase init error:',e);}
 </script>
 <script src="https://unpkg.com/klinecharts@9/dist/umd/klinecharts.min.js"></script>
+<style>
+/* ===== LOGIN v3 — CENTERED AMBIENT ===== */
+#ls{flex-direction:column !important;align-items:stretch !important;justify-content:flex-start !important;background:#07090F !important;overflow-y:auto !important;position:relative !important}
+.ls-l,.ls-r{display:none !important}
+.ls2-glow-a{position:fixed;top:-200px;right:-100px;width:620px;height:620px;background:radial-gradient(circle,rgba(74,104,240,.13) 0%,transparent 65%);pointer-events:none;z-index:0}
+.ls2-glow-b{position:fixed;bottom:-150px;left:-80px;width:520px;height:520px;background:radial-gradient(circle,rgba(139,92,246,.11) 0%,transparent 65%);pointer-events:none;z-index:0}
+.ls2-grid-bg{position:fixed;inset:0;background-image:linear-gradient(rgba(91,124,247,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(91,124,247,.022) 1px,transparent 1px);background-size:56px 56px;pointer-events:none;z-index:0}
+.ls2-nav{position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:60px;border-bottom:1px solid rgba(255,255,255,.05);flex-shrink:0}
+.ls2-logomark{display:flex;align-items:center;gap:9px}
+.ls2-logo-icon{width:30px;height:30px;background:linear-gradient(135deg,#4f6ef7,#7c5bf6);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;color:#fff;font-family:var(--mono);box-shadow:0 3px 12px rgba(91,124,247,.4)}
+.ls2-logo-text{font-size:14px;font-weight:700;color:#EEF2FF;letter-spacing:-.2px}
+.ls2-nav-right{display:flex;align-items:center;gap:14px}
+.ls2-live-pill{display:flex;align-items:center;gap:5px;padding:4px 10px;background:rgba(74,222,128,.07);border:1px solid rgba(74,222,128,.18);border-radius:20px;font-size:10px;font-weight:600;color:#4ade80}
+.ls2-pulse{width:6px;height:6px;background:#4ade80;border-radius:50%;box-shadow:0 0 6px #4ade80;animation:lp 2s infinite;flex-shrink:0}
+.ls2-demo-nav{padding:6px 14px;background:transparent;border:1px solid rgba(255,255,255,.1);border-radius:7px;color:#7E95C0;font-size:11px;font-weight:600;cursor:pointer;font-family:var(--sans);transition:all .15s}
+.ls2-demo-nav:hover{background:rgba(255,255,255,.07);color:#EEF2FF;border-color:rgba(255,255,255,.2)}
+.ls2-body{position:relative;z-index:5;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:36px 20px 48px;min-height:calc(100vh - 60px)}
+.ls2-chart-header{width:340px;margin-bottom:10px;position:relative}
+.ls2-equity-svg{width:100%;height:64px;display:block}
+.ls2-chart-badge{position:absolute;right:2px;bottom:10px;font-size:9px;font-weight:700;color:#a78bfa;letter-spacing:.4px;font-family:var(--mono)}
+.ls2-eq-line{stroke-dasharray:800;stroke-dashoffset:800;animation:ls2Draw 2s cubic-bezier(.4,0,.2,1) .4s forwards}
+@keyframes ls2Draw{to{stroke-dashoffset:0}}
+.ls2-headline-block{text-align:center;margin-bottom:24px;animation:ls2FadeUp .5s ease .2s both}
+.ls2-hl-main{font-size:30px;font-weight:800;color:#EEF2FF;letter-spacing:-1.4px;line-height:1.18;margin-bottom:7px}
+.ls2-hl-sub{font-size:12.5px;color:#3D5075;font-weight:500;letter-spacing:.1px}
+.ls2-card{width:100%;max-width:400px;background:rgba(10,13,22,.96);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:28px 32px 24px;backdrop-filter:blur(32px);-webkit-backdrop-filter:blur(32px);box-shadow:0 24px 64px rgba(0,0,0,.55),inset 0 0 0 1px rgba(91,124,247,.06);animation:ls2FadeUp .5s ease .1s both}
+@keyframes ls2FadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.ls2-card-title{font-size:15px;font-weight:700;color:#EEF2FF;letter-spacing:-.3px;margin-bottom:20px;text-align:center}
+.ls2-submit{width:100% !important;padding:13px !important;font-size:14px !important;margin-top:4px !important;border-radius:9px !important;letter-spacing:-.1px !important}
+.ls2-link-sm{font-size:10px;color:#3D5075;cursor:pointer;transition:color .15s;text-decoration:none;background:none;border:none;padding:0}
+.ls2-link-sm:hover{color:#7C9BFF}
+.ls2-demo-btn{width:100%;padding:11px 14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:9px;color:#4A5780;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);transition:all .15s;display:flex;align-items:center;justify-content:center;gap:8px}
+.ls2-demo-btn:hover{background:rgba(255,255,255,.08);color:#7E95C0;border-color:rgba(255,255,255,.14)}
+.ls2-register-link{text-align:center;margin-top:16px;font-size:11.5px;color:#2A3A56}
+.ls2-register-link a{color:#7C9BFF;cursor:pointer;font-weight:600;transition:color .15s}
+.ls2-register-link a:hover{color:#a78bfa}
+.ls2-trust{margin-top:18px;display:flex;align-items:center;gap:7px;font-size:9.5px;color:#1A2740;font-weight:500;flex-wrap:wrap;justify-content:center;animation:ls2FadeUp .5s ease .3s both}
+.ls2-sep{color:#141E30}
+.ls2-trust-link{color:#1A2740;cursor:pointer;transition:color .15s}
+.ls2-trust-link:hover{color:#3D5075}
+@media(max-width:500px){
+  .ls2-nav{padding:0 18px}
+  .ls2-live-pill{display:none}
+  .ls2-chart-header{width:100%;max-width:320px}
+  .ls2-hl-main{font-size:23px}
+  .ls2-card{padding:22px 18px 20px}
+  .ls2-body{padding:24px 14px 40px}
+}
+</style>
 </head>
 <body>
 <div id="tc"></div>
 
-<!-- LOGIN -->
+<!-- LOGIN v3 — Centered Ambient -->
 <div id="ls">
-  <!-- Hero left -->
-  <div class="ls-l">
-    <div class="ls-g"></div><div class="ls-gl"></div>
+  <!-- Ambient background -->
+  <div class="ls2-glow-a"></div>
+  <div class="ls2-glow-b"></div>
+  <div class="ls2-grid-bg"></div>
 
-    <!-- Logo -->
-    <div style="position:absolute;top:28px;left:36px;display:flex;align-items:center;gap:10px">
-      <div style="width:34px;height:34px;background:linear-gradient(135deg,#4f6ef7,#7c5bf6);border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff;font-family:var(--mono);box-shadow:0 4px 14px rgba(91,124,247,.45)">ST</div>
-      <span style="font-size:15px;font-weight:700;color:var(--tx);letter-spacing:-.3px">Simple<span style="color:#7C9BFF">Trader</span></span>
+  <!-- Top nav bar -->
+  <div class="ls2-nav">
+    <div class="ls2-logomark">
+      <div class="ls2-logo-icon">ST</div>
+      <span class="ls2-logo-text">Simple<span style="color:#7C9BFF">Trader</span></span>
     </div>
-
-    <!-- Social proof bar top -->
-    <div style="position:absolute;top:32px;right:36px;display:flex;align-items:center;gap:6px;padding:5px 12px;background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);border-radius:20px">
-      <span style="width:6px;height:6px;background:#4ade80;border-radius:50%;box-shadow:0 0 6px #4ade80;animation:lp 2s infinite;flex-shrink:0"></span>
-      <span style="font-size:10px;font-weight:600;color:#4ade80">+7.500 traders activos</span>
-    </div>
-
-    <!-- Main content -->
-    <div style="max-width:480px;text-align:center">
-
-      <!-- Eyebrow -->
-      <div style="display:inline-flex;align-items:center;gap:6px;padding:4px 12px;background:rgba(91,124,247,.1);border:1px solid rgba(91,124,247,.25);border-radius:20px;font-size:10px;font-weight:700;color:#7C9BFF;letter-spacing:.8px;text-transform:uppercase;margin-bottom:22px">
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-        La plataforma inteligente para prop traders
-      </div>
-
-      <!-- Headline -->
-      <h1 style="font-size:42px;font-weight:800;color:#EEF2FF;line-height:1.1;letter-spacing:-2px;margin-bottom:18px">
-        Deja de <span style="color:#f87171">perder</span> dinero<br>por <span style="background:linear-gradient(135deg,#7C9BFF,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">errores evitables</span>
-      </h1>
-
-      <!-- Subheadline -->
-      <p style="font-size:15px;color:#7E95C0;line-height:1.65;margin-bottom:30px;max-width:400px;margin-left:auto;margin-right:auto">
-        SimpleTrader analiza tu comportamiento, detecta tus patrones destructivos y te convierte en un trader consistente — no más suerte, sino método.
-      </p>
-
-      <!-- Benefits list -->
-      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:32px;text-align:left;max-width:340px;margin-left:auto;margin-right:auto">
-        <div style="display:flex;align-items:center;gap:10px">
-          <div style="width:20px;height:20px;background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.25);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          </div>
-          <span style="font-size:13px;color:#8B9FC4">Detecta revenge trading, FOMO y overtrade en tiempo real</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px">
-          <div style="width:20px;height:20px;background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.25);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          </div>
-          <span style="font-size:13px;color:#8B9FC4">Replica tus mejores setups en múltiples cuentas automáticamente</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px">
-          <div style="width:20px;height:20px;background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.25);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          </div>
-          <span style="font-size:13px;color:#8B9FC4">Journal con IA que te dice exactamente qué mejorar cada día</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px">
-          <div style="width:20px;height:20px;background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.25);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          </div>
-          <span style="font-size:13px;color:#8B9FC4">Control de riesgo automático — nunca más reventar una cuenta</span>
-        </div>
-      </div>
-
-      <!-- Stats -->
-      <div style="display:flex;gap:0;border:1px solid rgba(255,255,255,.07);border-radius:12px;overflow:hidden;background:rgba(255,255,255,.025);max-width:360px;margin:0 auto">
-        <div style="flex:1;padding:14px 16px;border-right:1px solid rgba(255,255,255,.07);text-align:center">
-          <div style="font-size:22px;font-weight:800;color:#7C9BFF;font-family:var(--mono);letter-spacing:-1px;line-height:1">+100</div>
-          <div style="font-size:9px;color:#3D5075;text-transform:uppercase;letter-spacing:.8px;margin-top:3px;font-weight:600">Cuentas</div>
-        </div>
-        <div style="flex:1;padding:14px 16px;border-right:1px solid rgba(255,255,255,.07);text-align:center">
-          <div style="font-size:22px;font-weight:800;color:#4ade80;font-family:var(--mono);letter-spacing:-1px;line-height:1">&lt;10ms</div>
-          <div style="font-size:9px;color:#3D5075;text-transform:uppercase;letter-spacing:.8px;margin-top:3px;font-weight:600">Latencia</div>
-        </div>
-        <div style="flex:1;padding:14px 16px;text-align:center">
-          <div style="font-size:22px;font-weight:800;color:#a78bfa;font-family:var(--mono);letter-spacing:-1px;line-height:1">24/7</div>
-          <div style="font-size:9px;color:#3D5075;text-transform:uppercase;letter-spacing:.8px;margin-top:3px;font-weight:600">Monitorización</div>
-        </div>
-      </div>
-
-      <!-- Testimonial -->
-      <div style="margin-top:24px;padding:16px 20px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.06);border-radius:12px;text-align:left;max-width:380px;margin-left:auto;margin-right:auto">
-        <div style="font-size:12px;color:#7E95C0;line-height:1.6;margin-bottom:10px;font-style:italic">"Pasé de perder 3 de cada 5 retos de prop firm a aprobar los últimos 4 seguidos. El journal con IA cambió todo."</div>
-        <div style="display:flex;align-items:center;gap:8px">
-          <div style="width:28px;height:28px;background:linear-gradient(135deg,#4f6ef7,#7c5bf6);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0">MR</div>
-          <div>
-            <div style="font-size:11px;font-weight:600;color:#EEF2FF">Miguel R.</div>
-            <div style="font-size:9px;color:#3D5075">Trader en Apex · Pro Plan</div>
-          </div>
-          <div style="margin-left:auto;display:flex;gap:1px">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          </div>
-        </div>
-      </div>
-
+    <div class="ls2-nav-right">
+      <span class="ls2-live-pill">
+        <span class="ls2-pulse"></span>
+        7.500+ traders activos
+      </span>
+      <button class="ls2-demo-nav" onclick="doDemo()">Ver demo →</button>
     </div>
   </div>
 
-  <!-- Login right -->
-  <div class="ls-r">
+  <!-- Main centered content -->
+  <div class="ls2-body">
 
-    <!-- Header -->
-    <div style="margin-bottom:28px">
-      <div style="font-size:24px;font-weight:800;color:#EEF2FF;letter-spacing:-.6px;margin-bottom:5px">Accede a tu cuenta</div>
-      <div style="font-size:13px;color:#4A5780;line-height:1.5">¿Primera vez? <a onclick="openRegister()" style="color:#7C9BFF;cursor:pointer;font-weight:600;text-decoration:none">Crea tu cuenta gratis →</a></div>
+    <!-- Mini equity curve -->
+    <div class="ls2-chart-header">
+      <svg class="ls2-equity-svg" viewBox="0 0 340 64" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="eqLine" x1="0" y1="0" x2="340" y2="0" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#5B7CF7" stop-opacity="0.4"/>
+            <stop offset="100%" stop-color="#a78bfa"/>
+          </linearGradient>
+          <linearGradient id="eqArea" x1="0" y1="0" x2="0" y2="64" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#5B7CF7" stop-opacity="0.13"/>
+            <stop offset="100%" stop-color="#5B7CF7" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <path d="M0,58 C15,55 25,52 40,48 S65,42 82,38 S108,44 128,32 S158,15 180,11 S207,16 228,8 S263,3 298,2 L340,1 L340,64 L0,64 Z" fill="url(#eqArea)"/>
+        <path class="ls2-eq-line" d="M0,58 C15,55 25,52 40,48 S65,42 82,38 S108,44 128,32 S158,15 180,11 S207,16 228,8 S263,3 298,2 L340,1" stroke="url(#eqLine)" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+        <circle cx="340" cy="1" r="3.5" fill="#a78bfa"/>
+        <circle cx="340" cy="1" r="7" fill="#a78bfa" fill-opacity="0.2"/>
+      </svg>
+      <div class="ls2-chart-badge">+28.4% · demo</div>
     </div>
 
-    <!-- Form -->
-    <div class="lf-g">
-      <label class="lf-l">Email</label>
-      <input class="lf-i" type="email" id="li-email" placeholder="tu@email.com" autocomplete="email">
-      <div class="lf-e" id="li-ee">Email inválido</div>
-    </div>
-    <div class="lf-g">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
-        <label class="lf-l" style="margin-bottom:0">Contraseña</label>
-        <a style="font-size:10px;color:#4A5780;cursor:pointer;transition:color .15s" onmouseover="this.style.color='#7C9BFF'" onmouseout="this.style.color='#4A5780'" onclick="forgotPassword()">¿La olvidaste?</a>
-      </div>
-      <input class="lf-i" type="password" id="li-pass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
-      <div class="lf-e" id="li-ep">Credenciales incorrectas</div>
+    <!-- Headline -->
+    <div class="ls2-headline-block">
+      <div class="ls2-hl-main">Opera con datos.<br>No con emociones.</div>
+      <div class="ls2-hl-sub">El copiloto de IA para prop traders serios</div>
     </div>
 
-    <!-- CTA -->
-    <button class="btn-pri" id="li-btn" onclick="doLogin()" style="width:100%;padding:13px;font-size:14px;margin-top:4px;border-radius:9px">
-      Iniciar sesión
-    </button>
+    <!-- Card -->
+    <div class="ls2-card">
+      <div class="ls2-card-title">Accede a tu cuenta</div>
 
-    <!-- Divider -->
-    <div class="ls-div" style="margin:18px 0">
-      <div class="ls-div-l"></div>
-      <span style="font-size:10px;color:#2A3A56;font-weight:500;padding:0 4px">o continúa con</span>
-      <div class="ls-div-l"></div>
-    </div>
-
-    <!-- Demo CTA -->
-    <button onclick="doDemo()" style="width:100%;padding:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:9px;color:#7E95C0;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--sans);transition:all .15s;display:flex;align-items:center;justify-content:center;gap:8px" onmouseover="this.style.background='rgba(255,255,255,.08)';this.style.color='#EEF2FF'" onmouseout="this.style.background='rgba(255,255,255,.04)';this.style.color='#7E95C0'">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-      Ver demo interactiva — sin registro
-    </button>
-
-    <!-- Trust signals -->
-    <div style="margin-top:22px;display:flex;flex-direction:column;gap:8px">
-      <div style="display:flex;align-items:center;justify-content:center;gap:16px">
-        <div style="display:flex;align-items:center;gap:5px;color:#2A3A56;font-size:10px;font-weight:500">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          SSL seguro
-        </div>
-        <div style="display:flex;align-items:center;gap:5px;color:#2A3A56;font-size:10px;font-weight:500">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          Datos cifrados
-        </div>
-        <div style="display:flex;align-items:center;gap:5px;color:#2A3A56;font-size:10px;font-weight:500">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          Cancela cuando quieras
-        </div>
+      <div class="lf-g">
+        <label class="lf-l">Email</label>
+        <input class="lf-i" type="email" id="li-email" placeholder="tu@email.com" autocomplete="email">
+        <div class="lf-e" id="li-ee">Email inválido</div>
       </div>
 
-      <div style="text-align:center;margin-top:4px">
-        <a onclick="openPricing()" style="font-size:11px;color:#2A3A56;cursor:pointer;font-weight:500;transition:color .15s;text-decoration:underline;text-underline-offset:3px" onmouseover="this.style.color='#7C9BFF'" onmouseout="this.style.color='#2A3A56'">Ver todos los planes y precios</a>
+      <div class="lf-g">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+          <label class="lf-l" style="margin-bottom:0">Contraseña</label>
+          <a class="ls2-link-sm" onclick="forgotPassword()">¿La olvidaste?</a>
+        </div>
+        <input class="lf-i" type="password" id="li-pass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+        <div class="lf-e" id="li-ep">Credenciales incorrectas</div>
+      </div>
+
+      <button class="btn-pri ls2-submit" id="li-btn" onclick="doLogin()">Iniciar sesión</button>
+
+      <div class="ls-div" style="margin:16px 0">
+        <div class="ls-div-l"></div>
+        <span style="font-size:10px;color:#1E2D44;font-weight:600;padding:0 8px">o</span>
+        <div class="ls-div-l"></div>
+      </div>
+
+      <button class="ls2-demo-btn" onclick="doDemo()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Explorar demo sin registro
+      </button>
+
+      <div class="ls2-register-link">
+        ¿Sin cuenta? <a onclick="openRegister()">Créala gratis →</a>
       </div>
     </div>
 
-    <!-- Legal footnote — small, not scary -->
-    <div style="margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,.05)">
-      <p style="font-size:9px;color:#1F2D47;line-height:1.6;margin:0;text-align:center">
-        SimpleTrader es una herramienta de gestión. No constituye asesoramiento financiero.<br>
-        <a style="color:#1F2D47;cursor:pointer;text-decoration:underline" onclick="openLegal('disclaimer')">Aviso legal</a> · <a style="color:#1F2D47;cursor:pointer;text-decoration:underline" onclick="openLegal('privacy')">Privacidad</a>
-      </p>
+    <!-- Trust footer -->
+    <div class="ls2-trust">
+      <span>🔒 SSL 256-bit</span>
+      <span class="ls2-sep">·</span>
+      <span>Datos cifrados</span>
+      <span class="ls2-sep">·</span>
+      <span>Cancela cuando quieras</span>
+      <span class="ls2-sep">·</span>
+      <a onclick="openLegal('privacy')" class="ls2-trust-link">Privacidad</a>
     </div>
 
   </div>
