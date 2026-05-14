@@ -2873,6 +2873,17 @@ html[data-theme=light] .ls-r{background:rgba(255,255,255,.98) !important;border-
 html[data-theme=light] .lf-i{background:rgba(74,104,240,.04) !important;border-color:rgba(74,104,240,.15) !important;color:#0F172A !important}
 html[data-theme=light] .lf-i:focus{background:rgba(74,104,240,.07) !important;border-color:rgba(74,104,240,.5) !important}
 
+/* DASHBOARD HERO */
+#dash-hero{padding-bottom:2px}
+#dash-greeting{background:linear-gradient(90deg,#EEF2FF 60%,rgba(124,155,255,.7));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+#dash-ai-banner{transition:background .2s,border-color .2s}
+#dash-ai-banner:hover{background:linear-gradient(90deg,rgba(91,124,247,.14),rgba(139,92,246,.09)) !important;border-color:rgba(91,124,247,.32) !important}
+html[data-theme=light] #dash-greeting{background:linear-gradient(90deg,#0F172A 60%,#4A68F0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+html[data-theme=light] #dash-ai-banner{background:linear-gradient(90deg,rgba(74,104,240,.07),rgba(139,92,246,.04)) !important;border-color:rgba(74,104,240,.18) !important}
+
+/* HD with SVG icons */
+.hd svg{opacity:.5;flex-shrink:0}
+
 </style>
 <script>
 /* ── Section hero header animation ── */
@@ -3065,7 +3076,7 @@ try{
       <!-- Eyebrow -->
       <div style="display:inline-flex;align-items:center;gap:6px;padding:4px 12px;background:rgba(91,124,247,.1);border:1px solid rgba(91,124,247,.25);border-radius:20px;font-size:10px;font-weight:700;color:#7C9BFF;letter-spacing:.8px;text-transform:uppercase;margin-bottom:22px">
         <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-        Centro de Alto Rendimiento para Traders
+        La plataforma inteligente para prop traders
       </div>
 
       <!-- Headline -->
@@ -3409,34 +3420,106 @@ try{
 
 <!-- DASHBOARD -->
 <div class="sec act" id="sec-dashboard">
+
+  <!-- ── Dashboard hero header ── -->
+  <div id="dash-hero" style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px;gap:12px;flex-wrap:wrap">
+    <div>
+      <div id="dash-greeting" style="font-size:20px;font-weight:800;color:#EEF2FF;letter-spacing:-.5px;line-height:1.2">Buenos días</div>
+      <div id="dash-date-line" style="font-size:12px;color:#3D5075;margin-top:3px;font-weight:500"></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <!-- Live equity badge -->
+      <div id="eq-live-hero" style="display:none;align-items:center;gap:7px;padding:7px 14px;background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);border-radius:8px">
+        <span style="width:6px;height:6px;background:#4ade80;border-radius:50%;box-shadow:0 0 6px #4ade80;animation:lp 2s infinite;flex-shrink:0"></span>
+        <span id="eq-live" style="font-size:12px;font-weight:700;color:#4ade80;font-family:var(--mono)"></span>
+        <span style="font-size:9px;color:rgba(74,222,128,.55);font-weight:600;letter-spacing:.4px;text-transform:uppercase">Live</span>
+      </div>
+      <!-- Rule violations badge -->
+      <div id="dash-alert-badge" style="display:none;align-items:center;gap:6px;padding:7px 14px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);border-radius:8px;cursor:pointer" onclick="nav(document.querySelector('[data-s=risk]'))">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <span id="dash-alert-txt" style="font-size:12px;font-weight:600;color:#f87171">Ver alertas</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── AI Insight banner ── -->
+  <div id="dash-ai-banner" style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:linear-gradient(90deg,rgba(91,124,247,.1) 0%,rgba(139,92,246,.06) 100%);border:1px solid rgba(91,124,247,.2);border-radius:10px;margin-bottom:16px;cursor:pointer" onclick="nav(document.querySelector('[data-s=journal]'))">
+    <div style="width:32px;height:32px;background:linear-gradient(135deg,rgba(91,124,247,.25),rgba(139,92,246,.2));border:1px solid rgba(91,124,247,.3);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7C9BFF" stroke-width="2" stroke-linecap="round"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg>
+    </div>
+    <div style="flex:1;min-width:0">
+      <div style="font-size:9px;font-weight:700;color:#5B7CF7;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">SimpleTrader IA</div>
+      <div id="dash-ai-txt" style="font-size:12.5px;color:#8B9FC4;line-height:1.4">Añade trades al journal para que la IA analice tus patrones y detecte áreas de mejora.</div>
+    </div>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3D5075" stroke-width="2" stroke-linecap="round"><path d="m9 18 6-6-6-6"/></svg>
+  </div>
+
+  <!-- ── Risk rules strip ── -->
   <div class="rstrip" id="dash-rules"></div>
+
+  <!-- ── KPI cards ── -->
   <div class="g4" id="dash-kpi"></div>
+
+  <!-- ── Charts row 1 ── -->
   <div class="g2">
-    <div class="card"><div class="hd">Perfil del Trader — Fortalezas &amp; Debilidades</div><div id="radar-chart" style="display:flex;align-items:center;justify-content:center;padding:8px 0;min-height:220px"></div></div>
     <div class="card">
-      <div class="hd">P&amp;L por Instrumento<div class="hd-r"><span id="eq-live" class="up" style="font-family:var(--mono);font-size:10.5px"></span></div></div>
+      <div class="hd">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Perfil del Trader
+        <div class="hd-r" style="font-size:9px;color:#3D5075;font-weight:500;text-transform:none;letter-spacing:0">Fortalezas y debilidades</div>
+      </div>
+      <div id="radar-chart" style="display:flex;align-items:center;justify-content:center;padding:8px 0;min-height:220px"></div>
+    </div>
+    <div class="card">
+      <div class="hd">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="2" x2="12" y2="6"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/><line x1="12" y1="18" x2="12" y2="22"/></svg>
+        P&amp;L por Instrumento
+      </div>
       <div style="display:flex;flex-direction:column;gap:7px;margin-top:8px" id="instr-bars"></div>
     </div>
   </div>
-  <!-- SimpleScore row -->
+
+  <!-- ── Charts row 2 ── -->
   <div class="g2" style="margin-top:0">
     <div class="card" id="simple-score-card">
-      <div class="hd">SimpleScore™ — Salud de Trading</div>
+      <div class="hd">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        SimpleScore™
+        <div class="hd-r" style="font-size:9px;color:#3D5075;font-weight:500;text-transform:none;letter-spacing:0">Salud de trading</div>
+      </div>
       <div style="display:flex;align-items:center;gap:20px;padding:8px 0">
         <div id="simple-score-gauge" style="flex-shrink:0"></div>
-        <div style="flex:1">
-          <div id="simple-score-breakdown" style="display:flex;flex-direction:column;gap:5px"></div>
-        </div>
+        <div style="flex:1"><div id="simple-score-breakdown" style="display:flex;flex-direction:column;gap:5px"></div></div>
       </div>
     </div>
     <div class="card">
-      <div class="hd">Rendimiento Diario — Últimas 8 semanas</div>
+      <div class="hd">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Últimas 8 semanas
+        <div class="hd-r" style="font-size:9px;color:#3D5075;font-weight:500;text-transform:none;letter-spacing:0">Rendimiento diario</div>
+      </div>
       <div id="daily-heatmap" style="padding:6px 2px"></div>
     </div>
   </div>
+
+  <!-- ── Charts row 3 ── -->
   <div class="g2">
-    <div class="card"><div class="hd">Posiciones Abiertas<div class="hd-r"><span class="bdg bok" id="pos-cnt"></span></div></div><div class="tw"><table><thead><tr><th>Instr.</th><th>Dir.</th><th>Ctrs.</th><th>Entrada</th><th>Precio</th><th>Ticks</th><th>P&amp;L</th></tr></thead><tbody id="pos-body"></tbody></table></div></div>
-    <div class="card"><div class="hd">P&amp;L Diario — Últimas 2 semanas</div><div id="daily-bars" style="padding:6px 2px"></div></div>
+    <div class="card">
+      <div class="hd">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Posiciones Abiertas
+        <div class="hd-r"><span class="bdg bok" id="pos-cnt"></span></div>
+      </div>
+      <div class="tw"><table><thead><tr><th>Instr.</th><th>Dir.</th><th>Ctrs.</th><th>Entrada</th><th>Precio</th><th>Ticks</th><th>P&amp;L</th></tr></thead><tbody id="pos-body"></tbody></table></div>
+    </div>
+    <div class="card">
+      <div class="hd">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+        P&amp;L Diario
+        <div class="hd-r" style="font-size:9px;color:#3D5075;font-weight:500;text-transform:none;letter-spacing:0">Últimas 2 semanas</div>
+      </div>
+      <div id="daily-bars" style="padding:6px 2px"></div>
+    </div>
   </div>
 </div>
 
@@ -9861,7 +9944,41 @@ function renderDashRules(){
   if(!chips.length){el.innerHTML='';return;}
   el.innerHTML=chips.map(function(c){return '<span class="bdg '+c.cls+'" style="font-size:9.5px;padding:3px 9px">'+c.icon+' '+c.text+'</span>';}).join('');
 }
+function renderDashHero(){
+  // Greeting
+  var gEl=document.getElementById('dash-greeting');
+  var dEl=document.getElementById('dash-date-line');
+  if(gEl){
+    var h=new Date().getHours();
+    var saludo=h<12?'Buenos días':h<18?'Buenas tardes':'Buenas noches';
+    var nombre=(U&&U.name)?', '+U.name.split(' ')[0]:'';
+    gEl.textContent=saludo+nombre;
+  }
+  if(dEl){
+    var now=new Date();
+    var dias=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+    var meses=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+    dEl.textContent=dias[now.getDay()]+', '+now.getDate()+' de '+meses[now.getMonth()]+' · Sesión NY '+(now.getHours()<16?'abierta':'cerrada');
+  }
+  // Live equity hero badge
+  var liveEl=document.getElementById('eq-live-hero');
+  var liveSpan=document.getElementById('eq-live');
+  if(liveEl&&liveSpan&&liveSpan.textContent){liveEl.style.display='flex';}
+  // AI banner
+  var aiTxt=document.getElementById('dash-ai-txt');
+  if(aiTxt&&JTRADES.length>5){
+    var wins=JTRADES.filter(function(t){return t.gross>0;}).length;
+    var wr=Math.round(wins/JTRADES.length*100);
+    var msgs=[
+      'Tu win rate es del '+wr+'% — por encima del '+Math.round(wr*0.9)+'% de la semana pasada. Sigue con la disciplina de entrada.',
+      'Llevas '+JTRADES.length+' trades registrados. La IA detecta que tus mejores resultados son en las primeras 2 horas de sesión.',
+      'Con '+wins+' trades ganadores de '+JTRADES.length+', estás construyendo consistencia. Revisa el análisis completo en Journal.'
+    ];
+    aiTxt.textContent=msgs[JTRADES.length%msgs.length];
+  }
+}
 function renderDashKPI(){
+  renderDashHero();
   var el=document.getElementById('dash-kpi');
   if(!el)return;
   var accs=SAVED_ACCOUNTS.filter(function(a){return a.status==='connected';});
