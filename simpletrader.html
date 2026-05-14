@@ -10,6 +10,11 @@
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#5B7CF7">
 
+<!-- DM Sans — Premium SaaS Typography -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+
 <!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://simpletrader.app/">
@@ -55,10 +60,38 @@
 })();
 </script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
-:root{--bg:#0d0f14;--bg2:#12151c;--bg3:#1c2235;--bg4:#2a3352;--card:#161a26;--card2:#242d48;--b1:#2e3a58;--b2:#3d5080;--b3:#546090;--cy:#5B7CF7;--cy1:rgba(91,124,247,.12);--cy8:rgba(91,124,247,.14);--gn:#22C55E;--gn2:#16A34A;--rd:#EF4444;--am:#F59E0B;--pu:#8B5CF6;--bl:#38BDF8;--tx:#F0F4FF;--tx2:#8B9FC4;--tx3:#4A5780;--sh:0 8px 40px rgba(0,0,0,.7);--mono:ui-monospace,'Cascadia Code',Consolas,monospace;--sans:ui-sans-serif,system-ui,-apple-system,sans-serif;--radius:8px;--radius-sm:6px;--radius-lg:12px;--chart-bg:#0d1117;--chart-grid:#1c2338;--chart-text:#4a5568;--chart-up:#22c55e;--chart-dn:#ef4444}
-html[data-theme=light]{--bg:#F3F6FB;--bg2:#EAF0F8;--bg3:#DDE5F2;--bg4:#D0DAEA;--card:#FFFFFF;--card2:#F3F6FB;--b1:#D4DCE8;--b2:#B8C4D8;--b3:#98AABF;--cy:#4A68F0;--cy1:rgba(74,104,240,.1);--cy8:rgba(74,104,240,.08);--gn:#15803D;--gn2:#166534;--rd:#DC2626;--am:#B45309;--pu:#6D28D9;--bl:#0369A1;--tx:#0F172A;--tx2:#2D3F5E;--tx3:#64748B;--sh:0 4px 20px rgba(15,23,42,.1);--chart-bg:#ffffff;--chart-grid:#e8edf5;--chart-text:#94a3b8;--chart-up:#15803d;--chart-dn:#dc2626}
-html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);font-family:var(--sans);font-size:13.5px}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+:root{
+  /* ── OLED Dark palette ── */
+  --bg:#080B12;--bg2:#0E1117;--bg3:#151B28;--bg4:#1E2638;
+  --card:#111520;--card2:#192035;
+  --b1:#1F2D47;--b2:#283A5C;--b3:#3A5080;
+  /* ── Brand ── */
+  --cy:#5B7CF7;--cy1:rgba(91,124,247,.12);--cy8:rgba(91,124,247,.15);
+  --gn:#22C55E;--gn2:#16A34A;--rd:#EF4444;--am:#F59E0B;--pu:#8B5CF6;--bl:#38BDF8;
+  /* ── Text ── */
+  --tx:#EEF2FF;--tx2:#7E95C0;--tx3:#3D5075;
+  /* ── Shadows ── */
+  --sh:0 8px 40px rgba(0,0,0,.8);--sh-sm:0 2px 12px rgba(0,0,0,.6);
+  /* ── Fonts ── */
+  --mono:'DM Mono',ui-monospace,'Cascadia Code',Consolas,monospace;
+  --sans:'DM Sans',ui-sans-serif,system-ui,-apple-system,sans-serif;
+  /* ── Radii ── */
+  --radius:10px;--radius-sm:7px;--radius-lg:14px;
+  /* ── Charts ── */
+  --chart-bg:#080B12;--chart-grid:#151B28;--chart-text:#3D5075;--chart-up:#22c55e;--chart-dn:#ef4444;
+}
+html[data-theme=light]{
+  --bg:#F0F4FC;--bg2:#E8EEF8;--bg3:#DCE4F2;--bg4:#CDD9EE;
+  --card:#FFFFFF;--card2:#F4F7FD;
+  --b1:#CDD8EC;--b2:#B3C3DC;--b3:#8FA8C8;
+  --cy:#4A68F0;--cy1:rgba(74,104,240,.1);--cy8:rgba(74,104,240,.09);
+  --gn:#15803D;--gn2:#166534;--rd:#DC2626;--am:#B45309;--pu:#6D28D9;--bl:#0369A1;
+  --tx:#0F172A;--tx2:#2D4060;--tx3:#5A7099;
+  --sh:0 4px 20px rgba(15,23,42,.1);--sh-sm:0 2px 8px rgba(15,23,42,.08);
+  --chart-bg:#ffffff;--chart-grid:#e8edf5;--chart-text:#94a3b8;--chart-up:#15803d;--chart-dn:#dc2626;
+}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);font-family:var(--sans);font-size:13.5px;letter-spacing:.01em}
 /* Smooth theme transition — only while switching */
 html.theme-switching *,html.theme-switching *::before,html.theme-switching *::after{transition:background-color .25s ease,border-color .25s ease,color .2s ease,fill .2s ease,box-shadow .25s ease !important}
 
@@ -2441,6 +2474,251 @@ html[data-theme=light] .pc.ft{background:linear-gradient(145deg,rgba(240,244,255
 
 /* ── Topbar buttons ── */
 .tbtn:hover{background:rgba(91,124,247,.1);border-color:rgba(91,124,247,.3);color:var(--cy)}
+
+/* ════════════════════════════════════════════════════════════
+   UI/UX PRO MAX — SIMPLETRADER X PREMIUM OVERHAUL
+   Design System: OLED Dark + Glassmorphism + DM Sans
+   ════════════════════════════════════════════════════════════ */
+
+/* ── 1. TYPOGRAPHY SYSTEM ── */
+:root{
+  --fs-2xs:10px; --fs-xs:11px; --fs-sm:12px; --fs-base:13.5px;
+  --fs-md:15px;  --fs-lg:17px; --fs-xl:20px; --fs-2xl:24px; --fs-3xl:30px;
+  --fw-normal:400; --fw-medium:500; --fw-semibold:600; --fw-bold:700;
+  --lh-tight:1.2; --lh-snug:1.4; --lh-normal:1.6;
+  --ls-tight:-.4px; --ls-wide:.8px; --ls-wider:1.2px;
+  --transition-fast:150ms cubic-bezier(.4,0,.2,1);
+  --transition-base:220ms cubic-bezier(.4,0,.2,1);
+  --transition-slow:350ms cubic-bezier(.16,1,.3,1);
+}
+
+/* Base text refinements */
+body{font-size:var(--fs-base);line-height:var(--lh-normal);font-weight:var(--fw-normal)}
+h1,h2,h3,h4{font-weight:var(--fw-bold);letter-spacing:var(--ls-tight);line-height:var(--lh-tight)}
+label,.lf-l,.hd,.ml,.pf-lbl,.sg{letter-spacing:var(--ls-wider);font-weight:var(--fw-bold)}
+
+/* ── 2. SIDEBAR — Premium nav ── */
+.sb{background:linear-gradient(180deg,#080B12 0%,#0A0D16 100%);border-right:1px solid rgba(255,255,255,.05)}
+.sb-logo{border-bottom:1px solid rgba(255,255,255,.05);padding:16px 14px}
+.sb-mark{background:linear-gradient(135deg,#4A68F0 0%,#7C5CF6 100%);box-shadow:0 4px 14px rgba(91,124,247,.4);border-radius:8px;transition:var(--transition-base)}
+.sb-mark:hover{border-radius:50%;box-shadow:0 4px 20px rgba(91,124,247,.55)}
+.sb-txt .uname{font-size:var(--fs-sm);font-weight:var(--fw-semibold);letter-spacing:.1px}
+.sb-txt span:first-child{font-size:var(--fs-sm);font-weight:var(--fw-bold);letter-spacing:-.2px;background:linear-gradient(135deg,var(--tx),rgba(238,242,255,.7));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+/* Nav items */
+.ni{border-radius:8px;padding:8px 12px;font-size:var(--fs-sm);font-weight:var(--fw-medium);color:var(--tx3);border:1px solid transparent;transition:var(--transition-fast)}
+.ni:hover{background:rgba(255,255,255,.04);color:rgba(238,242,255,.75);border-color:rgba(255,255,255,.04);transform:translateX(0)}
+.ni.act{background:linear-gradient(90deg,rgba(91,124,247,.18) 0%,rgba(91,124,247,.06) 100%);color:var(--cy);border:1px solid rgba(91,124,247,.22);border-left:2px solid var(--cy);padding-left:10px;font-weight:var(--fw-semibold);box-shadow:inset 0 0 24px rgba(91,124,247,.05)}
+.ni.act svg{opacity:1;filter:drop-shadow(0 0 5px rgba(91,124,247,.5))}
+.ni svg{opacity:.45;transition:opacity var(--transition-fast),filter var(--transition-fast)}
+.ni:hover svg{opacity:.7}
+/* Section labels */
+.sg{font-size:9px;color:rgba(61,80,117,.9);letter-spacing:1.4px;padding:14px 12px 5px}
+/* User row */
+.up-row{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.05);border-radius:9px;transition:var(--transition-fast)}
+.up-row:hover{background:rgba(91,124,247,.09);border-color:rgba(91,124,247,.18)}
+.uav{background:linear-gradient(135deg,#4A68F0,#7C5CF6);box-shadow:0 2px 12px rgba(91,124,247,.3)}
+.uname{font-size:var(--fs-sm);font-weight:var(--fw-semibold)}
+.uplan{font-size:9px;font-weight:var(--fw-bold);letter-spacing:.4px;text-transform:uppercase;color:var(--cy);opacity:.9}
+/* Status dot */
+.ll{box-shadow:0 0 8px rgba(34,197,94,.5)}
+
+/* ── 3. TOPBAR — Cleaner header ── */
+.topbar{background:rgba(8,11,18,.97);border-bottom:1px solid rgba(255,255,255,.05);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.tb-t{font-size:var(--fs-sm);font-weight:var(--fw-bold);color:var(--tx);letter-spacing:.1px;border-right:1px solid rgba(255,255,255,.06)}
+.tbtn{border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.025);border-radius:8px;transition:var(--transition-fast)}
+.tbtn:hover{background:rgba(91,124,247,.12);border-color:rgba(91,124,247,.3);color:var(--cy);transform:translateY(-1px)}
+.tb-clk{font-family:var(--mono);font-size:10px;color:var(--tx3);border-left:1px solid rgba(255,255,255,.06)}
+.ws-p{border-radius:6px;font-size:9px;font-weight:var(--fw-bold);letter-spacing:.3px}
+html[data-theme=light] .topbar{background:rgba(255,255,255,.97);border-bottom:1px solid rgba(74,104,240,.08)}
+
+/* ── 4. KPI METRIC CARDS — Hero numbers ── */
+.mc{background:rgba(17,21,32,.96);border:1px solid rgba(255,255,255,.065);border-radius:12px;overflow:hidden;transition:border-color var(--transition-base),box-shadow var(--transition-base),transform var(--transition-base);padding:16px 18px}
+.mc::before{content:'';position:absolute;top:0;left:0;right:0;height:1.5px;background:linear-gradient(90deg,transparent,rgba(91,124,247,.5) 30%,rgba(139,92,246,.4) 70%,transparent);opacity:.6}
+.mc::after{content:'';position:absolute;top:-60px;right:-40px;width:120px;height:120px;background:radial-gradient(circle,rgba(91,124,247,.06),transparent 65%);pointer-events:none;border-radius:50%}
+.mc:hover{border-color:rgba(91,124,247,.25);box-shadow:0 8px 32px rgba(0,0,0,.5),0 0 0 1px rgba(91,124,247,.07);transform:translateY(-3px)}
+.ml{font-size:9px;color:var(--tx3);font-weight:var(--fw-bold);letter-spacing:1.3px;text-transform:uppercase;display:flex;align-items:center;gap:6px;margin-bottom:2px}
+.mv{font-size:26px;font-weight:700;font-family:var(--mono);line-height:1.15;letter-spacing:-1px;margin-top:6px}
+.mv.up{color:#4ade80;text-shadow:0 0 24px rgba(34,197,94,.22)}
+.mv.dn{color:#f87171;text-shadow:0 0 24px rgba(239,68,68,.22)}
+.mv.cy{color:var(--cy);text-shadow:0 0 24px rgba(91,124,247,.25)}
+.ms{font-size:var(--fs-xs);margin-top:5px;font-weight:var(--fw-medium);color:var(--tx3)}
+/* Icon container inside mc */
+.mc .mgr-kpi-ico{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+html[data-theme=light] .mc{background:rgba(255,255,255,.98);border-color:rgba(74,104,240,.1)}
+html[data-theme=light] .mc::before{background:linear-gradient(90deg,transparent,rgba(74,104,240,.35) 40%,transparent)}
+
+/* ── 5. CONTENT CARDS — Glass surface ── */
+.card{background:rgba(17,21,32,.96);border:1px solid rgba(255,255,255,.065);border-radius:12px;padding:18px;transition:border-color var(--transition-base),box-shadow var(--transition-base),transform var(--transition-base);box-shadow:0 2px 16px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.025)}
+.card:hover{border-color:rgba(255,255,255,.1);box-shadow:0 6px 30px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.035);transform:translateY(-1px)}
+html[data-theme=light] .card{background:#fff;border-color:rgba(74,104,240,.1);box-shadow:0 2px 12px rgba(15,23,42,.07)}
+html[data-theme=light] .card:hover{border-color:rgba(74,104,240,.2);box-shadow:0 6px 20px rgba(15,23,42,.1)}
+
+/* ── 6. SECTION HEADER ── */
+.hd{font-size:9px;font-weight:var(--fw-bold);color:var(--tx3);letter-spacing:1.3px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:7px}
+.hd::before{content:'';display:block;width:3px;height:12px;background:linear-gradient(180deg,var(--cy),var(--pu));border-radius:2px;flex-shrink:0}
+.sec-title{font-size:18px;font-weight:700;letter-spacing:-.4px;line-height:1.2}
+.sec-sub{font-size:var(--fs-sm);color:var(--tx3);margin-top:3px;font-weight:var(--fw-normal)}
+.sec-header{padding-bottom:14px;margin-bottom:16px;border-bottom:1px solid rgba(255,255,255,.05)}
+html[data-theme=light] .sec-header{border-bottom-color:rgba(74,104,240,.08)}
+
+/* ── 7. RULE PILLS (Dashboard) ── */
+.rpill{padding:5px 10px;border-radius:6px;font-size:var(--fs-xs);font-weight:var(--fw-semibold);display:flex;align-items:center;gap:5px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.rpg{background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);color:var(--gn);box-shadow:0 2px 10px rgba(34,197,94,.06)}
+.rpw{background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.2);color:var(--am);box-shadow:0 2px 10px rgba(245,158,11,.06)}
+.rpe{background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.2);color:var(--rd);box-shadow:0 2px 10px rgba(239,68,68,.06)}
+.rpd{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0;box-shadow:0 0 4px currentColor}
+.rstrip{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px}
+
+/* ── 8. BUTTONS — Premium interactions ── */
+.btn{border-radius:8px;font-size:var(--fs-sm);font-weight:var(--fw-semibold);transition:all var(--transition-fast);border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);color:var(--tx2);cursor:pointer}
+.btn:hover{background:rgba(255,255,255,.07);color:var(--tx);border-color:rgba(255,255,255,.12);transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.btn:active{transform:none;box-shadow:none}
+.btn.bc{background:rgba(91,124,247,.1);color:var(--cy);border-color:rgba(91,124,247,.3);position:relative;overflow:hidden}
+.btn.bc:hover{background:rgba(91,124,247,.18);border-color:rgba(91,124,247,.5);box-shadow:0 4px 18px rgba(91,124,247,.2)}
+.btn.bg2:hover{background:rgba(34,197,94,.14);box-shadow:0 4px 14px rgba(34,197,94,.12)}
+.btn.br:hover{background:rgba(239,68,68,.14);box-shadow:0 4px 14px rgba(239,68,68,.12)}
+.btn-pri{background:linear-gradient(135deg,#4A68F0 0%,#6B4FF0 100%);border:none;border-radius:9px;padding:12px 18px;color:#fff;font-family:var(--sans);font-size:var(--fs-base);font-weight:var(--fw-bold);cursor:pointer;position:relative;overflow:hidden;transition:all var(--transition-base);box-shadow:0 4px 20px rgba(74,104,240,.4),inset 0 1px 0 rgba(255,255,255,.15)}
+.btn-pri::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.1) 50%,transparent 100%);transform:translateX(-100%);transition:transform .55s ease}
+.btn-pri:hover::before{transform:translateX(100%)}
+.btn-pri:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(74,104,240,.55),inset 0 1px 0 rgba(255,255,255,.2)}
+.btn-pri:active{transform:none;box-shadow:0 4px 14px rgba(74,104,240,.3)}
+.btn-pri:disabled{opacity:.45;cursor:not-allowed;transform:none}
+html[data-theme=light] .btn{background:rgba(15,23,42,.04);border-color:rgba(74,104,240,.12);color:var(--tx2)}
+html[data-theme=light] .btn:hover{background:rgba(15,23,42,.08)}
+
+/* ── 9. TOAST — Glassmorphism premium ── */
+.tst{border-radius:11px;font-size:var(--fs-sm);font-weight:var(--fw-medium);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);box-shadow:0 12px 40px rgba(0,0,0,.7),0 2px 8px rgba(0,0,0,.4)}
+.tst.ok{background:rgba(8,20,14,.9);border:1px solid rgba(34,197,94,.25);color:#4ade80;box-shadow:0 12px 40px rgba(0,0,0,.7),0 0 24px rgba(34,197,94,.08)}
+.tst.err{background:rgba(20,8,8,.9);border:1px solid rgba(239,68,68,.25);color:#f87171;box-shadow:0 12px 40px rgba(0,0,0,.7),0 0 24px rgba(239,68,68,.08)}
+.tst.warn{background:rgba(20,14,4,.9);border:1px solid rgba(245,158,11,.25);color:#fbbf24;box-shadow:0 12px 40px rgba(0,0,0,.7),0 0 24px rgba(245,158,11,.08)}
+.tst.info{background:rgba(8,12,24,.9);border:1px solid rgba(91,124,247,.25);color:var(--tx);box-shadow:0 12px 40px rgba(0,0,0,.7),0 0 24px rgba(91,124,247,.08)}
+html[data-theme=light] .tst.ok{background:rgba(240,253,244,.96);color:var(--gn)}
+html[data-theme=light] .tst.err{background:rgba(254,242,242,.96);color:var(--rd)}
+html[data-theme=light] .tst.warn{background:rgba(255,251,235,.96);color:var(--am)}
+html[data-theme=light] .tst.info{background:rgba(238,242,255,.96);color:var(--cy)}
+
+/* ── 10. TABLE — Dense professional ── */
+th{background:rgba(255,255,255,.02);border-bottom:1px solid rgba(255,255,255,.06);font-size:9px;font-weight:var(--fw-bold);letter-spacing:1.2px;color:var(--tx3);padding:10px 12px;text-transform:uppercase}
+td{padding:9px 12px;border-bottom:1px solid rgba(255,255,255,.04);font-size:var(--fs-sm);font-weight:var(--fw-normal);color:var(--tx)}
+tr:hover td{background:rgba(91,124,247,.045)}
+.mono{font-family:var(--mono);font-size:var(--fs-xs);letter-spacing:.3px}
+html[data-theme=light] th{background:rgba(74,104,240,.04);border-bottom-color:rgba(74,104,240,.1)}
+html[data-theme=light] td{border-bottom-color:rgba(74,104,240,.07)}
+html[data-theme=light] tr:hover td{background:rgba(74,104,240,.04)}
+
+/* ── 11. BADGES ── */
+.bdg{font-size:9px;font-weight:var(--fw-bold);padding:2px 7px;border-radius:5px;letter-spacing:.3px}
+.bb{background:rgba(91,124,247,.12);color:var(--cy);border:1px solid rgba(91,124,247,.3)}
+.bs{background:rgba(239,68,68,.1);color:#f87171;border:1px solid rgba(239,68,68,.3)}
+.bok{background:rgba(34,197,94,.08);color:var(--gn);border:1px solid rgba(34,197,94,.25)}
+.bof{background:rgba(255,255,255,.04);color:var(--tx3);border:1px solid rgba(255,255,255,.08)}
+.bw{background:rgba(245,158,11,.08);color:var(--am);border:1px solid rgba(245,158,11,.25)}
+
+/* ── 12. LOGIN SCREEN — Full premium ── */
+#ls{background:radial-gradient(ellipse 120% 80% at 20% 50%,rgba(74,104,240,.1) 0%,rgba(139,92,246,.06) 45%,transparent 70%),#080B12}
+.ls-l{background:none}
+.ls-g{background-image:linear-gradient(rgba(91,124,247,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(91,124,247,.04) 1px,transparent 1px);background-size:52px 52px}
+.ls-gl{background:radial-gradient(circle,rgba(91,124,247,.14) 0%,rgba(139,92,246,.08) 35%,transparent 65%);width:700px;height:700px}
+.ls-l::after{content:'';position:absolute;width:350px;height:350px;background:radial-gradient(circle,rgba(74,104,240,.08),transparent 65%);top:10%;right:5%;border-radius:50%;pointer-events:none;animation:orbFloat 9s ease-in-out infinite}
+.ls-l::before{content:'';position:absolute;width:250px;height:250px;background:radial-gradient(circle,rgba(139,92,246,.07),transparent 65%);bottom:15%;left:10%;border-radius:50%;pointer-events:none;animation:orbFloat 13s ease-in-out infinite reverse}
+@keyframes orbFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-28px) scale(1.05)}}
+.ls-r{width:460px;background:rgba(11,14,22,.96);backdrop-filter:blur(32px);-webkit-backdrop-filter:blur(32px);border-left:1px solid rgba(255,255,255,.06);padding:52px 44px;box-shadow:-30px 0 80px rgba(0,0,0,.5)}
+.ls-r>*{opacity:0;animation:fin .4s ease forwards}
+.lf-i{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:9px;padding:11px 14px;font-size:var(--fs-base);font-family:var(--sans);color:var(--tx);transition:all var(--transition-fast)}
+.lf-i:focus{background:rgba(91,124,247,.07);border-color:rgba(91,124,247,.55);box-shadow:0 0 0 3px rgba(91,124,247,.15)}
+.lf-i::placeholder{color:var(--tx3)}
+.lf-l{font-size:9px;font-weight:var(--fw-bold);color:var(--tx3);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:5px}
+html[data-theme=light] .ls-r{background:rgba(255,255,255,.97);border-left:1px solid rgba(74,104,240,.1);box-shadow:-20px 0 60px rgba(15,23,42,.08)}
+html[data-theme=light] .lf-i{background:rgba(74,104,240,.04);border-color:rgba(74,104,240,.18)}
+html[data-theme=light] .lf-i:focus{background:rgba(74,104,240,.07)}
+
+/* ── 13. PORTFOLIO CARDS ── */
+.pacc{background:linear-gradient(145deg,rgba(14,17,26,.97),rgba(11,14,22,.97));border:1px solid rgba(255,255,255,.065);border-radius:14px;padding:20px;box-shadow:0 4px 24px rgba(0,0,0,.5)}
+.pacc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--pacc-clr,#22C55E) 0%,rgba(34,197,94,.2) 60%,transparent 100%);opacity:.85}
+.pacc:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.6),0 0 28px rgba(34,197,94,.06);border-color:rgba(255,255,255,.1)}
+.pacc-stat{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.055);border-radius:9px;padding:9px 11px}
+.pacc-stat .sv{font-size:14px;font-weight:700;font-family:var(--mono);letter-spacing:-.4px}
+.pacc-stat .sl{font-size:8px;color:rgba(126,149,192,.5);text-transform:uppercase;letter-spacing:.8px;margin-top:2px}
+html[data-theme=light] .pacc{background:rgba(255,255,255,.98);border-color:rgba(74,104,240,.1)}
+
+/* ── 14. COMMAND PALETTE ── */
+#cmd-box{background:rgba(11,14,22,.98);backdrop-filter:blur(32px);-webkit-backdrop-filter:blur(32px);border:1px solid rgba(91,124,247,.22);border-radius:14px;box-shadow:0 28px 80px rgba(0,0,0,.85),0 0 0 1px rgba(91,124,247,.07)}
+#cmd-input{font-size:var(--fs-md);padding:16px 20px;font-family:var(--sans)}
+.cmd-item:hover,.cmd-item.sel{background:rgba(91,124,247,.09)}
+.cmd-item:hover .cmd-label,.cmd-item.sel .cmd-label{color:var(--cy)}
+.cmd-icon{background:rgba(255,255,255,.04);border-radius:7px}
+html[data-theme=light] #cmd-box{background:rgba(255,255,255,.98)}
+
+/* ── 15. PRICING CARDS ── */
+.pc{background:rgba(14,17,26,.98);border:1px solid rgba(255,255,255,.07);border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,.5)}
+.pc.ft{border-color:rgba(91,124,247,.4);background:linear-gradient(145deg,rgba(12,19,48,.98),rgba(14,12,42,.98));box-shadow:0 8px 40px rgba(91,124,247,.2),0 0 0 1px rgba(91,124,247,.18)}
+html[data-theme=light] .pc{background:#fff;border-color:rgba(74,104,240,.12)}
+html[data-theme=light] .pc.ft{background:linear-gradient(145deg,rgba(238,242,255,1),rgba(245,240,255,1));border-color:rgba(74,104,240,.35)}
+
+/* ── 16. SCROLLBAR — Refined ── */
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(91,124,247,.2);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:rgba(91,124,247,.38)}
+
+/* ── 17. FILTER BUTTONS ── */
+.fb{border-radius:7px;font-size:var(--fs-xs);font-weight:var(--fw-semibold);border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.025);color:var(--tx3);transition:all var(--transition-fast)}
+.fb:hover{background:rgba(255,255,255,.06);color:var(--tx2);border-color:rgba(255,255,255,.1)}
+.fb.act{background:linear-gradient(135deg,rgba(91,124,247,.16),rgba(91,124,247,.07));color:var(--cy);border-color:rgba(91,124,247,.4);box-shadow:0 0 14px rgba(91,124,247,.1)}
+
+/* ── 18. ACCOUNT CARDS ── */
+.acc-card{background:rgba(14,17,26,.96);border:1px solid rgba(255,255,255,.055);border-radius:12px;transition:all var(--transition-base)}
+.acc-card:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.4)}
+.acc-card.connected{border-color:rgba(34,197,94,.2)}
+.acc-card.connected:hover{border-color:rgba(34,197,94,.35);box-shadow:0 8px 28px rgba(0,0,0,.4),0 0 24px rgba(34,197,94,.08)}
+
+/* ── 19. MT5 CARD ── */
+.mt5-card{background:linear-gradient(135deg,rgba(4,12,26,.98),rgba(8,20,40,.98),rgba(3,10,22,.98));border:1px solid rgba(0,168,255,.2);border-radius:12px;box-shadow:0 4px 24px rgba(0,168,255,.05)}
+.mt5-badge{font-size:9px;font-weight:var(--fw-bold);letter-spacing:.3px;border-radius:5px}
+
+/* ── 20. PROGRESS BARS — Gradient fills ── */
+.pb{height:5px;background:rgba(255,255,255,.06);border-radius:3px}
+.pfg{background:linear-gradient(90deg,#16A34A,#4ade80)}
+.pfr{background:linear-gradient(90deg,#DC2626,#f87171)}
+.pfa{background:linear-gradient(90deg,#B45309,#fbbf24)}
+.pfc{background:linear-gradient(90deg,#4A68F0,#818cf8)}
+
+/* ── 21. TOGGLE ── */
+.tgt{background:rgba(255,255,255,.12);border-radius:10px}
+.tog input:checked+.tgt{background:linear-gradient(90deg,var(--cy),#22C55E);box-shadow:0 0 12px rgba(91,124,247,.25)}
+
+/* ── 22. EMPTY STATES — Friendly feedback ── */
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 24px;text-align:center;color:var(--tx3)}
+.empty-state .empty-icon{font-size:40px;margin-bottom:14px;opacity:.35;filter:grayscale(1)}
+.empty-state .empty-title{font-size:var(--fs-md);font-weight:var(--fw-semibold);color:var(--tx2);margin-bottom:6px}
+.empty-state .empty-desc{font-size:var(--fs-sm);line-height:1.6;max-width:280px;color:var(--tx3)}
+
+/* ── 23. FOCUS — Accessible ── */
+*:focus-visible{outline:2px solid rgba(91,124,247,.65);outline-offset:3px;border-radius:6px}
+input:focus-visible,select:focus-visible,textarea:focus-visible{outline:none}
+
+/* ── 24. REDUCED MOTION ── */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
+}
+
+/* ── 25. SUBTLE ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes scaleIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+.sec.act{animation:fadeUp .22s cubic-bezier(.16,1,.3,1)}
+.card{animation:fadeIn .18s ease}
+
+/* ── 26. LIGHT MODE REFINEMENTS ── */
+html[data-theme=light] .sb{background:linear-gradient(180deg,#F8FAFF 0%,#F3F6FC 100%);border-right:1px solid rgba(74,104,240,.1)}
+html[data-theme=light] .ni:hover{background:rgba(74,104,240,.06);color:var(--tx)}
+html[data-theme=light] .ni.act{background:linear-gradient(90deg,rgba(74,104,240,.12),rgba(74,104,240,.04));border-color:rgba(74,104,240,.2);border-left:2px solid var(--cy)}
+html[data-theme=light] .up-row{background:rgba(74,104,240,.05);border-color:rgba(74,104,240,.12)}
+html[data-theme=light] .topbar{background:rgba(255,255,255,.98);border-bottom:1px solid rgba(74,104,240,.1)}
+html[data-theme=light] .tbtn{background:rgba(74,104,240,.04);border-color:rgba(74,104,240,.12)}
+html[data-theme=light] .mc{background:#fff;border-color:rgba(74,104,240,.1)}
+html[data-theme=light] .mc::before{background:linear-gradient(90deg,transparent,rgba(74,104,240,.3) 40%,transparent)}
+html[data-theme=light] .hd{color:rgba(90,112,153,.8)}
 
 </style>
 <script>
