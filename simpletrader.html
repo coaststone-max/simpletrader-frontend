@@ -7814,14 +7814,23 @@ function renderAccounts(){
 })();
 
 // Proxy call — token stays on the server
-async function maProxy(base, path, method, body, region){
+async function maProxy(base, path, method, body, region, _retry){
   const res = await fetch('/api/mt5/proxy', {
     method: 'POST',
     headers: {'Content-Type':'application/json'},
     body: JSON.stringify({base, path, method: method||'GET', body: body||null, region: region||MT5.region||'london'}),
   });
   const data = await res.json().catch(()=>({}));
-  if(!res.ok) throw new Error(data.message || data.error || `HTTP ${res.status}`);
+  if(!res.ok){
+    // Timeout — retry once automatically (cold-start on MetaApi side)
+    if((res.status===504 || data.timeout) && !_retry){
+      await new Promise(r=>setTimeout(r,2500));
+      return maProxy(base, path, method, body, region, true);
+    }
+    const msg = data.error || data.message || data.details || `HTTP ${res.status}`;
+    if(res.status===504) throw new Error('MetaApi no respondió a tiempo. Inténtalo de nuevo en unos segundos.');
+    throw new Error(msg);
+  }
   return data;
 }
 

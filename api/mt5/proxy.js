@@ -16,14 +16,21 @@
  * base = 'data' → https://{region}.mt-client-api-v1.agiliumtrade.ai
  *
  * Required env var:
- *   METAAPI_TOKEN — your MetaApi auth token (Settings → API Access in app.metaapi.cloud)
+ *   METAAPI_TOKEN — MetaApi auth token (app.metaapi.cloud → API Access)
+ *
+ * Note: Vercel Hobby functions timeout at 10 s.
+ *       We use an 8 s AbortSignal so errors are clear, not opaque 504s.
  */
 
 const TOKEN = process.env.METAAPI_TOKEN;
 
+// MetaApi REST base URLs
 const PROV_BASE = 'https://mt-provisioning-api-v1.agiliumtrade.agiliumtrade.ai';
 const DATA_BASE = (region) =>
   `https://${region || 'london'}.mt-client-api-v1.agiliumtrade.ai`;
+
+// 8-second timeout — leaves 2 s margin before Vercel's 10-s hard cut
+const FETCH_TIMEOUT_MS = 8_000;
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin',  '*');
@@ -60,9 +67,13 @@ export default async function handler(req, res) {
   const baseUrl = base === 'prov' ? PROV_BASE : DATA_BASE(region);
   const url = `${baseUrl}${path}`;
 
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+
   try {
     const fetchOpts = {
       method,
+      signal: controller.signal,
       headers: {
         'auth-token':   TOKEN,
         'Content-Type': 'application/json',
@@ -76,6 +87,8 @@ export default async function handler(req, res) {
     console.log(`[mt5/proxy] ${method} ${base}:${path}`);
 
     const upstream = await fetch(url, fetchOpts);
+    clearTimeout(timer);
+
     const text = await upstream.text();
 
     // Try JSON, fall back to raw text
@@ -86,7 +99,18 @@ export default async function handler(req, res) {
     res.status(upstream.ok ? 200 : upstream.status).json(data);
 
   } catch (err) {
+    clearTimeout(timer);
     console.error('[mt5/proxy] Error:', err.message);
+
+    // AbortError = our 8-s timeout fired
+    if (err.name === 'AbortError') {
+      return res.status(504).json({
+        ok:      false,
+        error:   'MetaApi tardó demasiado en responder (>8s). Inténtalo de nuevo en unos segundos.',
+        timeout: true,
+      });
+    }
+
     res.status(500).json({ ok: false, error: err.message });
   }
 }
