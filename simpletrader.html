@@ -3098,6 +3098,353 @@ try{
   .ls2-body{padding:24px 14px 40px}
 }
 </style>
+
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   SIMPLETRADER X — PREMIUM APP DESIGN v4
+   Dark SaaS · Data-Dense · Glassmorphism
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Base rendering ── */
+body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+
+/* ── Topbar — frosted glass ── */
+.topbar{
+  background:rgba(7,9,15,.94) !important;
+  backdrop-filter:blur(24px) !important;
+  -webkit-backdrop-filter:blur(24px) !important;
+  border-bottom:1px solid rgba(255,255,255,.055) !important;
+  box-shadow:0 1px 24px rgba(0,0,0,.5) !important;
+  height:52px !important;
+  min-height:52px !important;
+}
+.tb-t{font-size:13px !important;font-weight:700 !important;color:#EEF2FF !important;letter-spacing:-.2px !important}
+.tb-clk{font-size:11px !important;font-family:var(--mono) !important;color:#2A3A56 !important;letter-spacing:.5px !important}
+
+/* ── Sidebar ── */
+.sb{
+  background:#06080E !important;
+  border-right:1px solid rgba(255,255,255,.05) !important;
+  width:218px !important;
+  min-width:218px !important;
+}
+.sb.col{width:54px !important;min-width:54px !important}
+.sb-logo{
+  padding:0 13px !important;
+  height:52px !important;
+  border-bottom:1px solid rgba(255,255,255,.05) !important;
+  background:rgba(0,0,0,.18) !important;
+}
+.sb-mark{
+  background:linear-gradient(135deg,#4f6ef7,#7c5bf6) !important;
+  border-radius:8px !important;
+  box-shadow:0 3px 10px rgba(91,124,247,.38) !important;
+  width:26px !important;height:26px !important;
+  font-size:10px !important;
+}
+.sb-mark:hover{border-radius:50% !important}
+
+/* Nav items */
+.ni{
+  border-radius:8px !important;
+  padding:7px 10px !important;
+  font-size:12px !important;
+  color:rgba(126,149,192,.7) !important;
+  transition:all .15s ease !important;
+  border:1px solid transparent !important;
+  margin:0 !important;
+}
+.ni:hover{
+  background:rgba(255,255,255,.048) !important;
+  color:#C8D4EE !important;
+  border-color:rgba(255,255,255,.055) !important;
+}
+.ni.act{
+  background:linear-gradient(92deg,rgba(91,124,247,.18),rgba(91,124,247,.06)) !important;
+  color:#8AABFF !important;
+  border:1px solid rgba(91,124,247,.25) !important;
+  border-left:2.5px solid #5B7CF7 !important;
+  padding-left:8px !important;
+  font-weight:600 !important;
+}
+.ni svg{opacity:.45 !important;width:14px !important;height:14px !important;stroke:#7E95C0}
+.ni:hover svg,.ni.act svg{opacity:.8 !important}
+.ni.act svg{stroke:#8AABFF !important}
+.ni-lbl{font-size:12px !important}
+
+/* Section group labels */
+.sg{
+  font-size:8.5px !important;
+  letter-spacing:1.4px !important;
+  color:rgba(61,80,117,.6) !important;
+  padding:16px 12px 5px !important;
+  font-weight:700 !important;
+  text-transform:uppercase !important;
+}
+
+/* Sidebar bottom */
+.sb-foot{
+  background:rgba(0,0,0,.15) !important;
+  border-top:1px solid rgba(255,255,255,.05) !important;
+  padding:10px !important;
+}
+.uav{
+  background:linear-gradient(135deg,#4f6ef7,#7c5bf6) !important;
+  box-shadow:0 2px 8px rgba(91,124,247,.3) !important;
+}
+.u-name{font-size:11px !important;font-weight:600 !important;color:#C8D4EE !important}
+.uplan{font-size:8px !important;font-weight:700 !important;color:#5B7CF7 !important;letter-spacing:.5px !important;text-transform:uppercase !important}
+
+/* ── KPI Metric Cards ── */
+.mc{
+  background:rgba(10,13,21,.98) !important;
+  border:1px solid rgba(255,255,255,.07) !important;
+  border-radius:12px !important;
+  padding:16px !important;
+  position:relative !important;
+  overflow:hidden !important;
+  transition:border-color .2s,box-shadow .2s,transform .15s !important;
+  cursor:default !important;
+}
+.mc:hover{
+  border-color:rgba(91,124,247,.28) !important;
+  box-shadow:0 8px 32px rgba(0,0,0,.45),0 0 0 1px rgba(91,124,247,.08) inset !important;
+  transform:translateY(-1px) !important;
+}
+/* Gradient top line */
+.mc::before{
+  content:'' !important;
+  position:absolute !important;
+  top:0 !important;left:0 !important;right:0 !important;
+  height:1.5px !important;
+  background:linear-gradient(90deg,transparent,rgba(91,124,247,.65) 35%,rgba(139,92,246,.5) 65%,transparent) !important;
+}
+/* Corner ambient glow */
+.mc::after{
+  content:'' !important;
+  position:absolute !important;
+  top:-30px !important;right:-20px !important;
+  width:90px !important;height:90px !important;
+  background:radial-gradient(circle,rgba(91,124,247,.055) 0%,transparent 65%) !important;
+  pointer-events:none !important;
+}
+/* Card icon */
+.mc-icon{
+  width:30px !important;height:30px !important;
+  border-radius:8px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  margin-bottom:10px !important;
+}
+/* Label */
+.ml{
+  font-size:9px !important;
+  font-weight:700 !important;
+  color:#2A3A56 !important;
+  letter-spacing:1.1px !important;
+  text-transform:uppercase !important;
+  margin-bottom:4px !important;
+}
+/* Value */
+.mv{
+  font-size:23px !important;
+  font-weight:800 !important;
+  letter-spacing:-1px !important;
+  line-height:1.15 !important;
+  font-family:var(--mono) !important;
+  color:#EEF2FF !important;
+  margin-top:0 !important;
+}
+/* Sub text */
+.ms{
+  font-size:10px !important;
+  color:#2A3A56 !important;
+  margin-top:5px !important;
+  font-weight:500 !important;
+  display:flex !important;
+  align-items:center !important;
+  gap:4px !important;
+}
+
+/* ── Content Cards ── */
+.card{
+  background:rgba(10,13,21,.98) !important;
+  border:1px solid rgba(255,255,255,.065) !important;
+  border-radius:12px !important;
+  padding:18px !important;
+  transition:border-color .2s,box-shadow .2s !important;
+}
+.card:hover{
+  border-color:rgba(91,124,247,.18) !important;
+  box-shadow:0 4px 28px rgba(0,0,0,.38) !important;
+}
+
+/* ── Section headers ── */
+.hd{
+  font-size:9.5px !important;
+  font-weight:700 !important;
+  color:rgba(61,80,117,.9) !important;
+  letter-spacing:1px !important;
+  text-transform:uppercase !important;
+  margin-bottom:14px !important;
+  display:flex !important;
+  align-items:center !important;
+  gap:7px !important;
+  padding-bottom:11px !important;
+  border-bottom:1px solid rgba(255,255,255,.045) !important;
+}
+.hd svg{opacity:.6 !important;stroke:#5B7CF7 !important;color:#5B7CF7 !important}
+.hd-r{margin-left:auto !important;display:flex !important;align-items:center !important;gap:5px !important}
+
+/* ── Dashboard Hero ── */
+#dash-hero{
+  padding:4px 0 18px !important;
+  border-bottom:1px solid rgba(255,255,255,.04) !important;
+  margin-bottom:18px !important;
+}
+#dash-greeting{
+  font-size:21px !important;
+  font-weight:800 !important;
+  letter-spacing:-.5px !important;
+  line-height:1.2 !important;
+  background:linear-gradient(125deg,#EEF2FF 20%,rgba(138,171,255,.8) 100%) !important;
+  -webkit-background-clip:text !important;
+  -webkit-text-fill-color:transparent !important;
+  background-clip:text !important;
+}
+#dash-date-line{
+  font-size:11.5px !important;
+  color:#253349 !important;
+  margin-top:4px !important;
+  font-weight:500 !important;
+  letter-spacing:.1px !important;
+}
+
+/* ── AI Insight Banner ── */
+#dash-ai-banner{
+  background:linear-gradient(105deg,rgba(91,124,247,.1) 0%,rgba(139,92,246,.065) 55%,rgba(91,124,247,.04) 100%) !important;
+  border:1px solid rgba(91,124,247,.22) !important;
+  border-radius:12px !important;
+  padding:13px 18px !important;
+  margin-bottom:16px !important;
+  position:relative !important;
+  overflow:hidden !important;
+  transition:border-color .2s,background .2s !important;
+}
+#dash-ai-banner::before{
+  content:'' !important;
+  position:absolute !important;
+  top:0 !important;left:0 !important;right:0 !important;
+  height:1px !important;
+  background:linear-gradient(90deg,transparent,rgba(91,124,247,.55),rgba(139,92,246,.4),transparent) !important;
+}
+#dash-ai-banner:hover{
+  border-color:rgba(91,124,247,.38) !important;
+  background:linear-gradient(105deg,rgba(91,124,247,.14) 0%,rgba(139,92,246,.1) 55%,rgba(91,124,247,.06) 100%) !important;
+}
+
+/* ── Content spacing ── */
+.content{padding:18px 22px 32px !important}
+.g4{gap:10px !important;margin-bottom:12px !important}
+.g2{gap:10px !important;margin-bottom:12px !important}
+.rstrip{margin-bottom:14px !important;gap:5px !important}
+
+/* ── Section title ── */
+.sec-header{margin-bottom:18px !important;padding-bottom:14px !important;border-bottom:1px solid rgba(255,255,255,.05) !important}
+.sec-title{font-size:18px !important;font-weight:800 !important;color:#EEF2FF !important;letter-spacing:-.4px !important}
+.sec-sub{font-size:11px !important;color:#2A3A56 !important;margin-top:2px !important}
+
+/* ── Primary Button ── */
+.btn-pri{
+  background:linear-gradient(135deg,#4f6ef7 0%,#5B7CF7 60%,#6d6af5 100%) !important;
+  border-radius:9px !important;
+  font-size:13px !important;
+  font-weight:700 !important;
+  letter-spacing:-.1px !important;
+  box-shadow:0 4px 16px rgba(79,110,247,.28),0 1px 0 rgba(255,255,255,.1) inset !important;
+  transition:all .15s ease !important;
+  border:none !important;
+}
+.btn-pri:not(:disabled):hover{
+  filter:brightness(1.1) !important;
+  transform:translateY(-1px) !important;
+  box-shadow:0 8px 24px rgba(79,110,247,.4),0 1px 0 rgba(255,255,255,.12) inset !important;
+}
+.btn-pri:active{transform:translateY(0) !important;filter:brightness(.95) !important}
+
+/* ── Secondary / small buttons ── */
+.btn{
+  font-size:10.5px !important;
+  padding:5px 11px !important;
+  border-radius:6px !important;
+  font-weight:600 !important;
+  cursor:pointer !important;
+  transition:all .15s !important;
+  border:1px solid rgba(255,255,255,.1) !important;
+  background:rgba(255,255,255,.04) !important;
+  color:#7E95C0 !important;
+}
+.btn:hover{background:rgba(255,255,255,.08) !important;color:#EEF2FF !important}
+.btn.sm{padding:3px 9px !important;font-size:10px !important}
+
+/* ── Tables ── */
+.tw table{font-size:11.5px !important;border-collapse:collapse !important;width:100% !important}
+.tw th{
+  font-size:8.5px !important;
+  letter-spacing:.9px !important;
+  color:#2A3A56 !important;
+  font-weight:700 !important;
+  text-transform:uppercase !important;
+  border-bottom:1px solid rgba(255,255,255,.06) !important;
+  padding:6px 8px !important;
+  white-space:nowrap !important;
+}
+.tw td{
+  padding:7px 8px !important;
+  border-bottom:1px solid rgba(255,255,255,.03) !important;
+  color:#7E95C0 !important;
+  transition:color .12s !important;
+}
+.tw tr:hover td{
+  background:rgba(91,124,247,.045) !important;
+  color:#C8D4EE !important;
+}
+
+/* ── Badges ── */
+.bdg{font-size:9.5px !important;padding:3px 8px !important;border-radius:5px !important;font-weight:700 !important}
+
+/* ── Scrollbars ── */
+::-webkit-scrollbar{width:3px;height:3px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(91,124,247,.18);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:rgba(91,124,247,.38)}
+
+/* ── Section entry animation ── */
+.sec.act{animation:appSecIn .22s cubic-bezier(.4,0,.2,1) both !important}
+@keyframes appSecIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Glassmorphism card variant ── */
+.card-glass{
+  background:rgba(10,13,21,.85) !important;
+  backdrop-filter:blur(20px) !important;
+  -webkit-backdrop-filter:blur(20px) !important;
+  border:1px solid rgba(255,255,255,.07) !important;
+  border-radius:12px !important;
+}
+
+/* ── Responsive ── */
+@media(max-width:900px){
+  .content{padding:14px 14px 80px !important}
+  #dash-kpi.g4{grid-template-columns:repeat(2,1fr) !important}
+  .g2{grid-template-columns:1fr !important}
+}
+@media(max-width:500px){
+  .content{padding:12px 10px 80px !important}
+  .mv{font-size:20px !important}
+  .mc{padding:13px !important}
+}
+</style>
 </head>
 <body>
 <div id="tc"></div>
