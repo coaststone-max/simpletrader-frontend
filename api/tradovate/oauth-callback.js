@@ -1,25 +1,33 @@
 /**
  * /api/tradovate/oauth-callback.js
  *
- * Recibe el código de autorización de Tradovate, lo intercambia por un token,
- * obtiene la lista de cuentas y lo guarda todo en Supabase (user_data.payload).
+ * Endpoint único para el flujo OAuth de Tradovate (inicio + callback).
+ *
+ * Modo START   → GET ?action=start&user_id=X[&mode=demo]
+ *   Redirige al usuario a trader.tradovate.com/oauth para que se autentique.
+ *   Si TRADOVATE_CID no está configurado, responde 503 {pending:true}.
+ *
+ * Modo CALLBACK → GET ?code=XXX&state=USER_ID  (Tradovate redirige aquí)
+ *   Intercambia el code por access_token, obtiene cuentas,
+ *   guarda en Supabase y redirige al app con ?oauth_success=tradovate.
  *
  * Flujo completo:
- *   1. Usuario hace clic en "Conectar con Tradovate" en el UI
- *   2. → oauth-start.js redirige a trader.tradovate.com/oauth
- *   3. Usuario introduce sus credenciales EN TRADOVATE (nunca en SimpleTrader)
- *   4. Tradovate redirige aquí con ?code=XXX&state=USER_ID
- *   5. Intercambiamos el code por un access_token
- *   6. Obtenemos la lista de cuentas con ese token
- *   7. Guardamos token + cuentas en Supabase
- *   8. Redirigimos al usuario de vuelta a la app con ?oauth_success=tradovate
+ *   1. Usuario pulsa "Conectar con Tradovate" → startTradovateOAuth() en el UI
+ *   2. → /api/tradovate/oauth-callback?action=start&user_id=X  (este archivo)
+ *   3. → 302 a trader.tradovate.com/oauth (Tradovate gestiona el login)
+ *   4. Tradovate → 302 a /api/tradovate/oauth-callback?code=X&state=USER_ID
+ *   5. Intercambiamos code → token, guardamos en Supabase
+ *   6. → 302 a simpletrader.app?oauth_success=tradovate
  *
  * Env vars necesarias:
- *   TRADOVATE_CID          — Client ID de la app registrada
- *   TRADOVATE_SEC          — Client Secret de la app registrada
+ *   TRADOVATE_CID          — Client ID (público en OAuth, no es secreto)
+ *   TRADOVATE_SEC          — Client Secret (nunca sale del servidor)
  *   SUPABASE_URL           — URL de tu proyecto Supabase
  *   SUPABASE_SERVICE_KEY   — Service key (bypasa RLS, solo en servidor)
  *   APP_URL                — URL base (ej. https://simpletrader.app)
+ *
+ * ⚠️  Activar en enero: añadir TRADOVATE_CID + TRADOVATE_SEC en
+ *     Vercel → Settings → Environment Variables
  */
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
@@ -39,9 +47,42 @@ function sbHeaders() {
 
 export default async function handler(req, res) {
   const origin = process.env.APP_URL || `https://${req.headers.host}`;
+  const { action, user_id, mode, code, state: userId, error: oauthError, _probe } = req.query;
 
-  // ── Error enviado por Tradovate (usuario cancela, etc.) ─────────────────────
-  const { code, state: userId, error: oauthError } = req.query;
+  // ── MODO START: redirigir al usuario a Tradovate ────────────────────────────
+  if (action === 'start') {
+    if (!CID) {
+      return res.status(503).json({
+        ok:      false,
+        pending: true,
+        error:   'OAuth no configurado aún. Añade TRADOVATE_CID en Vercel → Settings → Environment Variables.',
+        docs:    'https://trader.tradovate.com/account/developer',
+      });
+    }
+    if (!user_id) return res.status(400).json({ ok: false, error: 'Falta user_id' });
+
+    const redirectUri = `${origin}/api/tradovate/oauth-callback`;
+    const params = new URLSearchParams({
+      response_type: 'code',
+      client_id:     CID,
+      redirect_uri:  redirectUri,
+      state:         user_id,
+    });
+    const baseAuth = mode === 'demo'
+      ? 'https://trader-d.tradovateapi.com/oauth'
+      : 'https://trader.tradovate.com/oauth';
+
+    console.log(`[OAuth start] user=${user_id} → ${baseAuth}`);
+    return res.redirect(302, `${baseAuth}?${params}`);
+  }
+
+  // ── MODO PROBE: solo verificar si CID está configurado ─────────────────────
+  if (_probe) {
+    return res.status(CID ? 200 : 503).json({ ok: !!CID, pending: !CID });
+  }
+
+  // ── MODO CALLBACK: Tradovate redirige aquí con code ────────────────────────
+  // Error enviado por Tradovate (usuario cancela, etc.)
 
   if (oauthError) {
     console.warn('[OAuth callback] Error de Tradovate:', oauthError);

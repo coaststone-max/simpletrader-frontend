@@ -29,7 +29,6 @@
     "api/webhook/tv.js":                    {"maxDuration": 30},
     "api/tradovate/accounts.js":            {"maxDuration": 20},
     "api/tradovate/exec.js":               {"maxDuration": 15},
-    "api/tradovate/oauth-start.js":        {"maxDuration": 10},
     "api/tradovate/oauth-callback.js":     {"maxDuration": 20},
     "api/stripe/webhook.js":                {"maxDuration": 10},
     "api/stripe/create-checkout.js":        {"maxDuration": 10},
@@ -38,7 +37,6 @@
     "api/notifications/push.js":            {"maxDuration": 10},
     "api/notifications/email.js":           {"maxDuration": 15},
     "api/backtest/candles.js":              {"maxDuration": 15},
-    "api/mt5/tick.js":                      {"maxDuration": 10},
     "api/mt5/manage.js":                    {"maxDuration": 10}
   }
 }
