@@ -9886,43 +9886,26 @@ function renderLive(){
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px">
       <div>
         <div style="font-size:14px;font-weight:700;color:var(--tx)">Cuentas Live — MT4 / MT5</div>
-        <div style="font-size:11px;color:var(--tx3);margin-top:2px">Conexión en tiempo real vía Expert Advisor · Datos cada 5 segundos</div>
+        <div style="font-size:11px;color:var(--tx3);margin-top:2px">MetaApi · Conexión directa sin EA · Datos en tiempo real</div>
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
         ${liveAccounts.length?`<button class="btn sm" onclick="openLegacyCsvImport()" style="opacity:.6">📂 Importar CSV</button>`:''}
-        <button class="btn bc" onclick="openLiveWizard()">
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="margin-right:5px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          Nueva conexión EA
-        </button>
+        ${MT5.connected
+          ? `<button class="btn sm" onclick="mt5Sync()" id="mt5-sync-btn" style="background:rgba(0,168,255,.12);border-color:rgba(0,168,255,.35);color:#00a8ff">↻ Sincronizar</button>
+             <button class="btn br sm" onclick="disconnectMT5()">Desconectar</button>`
+          : `<button class="btn bc" onclick="openMT5Modal()" style="background:rgba(0,168,255,.15);border-color:rgba(0,168,255,.4);color:#00a8ff">
+               <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="margin-right:5px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+               Conectar MT5
+             </button>`
+        }
       </div>
     </div>
 
-    <!-- How it works banner (shown only if no connections) -->
-    ${!connections.length?`<div style="background:linear-gradient(135deg,rgba(91,124,247,.08),rgba(139,92,246,.06));border:1px solid rgba(91,124,247,.2);border-radius:14px;padding:20px 24px;margin-bottom:16px;position:relative;overflow:hidden">
-      <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#5B7CF7,#8B5CF6,transparent)"></div>
-      <div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:12px;display:flex;align-items:center;gap:8px">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--cy)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5l3 3"/></svg>
-        ¿Cómo funciona la conexión en tiempo real?
-      </div>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
-        ${[
-          ['1','Genera token','Haz clic en "Nueva conexión EA" y genera tu token único','#5B7CF7'],
-          ['2','Descarga el EA','Descarga el Expert Advisor para MT4 o MT5','#8B5CF6'],
-          ['3','Instala & configura','Pega el token en los parámetros del EA en MetaTrader','#22C55E'],
-          ['4','¡Conectado!','Tu cuenta aparece online con datos en tiempo real','#F59E0B']
-        ].map(([n,t,d,c])=>`<div style="text-align:center;padding:14px 10px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:10px">
-          <div style="width:28px;height:28px;border-radius:50%;background:${c}22;border:1.5px solid ${c}55;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:${c};margin:0 auto 8px">${n}</div>
-          <div style="font-size:11px;font-weight:700;color:var(--tx);margin-bottom:4px">${t}</div>
-          <div style="font-size:10px;color:var(--tx3);line-height:1.5">${d}</div>
-        </div>`).join('')}
-      </div>
-      <div style="margin-top:14px;text-align:center">
-        <button class="btn-pri" style="width:auto;padding:10px 28px;font-size:12px" onclick="openLiveWizard()">Conectar mi primera cuenta →</button>
-      </div>
-    </div>`:''}
+    <!-- MetaApi MT5 block (always shown) -->
+    ${renderMT5Block()}
 
-    <!-- Connection cards -->
-    ${connections.length?connections.map(c=>connCard(c)).join(''):''}
+    <!-- EA connection cards (legacy) -->
+    ${connections.length?`<div style="margin-top:${MT5.connected?'16':'0'}px">${connections.map(c=>connCard(c)).join('')}</div>`:''}
 
     <!-- Legacy CSV accounts -->
     ${liveAccounts.length?`<div style="margin-top:20px">
