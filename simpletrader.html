@@ -4077,7 +4077,13 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
         <button class="fb" onclick="mgrFilter('expense',this)">💳 Otros</button>
       </div>
       <div id="mgr-tx-list"></div>
-      <div class="card" style="margin-top:11px"><div class="hd">Flujo Mensual — 6 meses</div><div id="mgr-bars-svg" style="padding:8px 4px 4px"></div></div>
+      <div class="card" style="margin-top:11px">
+        <div class="hd">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+          Flujo Mensual — 6 meses
+        </div>
+        <div id="mgr-bars-svg" style="padding:4px 0 0"></div>
+      </div>
     </div>
     <div style="display:flex;flex-direction:column;gap:11px">
       <div class="mgr-sum">
@@ -10502,30 +10508,120 @@ function svgDonut(containerId, legendId, data) {
 function svgBarChart(containerId, labels, datasets, H) {
   var el = document.getElementById(containerId);
   if (!el) return;
-  H = H || 120;
-  var W = el.offsetWidth || 400;
-  var pl=8,pr=8,pt=8,pb=20,gw=W-pl-pr,gh=H-pt-pb;
-  var allV=[]; datasets.forEach(function(ds){allV=allV.concat(ds.data);});
-  var mn=Math.min.apply(null,[0].concat(allV)),mx=Math.max.apply(null,[0].concat(allV)),rng=mx-mn||1;
+  H = H || 160;
+  var W = el.offsetWidth || 440;
+  var pl=46, pr=10, pt=22, pb=26;
+  var gw=W-pl-pr, gh=H-pt-pb;
+  var allV=[]; datasets.forEach(function(ds){allV=allV.concat(ds.data.filter(function(v){return v!==0;}));});
+  if(!allV.length)allV=[0];
+  var mn=Math.min.apply(null,[0].concat(allV));
+  var mx=Math.max.apply(null,[0].concat(allV));
+  /* add 10% headroom above/below so labels don't clip */
+  var pad=(mx-mn)*0.15||100;
+  if(mx>0)mx+=pad; if(mn<0)mn-=pad;
+  var rng=mx-mn||1;
   var zy=pt+gh-((0-mn)/rng)*gh;
-  var n=labels.length, nD=datasets.length, gW=gw/n, bW=Math.max(3,(gW/nD)-2);
-  
-  var svg='<svg width="100%" height="'+H+'" viewBox="0 0 '+W+' '+H+'">';
-  // Zero line
-  svg+='<line x1="'+pl+'" y1="'+zy.toFixed(1)+'" x2="'+(pl+gw)+'" y2="'+zy.toFixed(1)+'" stroke="rgba(255,255,255,.1)" stroke-width="1"/>';
+  var n=labels.length, nD=datasets.length;
+  var gW=gw/n;
+  /* Bar width: fill ~70% of each group slot, split by dataset count */
+  var groupFill=0.72, gap=3;
+  var totalBW=gW*groupFill, bW=Math.max(8,(totalBW-gap*(nD-1))/nD);
+  var uid='bc_'+containerId.replace(/[^a-z0-9]/gi,'_');
+
+  var svg='<svg width="100%" height="'+H+'" viewBox="0 0 '+W+' '+H+'" style="overflow:visible;display:block">';
+
+  /* ── Defs: gradients per dataset ── */
+  svg+='<defs>';
+  datasets.forEach(function(ds,di){
+    var c=ds.color||'#5B7CF7';
+    var hasNeg=ds.data.some(function(v){return v<0;});
+    /* Positive gradient: bright at top → fade at bottom */
+    svg+='<linearGradient id="'+uid+'_p'+di+'" x1="0" y1="0" x2="0" y2="1">';
+    svg+='<stop offset="0%" stop-color="'+c+'" stop-opacity="1"/>';
+    svg+='<stop offset="100%" stop-color="'+c+'" stop-opacity="0.45"/>';
+    svg+='</linearGradient>';
+    /* Negative gradient: fade at top → bright at bottom (tip) */
+    svg+='<linearGradient id="'+uid+'_n'+di+'" x1="0" y1="0" x2="0" y2="1">';
+    svg+='<stop offset="0%" stop-color="'+c+'" stop-opacity="0.45"/>';
+    svg+='<stop offset="100%" stop-color="'+c+'" stop-opacity="0.92"/>';
+    svg+='</linearGradient>';
+    /* Glow filter */
+    svg+='<filter id="'+uid+'_glow'+di+'" x="-50%" y="-50%" width="200%" height="200%">';
+    svg+='<feGaussianBlur stdDeviation="3" result="blur"/>';
+    svg+='<feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>';
+    svg+='</filter>';
+  });
+  svg+='</defs>';
+
+  /* ── Horizontal grid lines ── */
+  var nLines=4;
+  for(var li=0;li<=nLines;li++){
+    var yLine=pt+(gh/nLines)*li;
+    var val=mx-(rng/nLines)*li;
+    /* skip values too close to zero */
+    if(Math.abs(val)<rng*0.04)continue;
+    svg+='<line x1="'+pl+'" y1="'+yLine.toFixed(1)+'" x2="'+(pl+gw)+'" y2="'+yLine.toFixed(1)+'" stroke="rgba(255,255,255,.045)" stroke-width="1"/>';
+    /* Y-axis tick labels */
+    var absV=Math.abs(val);
+    var fmt=(absV>=1000?(absV/1000).toFixed(1)+'k':Math.round(absV));
+    var prefix=val>=0?'':'−';
+    svg+='<text x="'+(pl-6)+'" y="'+(yLine+3.5).toFixed(1)+'" text-anchor="end" font-size="7.5" fill="#2A3A56" font-family="monospace,ui-monospace">'+prefix+'€'+fmt+'</text>';
+  }
+
+  /* ── Zero line ── */
+  svg+='<line x1="'+pl+'" y1="'+zy.toFixed(1)+'" x2="'+(pl+gw)+'" y2="'+zy.toFixed(1)+'" stroke="rgba(255,255,255,.14)" stroke-width="1" stroke-dasharray="4 3"/>';
+
+  /* ── Bars ── */
   datasets.forEach(function(ds,di){
     ds.data.forEach(function(v,i){
-      var x=pl+i*gW+di*(bW+1), bh=Math.abs((v/rng)*gh), y=v>=0?zy-bh:zy;
-      var r=2;
-      svg+='<rect x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+bW.toFixed(1)+'" height="'+Math.max(1,bh).toFixed(1)+'" fill="'+ds.color+'" opacity=".8" rx="'+r+'"/>';
+      if(v===0)return;
+      /* center the bar group */
+      var groupCX=pl+i*gW+gW/2;
+      var allBarsW=bW*nD+gap*(nD-1);
+      var startX=groupCX-allBarsW/2+di*(bW+gap);
+      var bh=Math.abs((v/rng)*gh);
+      var y=v>=0?zy-bh:zy;
+      var r=Math.min(4,bW*0.25);
+      var gradId=v>=0?(uid+'_p'+di):(uid+'_n'+di);
+      /* Shadow glow bar (subtle) */
+      svg+='<rect x="'+(startX+1).toFixed(1)+'" y="'+Math.max(pt,y).toFixed(1)+'" width="'+(bW-2).toFixed(1)+'" height="'+Math.max(2,bh-2).toFixed(1)+'" fill="'+ds.color+'" opacity="0.12" rx="'+r+'" filter="url(#'+uid+'_glow'+di+')"/>';
+      /* Main bar */
+      svg+='<rect x="'+startX.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+bW.toFixed(1)+'" height="'+Math.max(2,bh).toFixed(1)+'" fill="url(#'+gradId+')" rx="'+r+'" style="transition:opacity .15s"/>';
+      /* Top highlight line on positive bars */
+      if(v>0){
+        svg+='<rect x="'+startX.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+bW.toFixed(1)+'" height="1.5" fill="'+ds.color+'" opacity="0.6" rx="1"/>';
+      }
+      /* Value label */
+      var absV=Math.abs(v);
+      var fmtV=(absV>=1000?'€'+(absV/1000).toFixed(1)+'k':'€'+Math.round(absV));
+      var lblY=v>=0?y-5:y+bh+11;
+      /* clamp so it doesn't clip at top */
+      if(lblY<pt+8)lblY=y+bh+11;
+      svg+='<text x="'+(startX+bW/2).toFixed(1)+'" y="'+lblY.toFixed(1)+'" text-anchor="middle" font-size="7.5" fill="'+ds.color+'" opacity="0.75" font-family="monospace,ui-monospace" font-weight="600">'+fmtV+'</text>';
     });
   });
-  // X labels
-  var step=Math.ceil(n/6);
+
+  /* ── X-axis labels ── */
+  var step=Math.max(1,Math.ceil(n/8));
   labels.forEach(function(l,i){
-    if(i%step!==0)return;
-    svg+='<text x="'+(pl+i*gW+gW/2).toFixed(1)+'" y="'+(H-4)+'" text-anchor="middle" font-size="7.5" fill="#475569">'+l+'</text>';
+    if(n>8&&i%step!==0)return;
+    svg+='<text x="'+(pl+i*gW+gW/2).toFixed(1)+'" y="'+(H-7)+'" text-anchor="middle" font-size="9" fill="#3D5075" font-family="sans-serif,ui-sans-serif">'+l+'</text>';
   });
+
+  /* ── Inline legend (top-right) ── */
+  if(nD>1){
+    var lx=pl+gw-1;
+    for(var ld=nD-1;ld>=0;ld--){
+      var ds2=datasets[ld];
+      if(!ds2.label)continue;
+      var lw=ds2.label.length*5.5+16;
+      lx-=lw;
+      svg+='<rect x="'+lx+'" y="5" width="7" height="7" rx="2" fill="'+ds2.color+'" opacity="0.85"/>';
+      svg+='<text x="'+(lx+10)+'" y="12" font-size="7.5" fill="#3D5075" font-family="sans-serif,ui-sans-serif">'+ds2.label+'</text>';
+      lx-=6;
+    }
+  }
+
   svg+='</svg>';
   el.innerHTML=svg;
 }
@@ -10558,8 +10654,11 @@ function initPortfolioSVG() {
 function initMgrSVG() {
   svgBarChart('mgr-bars-svg',
     ['Nov','Dic','Ene','Feb','Mar','Abr'],
-    [{data:[0,1800,3200,2400,4100,3340],color:'#4F6EF7'},{data:[0,-600,-980,-720,-1240,-890],color:'#EF4444'}],
-    120
+    [
+      {data:[0,1800,3200,2400,4100,3340], color:'#5B7CF7', label:'Ingresos'},
+      {data:[0,-600,-980,-720,-1240,-890], color:'#EF4444', label:'Gastos'}
+    ],
+    168
   );
   // Mgr pie donut
   svgDonut('mgr-pie-svg','',[ 
