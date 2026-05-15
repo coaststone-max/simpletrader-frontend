@@ -713,6 +713,36 @@ tbody tr:last-child td{border-bottom:none}
 
   /* Replicador accounts column */
   div[style*="grid-template-columns:1fr 1fr;gap:9px"]{grid-template-columns:1fr!important}
+
+  /* AI Coach — score card stacks above insights */
+  div[style*="grid-template-columns:240px 1fr"]{grid-template-columns:1fr!important}
+  /* Coach insights — single column */
+  #j-ana-content div[style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr!important}
+
+  /* Analytics overview — charts stack */
+  #j-ana-content div[style*="grid-template-columns:1fr 1fr;gap:10px"]{grid-template-columns:1fr!important}
+
+  /* Backtesting — chart full width, sidebar below */
+  div[style*="grid-template-columns:1fr 274px"]{grid-template-columns:1fr!important}
+  #bt-chart-wrap{height:300px!important}
+  .bt-topbar{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .bt-bar-r1,.bt-bar-r2{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px}
+
+  /* Risk section */
+  div[style*="grid-template-columns:1fr 1fr;gap:9px"]{grid-template-columns:1fr!important}
+
+  /* Broker import modal */
+  #broker-import-modal > div{max-height:95vh!important;margin:16px!important;border-radius:14px!important}
+
+  /* Journal analytics tabs — scroll */
+  #j-ana-tabs{flex-wrap:nowrap!important;overflow-x:auto!important;-webkit-overflow-scrolling:touch!important;padding-bottom:3px;scrollbar-width:none}
+
+  /* Manager grid */
+  div[style*="grid-template-columns:1fr 330px"]{grid-template-columns:1fr!important}
+  div[style*="grid-template-columns:1fr 310px"]{grid-template-columns:1fr!important}
+
+  /* Portfolio donut + legend */
+  div[style*="display:flex;align-items:center;gap:12px"]{flex-direction:column!important;align-items:center!important}
 }
 
 @media (max-width: 480px) {
@@ -3955,6 +3985,7 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
       <button class="fb" id="jat-daytime"  onclick="renderAnalytics('daytime',this)">Día / Hora</button>
       <button class="fb" id="jat-symbol"   onclick="renderAnalytics('symbol',this)">Instrumento</button>
       <button class="fb" id="jat-setup"    onclick="renderAnalytics('setup',this)">Setup</button>
+      <button class="fb" id="jat-coach"    onclick="renderAnalytics('coach',this)" style="background:linear-gradient(135deg,rgba(91,124,247,.18),rgba(139,92,246,.15));border-color:rgba(91,124,247,.4);color:#8AABFF">🤖 Coach IA</button>
     </div>
     <div id="j-ana-content"></div>
   </div>
@@ -5620,6 +5651,7 @@ function renderAnalytics(tab, btn) {
   else if (tab === 'daytime') p.innerHTML = _anaDayTime();
   else if (tab === 'symbol') p.innerHTML = _anaSymbol();
   else if (tab === 'setup') p.innerHTML = _anaSetup();
+  else if (tab === 'coach') p.innerHTML = _anaCoach();
 }
 
 // ── SVG helpers ───────────────────────────────────────────────────
@@ -5848,6 +5880,200 @@ function _anaSetup() {
             <td style="padding:7px 8px"><div style="height:7px;background:var(--b1);border-radius:3px;overflow:hidden"><div style="height:100%;width:${pct}%;background:${up?'rgba(34,197,94,.6)':'rgba(239,68,68,.6)'};border-radius:3px"></div></div></td>
           </tr>`;}).join('')}</tbody>
       </table>
+    </div>
+  </div>`;
+}
+
+// ─── AI TRADE COACH ──────────────────────────────────────────────────────────
+function _anaCoach() {
+  const trades = JTRADES;
+  if (!trades.length) return `<div style="text-align:center;padding:56px;color:var(--tx3);font-size:13px">
+    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(91,124,247,.3)" stroke-width="1.2" style="margin-bottom:14px;display:block;margin-left:auto;margin-right:auto"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+    Sin trades — importa o añade operaciones al journal para activar el Coach IA</div>`;
+
+  const sorted = [...trades].sort((a,b)=>(a.dt||a.date||'')>(b.dt||b.date||'')?1:-1);
+  const wins = trades.filter(t=>t.gross>0);
+  const losses = trades.filter(t=>t.gross<=0);
+  const nets = trades.map(t=>+(t.gross-t.comm).toFixed(2));
+  const totalNet = nets.reduce((a,b)=>a+b,0);
+  const wr = wins.length/trades.length*100;
+  const avgW = wins.length ? wins.reduce((s,t)=>s+(t.gross-t.comm),0)/wins.length : 0;
+  const avgL = losses.length ? losses.reduce((s,t)=>s+(t.gross-t.comm),0)/losses.length : 0;
+  const rr = avgL<0 ? Math.abs(avgW/avgL) : 0;
+  const grossW = wins.reduce((s,t)=>s+t.gross,0);
+  const grossL = Math.abs(losses.reduce((s,t)=>s+t.gross,0));
+  const pf = grossL>0 ? grossW/grossL : 99;
+
+  // Day of week
+  const DAYS=['Lun','Mar','Mié','Jue','Vie'];
+  const dowData = Array.from({length:5},()=>({pnl:0,c:0,wins:0}));
+  trades.forEach(t=>{
+    const dt=t.dt||t.date||'';
+    if(dt.includes('-')){const dow=new Date(dt+'T12:00:00').getDay();if(dow>=1&&dow<=5){const d=dowData[dow-1];d.pnl+=+(t.gross-t.comm).toFixed(2);d.c++;if(t.gross>0)d.wins++;}}
+  });
+  const activeDays = dowData.filter(d=>d.c>0);
+  const bestDayIdx = activeDays.length ? dowData.reduce((bi,d,i)=>d.c>0&&d.pnl>dowData[bi].pnl?i:bi,dowData.findIndex(d=>d.c>0)) : -1;
+  const worstDayIdx = activeDays.length ? dowData.reduce((wi,d,i)=>d.c>0&&d.pnl<dowData[wi].pnl?i:wi,dowData.findIndex(d=>d.c>0)) : -1;
+
+  // Symbol analysis
+  const byS={};
+  trades.forEach(t=>{if(!byS[t.sym])byS[t.sym]={pnl:0,wins:0,c:0};const d=byS[t.sym];d.pnl+=+(t.gross-t.comm).toFixed(2);d.c++;if(t.gross>0)d.wins++;});
+  const symEntries=Object.entries(byS).sort((a,b)=>b[1].pnl-a[1].pnl);
+  const bestSym=symEntries[0];
+  const worstSym=symEntries[symEntries.length-1];
+
+  // Streaks
+  let maxLL=0,cLL=0,maxWW=0,cWW=0;
+  sorted.forEach(t=>{if(t.gross>0){cWW++;maxWW=Math.max(maxWW,cWW);cLL=0;}else{cLL++;maxLL=Math.max(maxLL,cLL);cWW=0;}});
+
+  // Drawdown
+  let peak=0,cum=0,maxDD=0;
+  nets.forEach(n=>{cum+=n;if(cum>peak)peak=cum;maxDD=Math.min(maxDD,cum-peak);});
+
+  // Frequency — trades per day
+  const tradeDays = new Set(sorted.map(t=>(t.dt||t.date||'').substring(0,10))).size||1;
+  const tradesPerDay = (trades.length/tradeDays).toFixed(1);
+
+  // Score calculation (0–100)
+  let score = 50;
+  if(wr>=60) score+=12; else if(wr>=50) score+=6; else if(wr<40) score-=12;
+  if(pf>=2) score+=12; else if(pf>=1.5) score+=8; else if(pf>=1) score+=2; else score-=12;
+  if(rr>=2) score+=10; else if(rr>=1.5) score+=6; else if(rr>=1) score+=2; else if(rr>0) score-=8;
+  if(maxLL<=2) score+=6; else if(maxLL>=6) score-=10; else if(maxLL>=4) score-=5;
+  if(totalNet>0) score+=8; else score-=8;
+  score = Math.max(8, Math.min(96, score));
+  const scoreGrade = score>=75?'A':score>=60?'B':score>=45?'C':score>=30?'D':'F';
+  const scoreColor = score>=70?'#22c55e':score>=50?'#f59e0b':'#ef4444';
+  const scoreBg = score>=70?'rgba(34,197,94,.1)':score>=50?'rgba(245,158,11,.1)':'rgba(239,68,68,.1)';
+  const scoreBdr = score>=70?'rgba(34,197,94,.25)':score>=50?'rgba(245,158,11,.25)':'rgba(239,68,68,.25)';
+  const scoreLabel = score>=75?'Trader sólido':score>=60?'Buen progreso':score>=45?'En desarrollo':score>=30?'Necesita mejoras':'Revisa tu sistema';
+
+  // Generate insights
+  const insights=[];
+
+  // Win rate
+  if(wr>=60) insights.push({t:'ok',icon:'✓',title:`Win rate alto (${wr.toFixed(0)}%)`,text:`Estás en el top 20% de traders. Con este acierto necesitas un R:R mínimo de ${(1/(wr/100)-1).toFixed(1)} para ser rentable — ${rr>=1?'lo cumples':'necesitas mejorar el R:R'}.`});
+  else if(wr<45) insights.push({t:'bad',icon:'!',title:`Win rate bajo (${wr.toFixed(0)}%)`,text:`Solo aciertas 4 de cada 10 trades. Sé más selectivo con las entradas o revisa si estás tomando setups de baja probabilidad.`});
+  else insights.push({t:'neu',icon:'i',title:`Win rate aceptable (${wr.toFixed(0)}%)`,text:`Con un 50-60% de acierto puedes ser muy rentable si mantienes el R:R por encima de 1.2.`});
+
+  // R:R
+  if(rr>=2) insights.push({t:'ok',icon:'✓',title:`R:R excelente (${rr.toFixed(1)}:1)`,text:`Ganas $${avgW.toFixed(0)} de media y pierdes $${Math.abs(avgL).toFixed(0)}. Es la fortaleza más valiosa — no la pierdas moviendo TPs prematuramente.`});
+  else if(rr>0&&rr<0.8) insights.push({t:'bad',icon:'!',title:`R:R desfavorable (${rr.toFixed(1)}:1)`,text:`Pierdes $${Math.abs(avgL).toFixed(0)} de media pero solo ganas $${avgW.toFixed(0)}. Mueve tu TP más lejos o reduce el SL para mejorar esta ratio.`});
+  else if(rr>0) insights.push({t:'neu',icon:'i',title:`R:R mejorable (${rr.toFixed(1)}:1)`,text:`Tu ratio riesgo/recompensa es aceptable. Apunta a 1.5:1 o más — pequeñas mejoras aquí impactan mucho en la rentabilidad final.`});
+
+  // Best day
+  if(bestDayIdx>=0 && dowData[bestDayIdx].c>0) {
+    const d=dowData[bestDayIdx];
+    insights.push({t:'ok',icon:'✓',title:`Mejor día: ${DAYS[bestDayIdx]}`,text:`Los ${DAYS[bestDayIdx]} generas +$${d.pnl.toFixed(0)} con ${Math.round(d.wins/d.c*100)}% de win rate (${d.c} trades). Prioriza operar ese día con más tamaño.`});
+  }
+
+  // Worst day
+  if(worstDayIdx>=0 && worstDayIdx!==bestDayIdx && dowData[worstDayIdx].c>0 && dowData[worstDayIdx].pnl<-100) {
+    const d=dowData[worstDayIdx];
+    insights.push({t:'bad',icon:'!',title:`Problema los ${DAYS[worstDayIdx]}`,text:`Los ${DAYS[worstDayIdx]} acumulas -$${Math.abs(d.pnl).toFixed(0)} (${d.c} trades). Reduce contratos o considera no operar ese día hasta analizar la causa.`});
+  }
+
+  // Best symbol
+  if(bestSym && bestSym[1].pnl>0) {
+    const wr2=Math.round(bestSym[1].wins/bestSym[1].c*100);
+    insights.push({t:'ok',icon:'✓',title:`Instrumento estrella: ${bestSym[0]}`,text:`+$${bestSym[1].pnl.toFixed(0)} en ${bestSym[1].c} trades de ${bestSym[0]} (${wr2}% win). Especialízate aquí — la consistencia en un instrumento es más valiosa que diversificar.`});
+  }
+
+  // Worst symbol
+  if(worstSym && worstSym[1].pnl < -300 && symEntries.length>1 && worstSym[0]!==bestSym[0]) {
+    insights.push({t:'bad',icon:'!',title:`Evita ${worstSym[0]} por ahora`,text:`-$${Math.abs(worstSym[1].pnl).toFixed(0)} en ${worstSym[1].c} trades de ${worstSym[0]}. Páusalo hasta entender qué falla — no todos los instrumentos encajan con tu estilo.`});
+  }
+
+  // Consecutive losses
+  if(maxLL>=5) insights.push({t:'bad',icon:'!',title:`Racha de ${maxLL} pérdidas consecutivas`,text:`Las rachas largas destruyen la confianza y llevan a revenge trading. Define una regla: para tras 2-3 pérdidas seguidas en el día.`});
+  else if(maxLL<=2&&trades.length>=10) insights.push({t:'ok',icon:'✓',title:`Rachas cortas (máx. ${maxLL} pérdidas)`,text:`Gestionas bien las rachas — solo ${maxLL} pérdidas seguidas en todo tu historial. Señal de buena disciplina emocional.`});
+
+  // Over-trading
+  if(parseFloat(tradesPerDay)>8) insights.push({t:'bad',icon:'!',title:`Sobreoperar (${tradesPerDay} trades/día)`,text:`Más de 8 trades diarios suele indicar revenge trading o falta de criterio. Menos trades, mejor seleccionados, da mejores resultados.`});
+  else if(parseFloat(tradesPerDay)<=3&&trades.length>=10) insights.push({t:'ok',icon:'✓',title:`Buena selectividad (${tradesPerDay} trades/día)`,text:`Operas pocas veces al día — señal de que esperas los setups correctos. La paciencia es una ventaja competitiva enorme.`});
+
+  // Profit factor
+  if(pf<1) insights.push({t:'bad',icon:'!',title:`Profit Factor negativo (${pf.toFixed(2)})`,text:`Pierdes más de lo que ganas en total. El sistema no es rentable todavía — revisa si el problema es el R:R, el win rate, o ambos.`});
+  else if(pf>=2) insights.push({t:'ok',icon:'✓',title:`Profit Factor excelente (${pf.toFixed(2)})`,text:`Por cada $1 que pierdes, ganas $${pf.toFixed(2)}. Un PF > 2 es el objetivo de cualquier trader profesional. Mantén la consistencia.`});
+
+  // Focus recommendation — based on weakest metric
+  let focus='';
+  if(pf<1) focus=`Tu prioridad es mejorar el <strong>Profit Factor</strong> (${pf.toFixed(2)}). Analiza tab por tab tus peores setups y elimínalos de tu playbook.`;
+  else if(rr>0&&rr<1) focus=`Trabaja el <strong>R:R</strong> (${rr.toFixed(1)}:1). Con un SL más ajustado o un TP más ambicioso puedes doblar tu expectativa sin cambiar nada más.`;
+  else if(wr<45) focus=`Reduce el número de entradas y sube la barra de calidad. Tu <strong>win rate ${wr.toFixed(0)}%</strong> indica que entras en demasiadas operaciones de baja probabilidad.`;
+  else if(maxLL>=5) focus=`Implementa una regla de <strong>stop de día</strong>. Con rachas de ${maxLL} pérdidas necesitas un mecanismo que te saque del mercado antes de que el daño emocional empiece.`;
+  else focus=`Estás en buen camino. Foco en <strong>consistencia</strong> — opera igual todos los días, documenta bien los setups y evita los días/instrumentos que te drenan.`;
+
+  const insCard=(ins)=>{
+    const c=ins.t==='ok'?'rgba(34,197,94,.12)':ins.t==='bad'?'rgba(239,68,68,.1)':'rgba(255,255,255,.05)';
+    const bc=ins.t==='ok'?'rgba(34,197,94,.25)':ins.t==='bad'?'rgba(239,68,68,.22)':'rgba(255,255,255,.08)';
+    const ic=ins.t==='ok'?'#22c55e':ins.t==='bad'?'#ef4444':'#94a3b8';
+    return `<div style="background:${c};border:1px solid ${bc};border-radius:10px;padding:13px 15px;display:flex;gap:11px;align-items:flex-start">
+      <div style="width:22px;height:22px;min-width:22px;border-radius:50%;background:${c};border:1.5px solid ${bc};display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:${ic};margin-top:1px">${ins.icon}</div>
+      <div><div style="font-size:11.5px;font-weight:700;color:var(--tx);margin-bottom:3px">${ins.title}</div><div style="font-size:10.5px;color:var(--tx2);line-height:1.55">${ins.text}</div></div>
+    </div>`;
+  };
+
+  const half1=insights.filter((_,i)=>i%2===0);
+  const half2=insights.filter((_,i)=>i%2===1);
+
+  return `
+  <div style="display:grid;grid-template-columns:240px 1fr;gap:14px;margin-bottom:14px;align-items:start">
+    <!-- Score card -->
+    <div class="card" style="text-align:center;padding:22px 18px;background:${scoreBg};border-color:${scoreBdr};position:relative;overflow:hidden">
+      <div style="position:absolute;top:-20px;right:-20px;width:100px;height:100px;background:radial-gradient(circle,${scoreColor}22,transparent 70%);pointer-events:none"></div>
+      <div style="font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;color:var(--tx3);margin-bottom:10px">Puntuación IA</div>
+      <div style="font-size:64px;font-weight:900;font-family:var(--mono);color:${scoreColor};line-height:1;letter-spacing:-3px">${score}</div>
+      <div style="font-size:28px;font-weight:900;font-family:var(--mono);color:${scoreColor};opacity:.4;margin-top:-4px">/100</div>
+      <div style="display:inline-block;background:${scoreBg};border:1.5px solid ${scoreBdr};border-radius:20px;padding:4px 14px;font-size:11px;font-weight:700;color:${scoreColor};margin-top:10px">${scoreLabel}</div>
+      <div style="margin-top:16px;border-top:1px solid ${scoreBdr};padding-top:14px">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;text-align:left">
+          <div><div style="font-size:8.5px;color:var(--tx3);margin-bottom:2px">Win Rate</div><div style="font-size:12px;font-weight:700;color:${wr>=55?'#22c55e':wr>=45?'#f59e0b':'#ef4444'}">${wr.toFixed(0)}%</div></div>
+          <div><div style="font-size:8.5px;color:var(--tx3);margin-bottom:2px">R:R Medio</div><div style="font-size:12px;font-weight:700;color:${rr>=1.5?'#22c55e':rr>=1?'#f59e0b':'#ef4444'}">${rr>0?rr.toFixed(1):'—'}</div></div>
+          <div><div style="font-size:8.5px;color:var(--tx3);margin-bottom:2px">Profit Factor</div><div style="font-size:12px;font-weight:700;color:${pf>=1.5?'#22c55e':pf>=1?'#f59e0b':'#ef4444'}">${pf>=99?'∞':pf.toFixed(2)}</div></div>
+          <div><div style="font-size:8.5px;color:var(--tx3);margin-bottom:2px">P&L Neto</div><div style="font-size:12px;font-weight:700;color:${totalNet>=0?'#22c55e':'#ef4444'}">${totalNet>=0?'+$':'-$'}${Math.abs(totalNet).toFixed(0)}</div></div>
+        </div>
+      </div>
+      <div style="margin-top:14px;font-size:9px;color:var(--tx3);opacity:.6">Basado en ${trades.length} trades</div>
+    </div>
+    <!-- Right: grade + mini chart -->
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div class="card" style="padding:14px 18px">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:52px;height:52px;border-radius:12px;background:linear-gradient(135deg,rgba(91,124,247,.2),rgba(139,92,246,.15));border:1px solid rgba(91,124,247,.3);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:900;color:#8AABFF;font-family:var(--mono)">${scoreGrade}</div>
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:800;color:var(--tx)">Grado de Trading</div>
+            <div style="font-size:11px;color:var(--tx3);margin-top:2px">${scoreLabel} · ${trades.length} operaciones analizadas</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:9px;color:var(--tx3)">Mejor racha</div>
+            <div style="font-size:15px;font-weight:700;color:#22c55e">${maxWW}W</div>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="padding:14px 18px">
+        <div style="font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px">Curva de capital</div>
+        ${_svgEquity(sorted,580,90)}
+      </div>
+    </div>
+  </div>
+
+  <!-- Insights grid -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+    <div style="display:flex;flex-direction:column;gap:8px">${half1.map(insCard).join('')}</div>
+    <div style="display:flex;flex-direction:column;gap:8px">${half2.map(insCard).join('')}</div>
+  </div>
+
+  <!-- Focus this week -->
+  <div class="card" style="background:linear-gradient(135deg,rgba(91,124,247,.1),rgba(139,92,246,.07));border-color:rgba(91,124,247,.25);padding:16px 20px">
+    <div style="display:flex;gap:12px;align-items:flex-start">
+      <div style="width:36px;height:36px;min-width:36px;border-radius:10px;background:rgba(91,124,247,.18);border:1px solid rgba(91,124,247,.35);display:flex;align-items:center;justify-content:center">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7C9BFF" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </div>
+      <div>
+        <div style="font-size:11.5px;font-weight:800;color:#8AABFF;margin-bottom:4px">Foco recomendado esta semana</div>
+        <div style="font-size:11.5px;color:var(--tx2);line-height:1.6">${focus}</div>
+      </div>
     </div>
   </div>`;
 }
@@ -8538,14 +8764,19 @@ function openBrokerImport(){
         <button onclick="closeBrokerImport()" style="background:none;border:none;color:var(--tx3);font-size:18px;cursor:pointer;padding:4px 8px">✕</button>
       </div>
       <!-- Drop zone -->
-      <div id="bi-dropzone" style="margin:18px 22px;border:2px dashed var(--b1);border-radius:12px;padding:32px;text-align:center;cursor:pointer;transition:.2s"
+      <div id="bi-dropzone" style="margin:18px 22px;border:2px dashed rgba(91,124,247,.3);border-radius:12px;padding:28px 24px;text-align:center;cursor:pointer;transition:all .2s;background:rgba(91,124,247,.03)"
            onclick="document.getElementById('bi-file').click()"
-           ondragover="event.preventDefault();this.style.borderColor='var(--ac)'"
-           ondragleave="this.style.borderColor='var(--b1)'"
-           ondrop="event.preventDefault();this.style.borderColor='var(--b1)';handleBrokerFileDrop(event.dataTransfer.files[0])">
-        <div style="font-size:36px;margin-bottom:8px">📂</div>
-        <div style="font-size:13px;font-weight:600;color:var(--tx);margin-bottom:4px">Arrastra tu CSV aquí o haz clic para seleccionar</div>
-        <div style="font-size:10.5px;color:var(--tx3)">Formatos: .csv · .txt · .html · .htm</div>
+           ondragover="event.preventDefault();this.style.borderColor='var(--cy)';this.style.background='rgba(91,124,247,.08)'"
+           ondragleave="this.style.borderColor='rgba(91,124,247,.3)';this.style.background='rgba(91,124,247,.03)'"
+           ondrop="event.preventDefault();this.style.borderColor='rgba(91,124,247,.3)';this.style.background='rgba(91,124,247,.03)';handleBrokerFileDrop(event.dataTransfer.files[0])">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(91,124,247,.5)" stroke-width="1.5" stroke-linecap="round" style="margin:0 auto 10px;display:block"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="12" x2="12" y2="18"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+        <div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:5px">Arrastra tu CSV aquí o haz clic</div>
+        <div style="font-size:10.5px;color:var(--tx3);margin-bottom:12px">Soporta Tradovate · NinjaTrader · Rithmic · MT4/MT5 · CSV genérico</div>
+        <div style="display:flex;justify-content:center;gap:6px;flex-wrap:wrap">
+          <span style="font-size:9px;padding:3px 8px;border-radius:4px;background:rgba(255,255,255,.06);color:var(--tx3);font-family:var(--mono)">.csv</span>
+          <span style="font-size:9px;padding:3px 8px;border-radius:4px;background:rgba(255,255,255,.06);color:var(--tx3);font-family:var(--mono)">.txt</span>
+          <span style="font-size:9px;padding:3px 8px;border-radius:4px;background:rgba(255,255,255,.06);color:var(--tx3);font-family:var(--mono)">.html</span>
+        </div>
         <input id="bi-file" type="file" accept=".csv,.txt,.html,.htm" style="display:none" onchange="handleBrokerFileDrop(this.files[0])">
       </div>
       <!-- Format selector -->
