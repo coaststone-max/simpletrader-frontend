@@ -8027,6 +8027,22 @@ async function connectMT5(btn){
     mt5SetStatus('➕ Registrando cuenta en MetaApi…','info');
     let accountId = null, region = 'london';
 
+    // Helper: wait N seconds showing countdown
+    async function waitWithCountdown(secs, label){
+      for(let t=secs;t>0;t--){
+        mt5SetStatus(`⏳ ${label} — esperando ${t}s…`,'warn');
+        await new Promise(r=>setTimeout(r,1000));
+      }
+    }
+
+    // Helper: find existing account in MetaApi (used as fallback)
+    async function findExistingAccount(){
+      mt5SetStatus('🔍 Buscando cuenta existente en MetaApi…','info');
+      const found = await maProxy('prov','/users/current/accounts?limit=10&offset=0','GET');
+      const arr = Array.isArray(found) ? found : (found.items||[]);
+      return arr.find(a => String(a.login)===String(login) && a.platform==='mt5') || null;
+    }
+
     try {
       const created = await maProxy('prov', '/users/current/accounts', 'POST', {
         login:       String(login),
@@ -8043,22 +8059,23 @@ async function connectMT5(btn){
       region = created.region || 'london';
       mt5SetStatus('✓ Cuenta registrada','ok');
     } catch(createErr){
-      // Account might already exist — search by login (fast, targeted query)
       const msg = createErr.message || '';
-      if(/duplicate|already exist|exists|conflict/i.test(msg) || /409|422/i.test(msg)){
-        mt5SetStatus('🔍 Cuenta ya existe — buscando…','info');
-        const found = await maProxy('prov', `/users/current/accounts?limit=10&offset=0`, 'GET');
-        const arr = Array.isArray(found) ? found : (found.items||[]);
-        const match = arr.find(a => String(a.login)===String(login) && a.platform==='mt5');
-        if(match){
-          accountId = match._id || match.id;
-          region = match.region || 'london';
-          mt5SetStatus('✓ Cuenta existente encontrada','ok');
-        } else {
-          throw new Error('No se encontró la cuenta en MetaApi. Detalle: '+msg);
-        }
-      } else {
-        throw createErr; // real error (wrong password, bad server name, etc.)
+
+      // Rate limit: wait 45s then look for existing account
+      if(/TooManyRequests|429|rate.?limit/i.test(msg)){
+        await waitWithCountdown(45,'Límite de peticiones MetaApi');
+        const match = await findExistingAccount();
+        if(match){ accountId=match._id||match.id; region=match.region||'london'; mt5SetStatus('✓ Cuenta encontrada','ok'); }
+        else throw new Error('Rate limit de MetaApi. Espera 1-2 minutos y vuelve a intentarlo.');
+      }
+      // Duplicate / conflict: account already exists
+      else if(/duplicate|already exist|exists|conflict/i.test(msg) || /409|422/i.test(msg)){
+        const match = await findExistingAccount();
+        if(match){ accountId=match._id||match.id; region=match.region||'london'; mt5SetStatus('✓ Cuenta existente encontrada','ok'); }
+        else throw new Error('No se encontró la cuenta en MetaApi. Detalle: '+msg);
+      }
+      else {
+        throw createErr; // real error (wrong credentials, bad server name, etc.)
       }
     }
 
