@@ -37,6 +37,6 @@
     "api/notifications/push.js":            {"maxDuration": 10},
     "api/notifications/email.js":           {"maxDuration": 15},
     "api/backtest/candles.js":              {"maxDuration": 15},
-    "api/mt5/manage.js":                    {"maxDuration": 10}
+    "api/mt5/proxy.js":                     {"maxDuration": 20}
   }
 }
