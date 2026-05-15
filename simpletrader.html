@@ -8022,19 +8022,12 @@ async function connectMT5(btn){
   const brokerLabel = MT5_BROKERS.find(b=>b.id===bId)?.name || bId;
 
   try {
-    // 1. Find or create MetaApi account (token stays on server via proxy)
-    mt5SetStatus('🔍 Verificando cuenta en MetaApi…','info');
-    const accounts = await maProxy('prov', '/users/current/accounts?limit=100&offset=0', 'GET');
+    // 1. Create account in MetaApi (skip listing — too slow on Vercel Hobby)
+    //    If it already exists MetaApi returns an error we handle below.
+    mt5SetStatus('➕ Registrando cuenta en MetaApi…','info');
     let accountId = null, region = 'london';
-    const existing = (Array.isArray(accounts) ? accounts : accounts.items||[])
-      .find(a => String(a.login) === login && a.server === server && a.platform === 'mt5');
 
-    if(existing){
-      accountId = existing._id || existing.id;
-      region = existing.region || 'london';
-      mt5SetStatus(`✓ Cuenta encontrada`, 'ok');
-    } else {
-      mt5SetStatus('➕ Registrando cuenta en MetaApi…','info');
+    try {
       const created = await maProxy('prov', '/users/current/accounts', 'POST', {
         login:       String(login),
         password:    pass,
@@ -8048,7 +8041,25 @@ async function connectMT5(btn){
       });
       accountId = created._id || created.id;
       region = created.region || 'london';
-      mt5SetStatus(`✓ Cuenta registrada (id: ${accountId})`, 'ok');
+      mt5SetStatus('✓ Cuenta registrada','ok');
+    } catch(createErr){
+      // Account might already exist — search by login (fast, targeted query)
+      const msg = createErr.message || '';
+      if(/duplicate|already exist|exists|conflict/i.test(msg) || /409|422/i.test(msg)){
+        mt5SetStatus('🔍 Cuenta ya existe — buscando…','info');
+        const found = await maProxy('prov', `/users/current/accounts?limit=10&offset=0`, 'GET');
+        const arr = Array.isArray(found) ? found : (found.items||[]);
+        const match = arr.find(a => String(a.login)===String(login) && a.platform==='mt5');
+        if(match){
+          accountId = match._id || match.id;
+          region = match.region || 'london';
+          mt5SetStatus('✓ Cuenta existente encontrada','ok');
+        } else {
+          throw new Error('No se encontró la cuenta en MetaApi. Detalle: '+msg);
+        }
+      } else {
+        throw createErr; // real error (wrong password, bad server name, etc.)
+      }
     }
 
     // 2. Deploy if needed
