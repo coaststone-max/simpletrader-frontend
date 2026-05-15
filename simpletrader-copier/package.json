@@ -1,0 +1,17 @@
+{
+  "name": "simpletrader-copier",
+  "version": "1.0.0",
+  "description": "SimpleTrader real-time trade copier — polls Tradovate master accounts and replicates to slaves",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

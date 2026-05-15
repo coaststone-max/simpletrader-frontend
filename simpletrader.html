@@ -3433,6 +3433,25 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
   border-radius:12px !important;
 }
 
+/* ── Replicator setup steps ── */
+.rep-step{
+  display:flex;gap:9px;align-items:flex-start;
+  font-size:9.5px;color:var(--tx2);line-height:1.7;
+}
+.rep-step-n{
+  width:19px;height:19px;border-radius:50%;flex-shrink:0;
+  background:rgba(91,124,247,.12);border:1px solid rgba(91,124,247,.3);
+  color:#7C9BFF;font-size:8.5px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;
+  margin-top:1px;
+}
+.rep-code{
+  display:inline-block;padding:1px 5px;
+  background:rgba(91,124,247,.1);border:1px solid rgba(91,124,247,.22);
+  border-radius:4px;font-family:var(--mono);font-size:8.5px;
+  color:#8AABFF;
+}
+
 /* ── Responsive ── */
 @media(max-width:900px){
   .content{padding:14px 14px 80px !important}
@@ -3960,8 +3979,111 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
   <div class="master-tabs" id="master-tabs"></div>
   <div id="master-panel"></div>
   <div class="g2" style="margin-top:11px">
-    <div class="card"><div class="hd">🔗 Live Trading — TradingView + Tradovate</div><div id="rep-cfg"></div></div>
-    <div class="card"><div class="hd">Log en vivo<div class="hd-r"><span id="log-cnt" style="font-size:8.5px;color:var(--tx3)"></span></div></div><div id="rep-log" style="display:flex;flex-direction:column;gap:3px;max-height:220px;overflow-y:auto"></div></div>
+
+    <!-- Conexión + Setup -->
+    <div class="card">
+      <div class="hd">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07M8.46 8.46a5 5 0 0 0 0 7.07"/></svg>
+        Conexión Tradovate
+        <div class="hd-r" id="rep-conn-badge"></div>
+      </div>
+      <div id="rep-cfg"></div>
+    </div>
+
+    <!-- Log en vivo + Railway setup -->
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div class="card">
+        <div class="hd">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Log en vivo
+          <div class="hd-r">
+            <span id="log-cnt" style="font-size:8.5px;color:var(--tx3)"></span>
+            <button class="btn sm" style="font-size:9px" onclick="document.getElementById('rep-log').innerHTML='';repLogs=[];document.getElementById('log-cnt').textContent='0 eventos'">↺</button>
+          </div>
+        </div>
+        <div id="rep-log" style="display:flex;flex-direction:column;gap:3px;max-height:180px;overflow-y:auto"></div>
+        <div id="rep-log-empty" style="text-align:center;padding:18px 0;color:var(--tx3);font-size:11px">
+          Sin eventos aún — espera a que se ejecute un trade en la maestra
+        </div>
+      </div>
+
+      <!-- Railway Copier setup card -->
+      <div class="card" id="railway-setup-card">
+        <div class="hd">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          Copier Autónomo — Railway
+          <div class="hd-r">
+            <span id="railway-status-badge" style="font-size:8px;padding:2px 7px;border-radius:10px;font-weight:700;background:rgba(153,102,0,.1);color:var(--am);border:1px solid rgba(153,102,0,.28)">● Sin desplegar</span>
+          </div>
+        </div>
+        <div style="font-size:10.5px;color:var(--tx2);line-height:1.7;margin-bottom:12px">
+          El copier autónomo monitoriza tu cuenta maestra cada <b style="color:var(--tx)">2.5 segundos</b> y replica trades automáticamente — sin alertas de TradingView.
+        </div>
+
+        <!-- CID explainer -->
+        <div style="padding:10px 12px;background:rgba(91,124,247,.07);border:1px solid rgba(91,124,247,.2);border-radius:8px;margin-bottom:12px">
+          <div style="font-size:9.5px;font-weight:700;color:var(--cy);margin-bottom:5px">¿Necesito el CID de Tradovate?</div>
+          <div style="font-size:9.5px;color:var(--tx2);line-height:1.7">
+            Sí — es gratuito y son <b style="color:var(--tx)">5 minutos</b>:<br>
+            1. Ve a <a onclick="window.open('https://trader.tradovate.com/account/developer','_blank')" style="color:var(--cy);cursor:pointer;text-decoration:underline">trader.tradovate.com/account/developer</a><br>
+            2. Crea una aplicación → anota el <code style="color:var(--cy)">Client ID</code> y el <code style="color:var(--cy)">Secret</code><br>
+            3. Úsalos como variables en Vercel y Railway
+          </div>
+        </div>
+
+        <!-- Deploy steps -->
+        <div style="font-size:9px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px">Desplegar el copier (una vez)</div>
+        <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px">
+          <div class="rep-step">
+            <div class="rep-step-n">1</div>
+            <div>
+              Añade en <b>Vercel → Settings → Environment Variables</b>:<br>
+              <code class="rep-code">TRADOVATE_CID</code> y <code class="rep-code">TRADOVATE_SEC</code>
+            </div>
+          </div>
+          <div class="rep-step">
+            <div class="rep-step-n">2</div>
+            <div>
+              Ve a <a onclick="window.open('https://railway.app/new','_blank')" style="color:var(--cy);cursor:pointer">Railway.app</a> → <b>New Project → Deploy from GitHub</b><br>
+              Selecciona tu repo y la carpeta <code class="rep-code">simpletrader-copier/</code>
+            </div>
+          </div>
+          <div class="rep-step">
+            <div class="rep-step-n">3</div>
+            <div>
+              En Railway → <b>Variables</b>, añade las 4 variables:
+              <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:5px">
+                <code class="rep-code">SUPABASE_URL</code>
+                <code class="rep-code">SUPABASE_SERVICE_KEY</code>
+                <code class="rep-code">TRADOVATE_CID</code>
+                <code class="rep-code">TRADOVATE_SEC</code>
+              </div>
+              <div style="margin-top:4px;font-size:8.5px;color:var(--tx3)">Opcional: <code class="rep-code" style="font-size:8px">SIMPLETRADER_USER_ID</code> — tu ID de usuario (cópialo abajo)</div>
+            </div>
+          </div>
+          <div class="rep-step">
+            <div class="rep-step-n">4</div>
+            <div>
+              Deploy → el copier arranca y empieza a copiar trades en <b>2.5s de latencia</b>
+            </div>
+          </div>
+        </div>
+
+        <!-- User ID copy -->
+        <div style="margin-bottom:10px">
+          <div style="font-size:8.5px;color:var(--tx3);margin-bottom:3px">Tu User ID <span style="font-weight:400">(para Railway)</span></div>
+          <div style="display:flex;gap:5px">
+            <input id="rep-uid-field" readonly value="Inicia sesión para ver tu ID" style="flex:1;font-size:8.5px;font-family:var(--mono);background:var(--bg3);border:1px solid var(--b1);border-radius:6px;padding:5px 8px;color:var(--tx2);outline:none;min-width:0">
+            <button class="btn sm" onclick="copyRepField('rep-uid-field','ID copiado ✓')">⎘ Copiar</button>
+          </div>
+        </div>
+
+        <a href="https://railway.app/new" target="_blank" class="btn bc" style="display:block;text-align:center;font-size:11px;text-decoration:none;padding:9px;border-radius:8px;font-weight:700">
+          🚀 Abrir Railway.app →
+        </a>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -6616,7 +6738,27 @@ function copyRepField(id,msg){const el=document.getElementById(id);if(!el)return
 function regenTvSecret(){confirm2('¿Regenerar secret?','Las alertas de TradingView existentes dejarán de funcionar hasta que actualices el JSON.',function(){tradovateConfig.webhookSecret=_genTvSecret();scheduleSave();renderRepCfg();toast('Secret regenerado — actualiza TradingView','warn',4000);});}
 
 let repTk=0,tvCount=0;
-function pushRepLog(sym,dir,action,acc,ctrs){const ok=Math.random()>.06,now=new Date().toLocaleTimeString('es-ES',{timeZone:'Europe/Madrid'});repLogs.unshift({now,sym,dir,action,acc,ctrs,ok});if(repLogs.length>80)repLogs.pop();const el=document.getElementById('rep-log');if(!el)return;el.innerHTML=repLogs.slice(0,16).map(l=>`<div style="display:flex;align-items:center;gap:4px;padding:3px 6px;border-radius:4px;background:var(--bg3);border:1px solid ${l.ok?'var(--b1)':'rgba(204,34,51,.2)'};font-size:9.5px"><span class="mono" style="color:var(--tx3);min-width:50px">${l.now}</span><span style="color:${l.ok?'var(--gn)':'var(--rd)'};font-size:7px">●</span><span class="mono cy" style="min-width:26px">${l.sym}</span><span class="bdg ${l.dir==='LONG'?'bb':'bs'}" style="font-size:8px">${l.dir}</span><span style="color:var(--tx2);flex:1">${l.action} ${l.ctrs}c</span><span style="color:var(--tx3);font-size:8px;max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${l.acc}</span></div>`).join('');document.getElementById('log-cnt').textContent=repLogs.length+' eventos';}
+function pushRepLog(sym,dir,action,acc,ctrs){
+  const ok=Math.random()>.06,now=new Date().toLocaleTimeString('es-ES',{timeZone:'Europe/Madrid'});
+  repLogs.unshift({now,sym,dir,action,acc,ctrs,ok});
+  if(repLogs.length>80)repLogs.pop();
+  const el=document.getElementById('rep-log');
+  const empty=document.getElementById('rep-log-empty');
+  if(!el)return;
+  if(empty)empty.style.display='none';
+  el.innerHTML=repLogs.slice(0,16).map(l=>`
+    <div style="display:flex;align-items:center;gap:5px;padding:4px 8px;border-radius:6px;background:${l.ok?'rgba(255,255,255,.025)':'rgba(204,34,51,.06)'};border:1px solid ${l.ok?'rgba(255,255,255,.07)':'rgba(204,34,51,.2)'};font-size:9.5px">
+      <span class="mono" style="color:var(--tx3);min-width:52px;font-size:9px">${l.now}</span>
+      <span style="width:5px;height:5px;border-radius:50%;background:${l.ok?'var(--gn)':'var(--rd)'};flex-shrink:0"></span>
+      <span class="mono" style="color:#8AABFF;min-width:28px;font-weight:700">${l.sym}</span>
+      <span class="bdg ${l.dir==='LONG'?'bb':'bs'}" style="font-size:7.5px;padding:1px 5px">${l.dir}</span>
+      <span style="color:var(--tx2);flex:1;font-size:9px">${l.action} ${l.ctrs}c</span>
+      <span style="color:var(--tx3);font-size:8.5px;max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${l.acc}</span>
+      ${l.ok?'':`<span style="color:var(--rd);font-size:8px">ERR</span>`}
+    </div>`).join('');
+  const cntEl=document.getElementById('log-cnt');
+  if(cntEl)cntEl.textContent=repLogs.length+' eventos';
+}
 
 setInterval(()=>{
   const on=MASTERS.reduce((a,m)=>a+m.slaves.filter(s=>s.on).length,0),tot=MASTERS.reduce((a,m)=>a+m.slaves.length,0);
