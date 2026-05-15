@@ -95,7 +95,10 @@ export default async function handler(req, res) {
     let data;
     try { data = JSON.parse(text); } catch { data = { raw: text }; }
 
-    // Forward upstream status
+    // Forward upstream status — include full body for debugging ValidationErrors
+    if (!upstream.ok) {
+      console.error(`[mt5/proxy] upstream ${upstream.status}:`, JSON.stringify(data).slice(0, 500));
+    }
     res.status(upstream.ok ? 200 : upstream.status).json(data);
 
   } catch (err) {

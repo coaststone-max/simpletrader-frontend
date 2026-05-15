@@ -7829,7 +7829,9 @@ async function maProxy(base, path, method, body, region, _retry){
     }
     const msg = data.error || data.message || data.details || `HTTP ${res.status}`;
     if(res.status===504) throw new Error('MetaApi no respondió a tiempo. Inténtalo de nuevo en unos segundos.');
-    throw new Error(msg);
+    // Show full detail for debugging (ValidationError, etc.)
+    const detail = data.details ? ` — ${JSON.stringify(data.details).slice(0,200)}` : '';
+    throw new Error(msg + detail);
   }
   return data;
 }
@@ -8032,19 +8034,21 @@ async function connectMT5(btn){
       region = existing.region || 'london';
       mt5SetStatus(`✓ Cuenta encontrada`, 'ok');
     } else {
-      mt5SetStatus('➕ Registrando cuenta…','info');
+      mt5SetStatus('➕ Registrando cuenta en MetaApi…','info');
       const created = await maProxy('prov', '/users/current/accounts', 'POST', {
-        login, password: pass, server, platform: 'mt5',
-        name: `SimpleTrader-${login}`,
-        application: 'MetaApi',
-        magic: 0,
-        region: 'london',
+        login:       String(login),
+        password:    pass,
+        server:      server,
+        platform:    'mt5',
+        name:        `SimpleTrader-${login}`,
+        magic:       0,
+        region:      'london',
         reliability: 'regular',
-        type: 'cloud',
+        type:        'cloud',
       });
       accountId = created._id || created.id;
       region = created.region || 'london';
-      mt5SetStatus(`✓ Cuenta registrada`, 'ok');
+      mt5SetStatus(`✓ Cuenta registrada (id: ${accountId})`, 'ok');
     }
 
     // 2. Deploy if needed
