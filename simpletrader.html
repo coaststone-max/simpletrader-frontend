@@ -4902,6 +4902,31 @@ function stLoadSession(){
     toast('Introduce tu nueva contraseña en Mi Perfil → Seguridad','info',6000);
     history.replaceState({},'',window.location.pathname);
   }
+  // ── Tradovate OAuth redirect ──────────────────────────────────────────────
+  if(p.get('oauth_success')==='tradovate'){
+    const n=p.get('accounts')||'?';
+    toast(`✅ Tradovate conectado vía OAuth — ${n} cuenta(s) descubiertas`,'ok',7000);
+    history.replaceState({},'',window.location.pathname);
+    // Reload user data from Supabase to pick up the new token + accounts
+    setTimeout(async()=>{
+      try{await loadUserData();}catch(e){}
+      // Navigate to replicator so the user sees their accounts
+      const repBtn=document.querySelector('[data-s="replicator"]');
+      if(repBtn)repBtn.click();
+    },800);
+  }
+  if(p.get('oauth_error')){
+    const code=p.get('oauth_error');
+    const msgs={
+      not_configured:'OAuth aún no configurado — se activará en enero cuando tengamos el CID',
+      token_exchange: 'Error intercambiando código OAuth con Tradovate — inténtalo de nuevo',
+      supabase_save:  'Conexión OK pero no se pudo guardar — recarga y vuelve a intentarlo',
+      missing_params: 'Parámetros OAuth incompletos — inténtalo de nuevo',
+      server_error:   'Error inesperado en el servidor — inténtalo de nuevo',
+    };
+    toast(msgs[code]||`Error OAuth: ${code}`,'warn',8000);
+    history.replaceState({},'',window.location.pathname);
+  }
   // Restore saved session
   const s=stLoadSession();
   if(s){_stToken=s.access_token;_stUser=s.user;hydrateUser(s.user);}
@@ -6874,13 +6899,50 @@ ${slaveAccs.length>0?`
 
 function openConnectTradovate(){
   const modal=document.createElement('div');modal.className='mm-bg';
-  modal.innerHTML=`<div class="mm" style="max-width:400px">
-<div style="font-size:16px;font-weight:700;color:var(--tx);margin-bottom:4px">⚡ Conectar Tradovate</div>
-<div style="font-size:11px;color:var(--tx3);margin-bottom:20px">Introduce tus credenciales de Tradovate. El sistema descubrirá automáticamente todas tus cuentas (Apex, Bulenox, TopstepX, TradeDay…)</div>
+  const uid=_stUser?.id||'';
+  modal.innerHTML=`<div class="mm" style="max-width:430px">
+<!-- Header -->
+<div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
+  <div style="width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,rgba(91,124,247,.2),rgba(139,92,246,.15));border:1px solid rgba(91,124,247,.3);display:flex;align-items:center;justify-content:center">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7C9BFF" stroke-width="2.2" stroke-linecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+  </div>
+  <div>
+    <div style="font-size:15px;font-weight:800;color:var(--tx)">Conectar Tradovate</div>
+    <div style="font-size:10px;color:var(--tx3)">Descubre automáticamente todas tus cuentas</div>
+  </div>
+</div>
+
+<!-- OAuth option (primary, coming soon) -->
+<div style="border:1.5px solid rgba(91,124,247,.35);border-radius:11px;padding:14px 16px;margin-bottom:10px;background:rgba(91,124,247,.05);position:relative">
+  <div style="position:absolute;top:-9px;right:12px;background:var(--cy);color:#fff;font-size:8px;font-weight:800;padding:2px 8px;border-radius:10px;letter-spacing:.5px">PRÓXIMAMENTE</div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <div style="width:32px;height:32px;border-radius:8px;background:rgba(91,124,247,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7C9BFF" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    </div>
+    <div style="flex:1">
+      <div style="font-size:11.5px;font-weight:700;color:#8AABFF">OAuth seguro — Recomendado</div>
+      <div style="font-size:9.5px;color:var(--tx3);margin-top:2px">Te redirige a tradovate.com · Nunca vemos tu contraseña</div>
+    </div>
+  </div>
+  <button onclick="startTradovateOAuth(this)" style="margin-top:11px;width:100%;padding:9px;border-radius:7px;border:1px solid rgba(91,124,247,.4);background:linear-gradient(135deg,rgba(91,124,247,.18),rgba(139,92,246,.12));color:#8AABFF;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--sans);transition:opacity .15s" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">
+    Conectar con Tradovate →
+  </button>
+  <div style="margin-top:8px;font-size:9px;color:var(--tx3);text-align:center">Activo en enero con el CID · <a href="https://trader.tradovate.com/account/developer" target="_blank" style="color:var(--cy)">trader.tradovate.com/developer</a></div>
+</div>
+
+<!-- Divider -->
+<div style="display:flex;align-items:center;gap:8px;margin:12px 0">
+  <div style="flex:1;height:1px;background:var(--b1)"></div>
+  <span style="font-size:9.5px;color:var(--tx3)">o usa credenciales directas</span>
+  <div style="flex:1;height:1px;background:var(--b1)"></div>
+</div>
+
+<!-- Credentials form (current working method) -->
 <div style="margin-bottom:10px"><div class="pf-lbl">Usuario (email de Tradovate)</div><input class="mm-in" id="tv-con-user" type="email" placeholder="tu@email.com" autocomplete="username"></div>
-<div style="margin-bottom:16px"><div class="pf-lbl">Contraseña</div><input class="mm-in" id="tv-con-pass" type="password" placeholder="••••••••" autocomplete="current-password"></div>
-<div style="padding:9px 11px;background:var(--bg3);border:1px solid var(--b1);border-radius:7px;font-size:9px;color:var(--tx3);margin-bottom:16px;line-height:1.6">
-  🔒 Tus credenciales se guardan <b style="color:var(--tx2)">cifradas en tu perfil privado</b> de SimpleTrader (Supabase con Row Level Security). Nadie más tiene acceso.
+<div style="margin-bottom:14px"><div class="pf-lbl">Contraseña</div><input class="mm-in" id="tv-con-pass" type="password" placeholder="••••••••" autocomplete="current-password"></div>
+<div style="padding:9px 11px;background:var(--bg3);border:1px solid var(--b1);border-radius:7px;font-size:9px;color:var(--tx3);margin-bottom:14px;line-height:1.6">
+  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-1px;margin-right:3px"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+  Credenciales guardadas <b style="color:var(--tx2)">cifradas en tu perfil</b> con Row Level Security · Nadie más tiene acceso
 </div>
 <div id="tv-con-err" style="display:none;padding:8px 11px;background:rgba(204,34,51,.08);border:1px solid rgba(204,34,51,.3);border-radius:7px;font-size:10px;color:var(--rd);margin-bottom:12px"></div>
 <div style="display:flex;gap:7px">
@@ -6891,6 +6953,33 @@ function openConnectTradovate(){
   document.body.appendChild(modal);
   modal.addEventListener('click',function(e){if(e.target===modal)modal.remove();});
   setTimeout(function(){const u=document.getElementById('tv-con-user');if(u)u.focus();},50);
+}
+
+async function startTradovateOAuth(btn){
+  const uid=_stUser?.id||'';
+  if(!uid){toast('Inicia sesión primero para conectar Tradovate','warn');return;}
+  btn.textContent='Verificando…';btn.disabled=true;
+  try{
+    // Check if OAuth is configured (CID available on server)
+    const check=await fetch(`/api/tradovate/oauth-start?user_id=${encodeURIComponent(uid)}&_check=1`,{method:'HEAD'}).catch(()=>null);
+    // If 503 → not configured yet; otherwise redirect
+    const probe=await fetch(`/api/tradovate/oauth-start?user_id=${encodeURIComponent(uid)}&_probe=1`).catch(()=>({status:503}));
+    if(probe.status===503){
+      const data=probe.json?await probe.json().catch(()=>({})):{};
+      if(data.pending){
+        toast('OAuth aún no configurado — se activa en enero cuando tengamos el CID de Tradovate','warn',6000);
+        btn.textContent='Conectar con Tradovate →';btn.disabled=false;return;
+      }
+    }
+    // OAuth is ready — redirect (server will 302 to Tradovate)
+    toast('Redirigiendo a Tradovate…','ok',3000);
+    setTimeout(()=>{
+      window.location.href=`/api/tradovate/oauth-start?user_id=${encodeURIComponent(uid)}`;
+    },400);
+  }catch(err){
+    toast('Error iniciando OAuth: '+err.message,'warn');
+    btn.textContent='Conectar con Tradovate →';btn.disabled=false;
+  }
 }
 
 async function submitConnectTradovate(btn){

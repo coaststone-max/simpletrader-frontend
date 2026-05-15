@@ -28,7 +28,9 @@
   "functions": {
     "api/webhook/tv.js":                    {"maxDuration": 30},
     "api/tradovate/accounts.js":            {"maxDuration": 20},
-    "api/tradovate/exec.js":                {"maxDuration": 15},
+    "api/tradovate/exec.js":               {"maxDuration": 15},
+    "api/tradovate/oauth-start.js":        {"maxDuration": 10},
+    "api/tradovate/oauth-callback.js":     {"maxDuration": 20},
     "api/stripe/webhook.js":                {"maxDuration": 10},
     "api/stripe/create-checkout.js":        {"maxDuration": 10},
     "api/stripe/portal.js":                 {"maxDuration": 10},
