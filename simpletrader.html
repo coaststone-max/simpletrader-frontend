@@ -3064,27 +3064,28 @@ try{
 .ls2-pulse{width:6px;height:6px;background:#4ade80;border-radius:50%;box-shadow:0 0 6px #4ade80;animation:lp 2s infinite;flex-shrink:0}
 .ls2-demo-nav{padding:6px 14px;background:transparent;border:1px solid rgba(255,255,255,.1);border-radius:7px;color:#7E95C0;font-size:11px;font-weight:600;cursor:pointer;font-family:var(--sans);transition:all .15s}
 .ls2-demo-nav:hover{background:rgba(255,255,255,.07);color:#EEF2FF;border-color:rgba(255,255,255,.2)}
-.ls2-body{position:relative;z-index:5;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:36px 20px 48px;min-height:calc(100vh - 60px)}
-.ls2-chart-header{width:340px;margin-bottom:10px;position:relative}
-.ls2-equity-svg{width:100%;height:64px;display:block}
-.ls2-chart-badge{position:absolute;right:2px;bottom:10px;font-size:9px;font-weight:700;color:#a78bfa;letter-spacing:.4px;font-family:var(--mono)}
+.ls2-body{position:relative;z-index:5;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px 20px 24px;min-height:calc(100vh - 60px)}
+.ls2-chart-header{width:320px;margin-bottom:6px;position:relative}
+.ls2-equity-svg{width:100%;height:48px;display:block}
+.ls2-chart-badge{position:absolute;right:2px;bottom:6px;font-size:9px;font-weight:700;color:#a78bfa;letter-spacing:.4px;font-family:var(--mono)}
 .ls2-eq-line{stroke-dasharray:800;stroke-dashoffset:800;animation:ls2Draw 2s cubic-bezier(.4,0,.2,1) .4s forwards}
 @keyframes ls2Draw{to{stroke-dashoffset:0}}
-.ls2-headline-block{text-align:center;margin-bottom:24px;animation:ls2FadeUp .5s ease .2s both}
-.ls2-hl-main{font-size:30px;font-weight:800;color:#EEF2FF;letter-spacing:-1.4px;line-height:1.18;margin-bottom:7px}
-.ls2-hl-sub{font-size:12.5px;color:#3D5075;font-weight:500;letter-spacing:.1px}
-.ls2-card{width:100%;max-width:400px;background:rgba(10,13,22,.96);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:28px 32px 24px;backdrop-filter:blur(32px);-webkit-backdrop-filter:blur(32px);box-shadow:0 24px 64px rgba(0,0,0,.55),inset 0 0 0 1px rgba(91,124,247,.06);animation:ls2FadeUp .5s ease .1s both}
+.ls2-headline-block{text-align:center;margin-bottom:16px;animation:ls2FadeUp .5s ease .2s both}
+.ls2-hl-main{font-size:28px;font-weight:800;color:#EEF2FF;letter-spacing:-1.4px;line-height:1.18;margin-bottom:5px}
+.ls2-hl-sub{font-size:12px;color:#3D5075;font-weight:500;letter-spacing:.1px}
+.ls2-card{width:100%;max-width:400px;background:rgba(10,13,22,.96);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:22px 28px 18px;backdrop-filter:blur(32px);-webkit-backdrop-filter:blur(32px);box-shadow:0 24px 64px rgba(0,0,0,.55),inset 0 0 0 1px rgba(91,124,247,.06);animation:ls2FadeUp .5s ease .1s both}
 @keyframes ls2FadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-.ls2-card-title{font-size:15px;font-weight:700;color:#EEF2FF;letter-spacing:-.3px;margin-bottom:20px;text-align:center}
-.ls2-submit{width:100% !important;padding:13px !important;font-size:14px !important;margin-top:4px !important;border-radius:9px !important;letter-spacing:-.1px !important}
+.ls2-card-title{font-size:14px;font-weight:700;color:#EEF2FF;letter-spacing:-.3px;margin-bottom:14px;text-align:center}
+.ls2-card .lf-g{margin-bottom:11px !important}
+.ls2-submit{width:100% !important;padding:12px !important;font-size:14px !important;margin-top:2px !important;border-radius:9px !important;letter-spacing:-.1px !important}
 .ls2-link-sm{font-size:10px;color:#3D5075;cursor:pointer;transition:color .15s;text-decoration:none;background:none;border:none;padding:0}
 .ls2-link-sm:hover{color:#7C9BFF}
-.ls2-demo-btn{width:100%;padding:11px 14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:9px;color:#4A5780;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);transition:all .15s;display:flex;align-items:center;justify-content:center;gap:8px}
+.ls2-demo-btn{width:100%;padding:9px 14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:9px;color:#4A5780;font-size:11.5px;font-weight:600;cursor:pointer;font-family:var(--sans);transition:all .15s;display:flex;align-items:center;justify-content:center;gap:8px}
 .ls2-demo-btn:hover{background:rgba(255,255,255,.08);color:#7E95C0;border-color:rgba(255,255,255,.14)}
-.ls2-register-link{text-align:center;margin-top:16px;font-size:11.5px;color:#2A3A56}
+.ls2-register-link{text-align:center;margin-top:12px;font-size:11.5px;color:#2A3A56}
 .ls2-register-link a{color:#7C9BFF;cursor:pointer;font-weight:600;transition:color .15s}
 .ls2-register-link a:hover{color:#a78bfa}
-.ls2-trust{margin-top:18px;display:flex;align-items:center;gap:7px;font-size:9.5px;color:#1A2740;font-weight:500;flex-wrap:wrap;justify-content:center;animation:ls2FadeUp .5s ease .3s both}
+.ls2-trust{margin-top:12px;display:flex;align-items:center;gap:7px;font-size:9.5px;color:#1A2740;font-weight:500;flex-wrap:wrap;justify-content:center;animation:ls2FadeUp .5s ease .3s both}
 .ls2-sep{color:#141E30}
 .ls2-trust-link{color:#1A2740;cursor:pointer;transition:color .15s}
 .ls2-trust-link:hover{color:#3D5075}
@@ -3174,7 +3175,7 @@ try{
 
       <button class="btn-pri ls2-submit" id="li-btn" onclick="doLogin()">Iniciar sesión</button>
 
-      <div class="ls-div" style="margin:16px 0">
+      <div class="ls-div" style="margin:12px 0">
         <div class="ls-div-l"></div>
         <span style="font-size:10px;color:#1E2D44;font-weight:600;padding:0 8px">o</span>
         <div class="ls-div-l"></div>
