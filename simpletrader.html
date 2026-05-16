@@ -7953,42 +7953,89 @@ function renderMT5Block(){
   </div>`;
 }
 
+// ── Direct connect via MetaApi Account ID (no provisioning API) ──────────────
+async function connectMT5direct(btn){
+  const accountId = (document.getElementById('mt5-account-id')?.value||'').trim();
+  const region    = document.getElementById('mt5-region')?.value || 'london';
+  const label     = (document.getElementById('mt5-label')?.value||'').trim() || 'MT5 Real';
+
+  if(!accountId){ mt5SetStatus('Introduce el Account ID de MetaApi','warn'); return; }
+  if(!/^[0-9a-f-]{30,}$/i.test(accountId)){ mt5SetStatus('Account ID no válido — debe ser el UUID de MetaApi','warn'); return; }
+
+  btn.disabled = true;
+  mt5SetStatus('🔗 Conectando con MetaApi…','info');
+
+  try {
+    MT5.accountId = accountId;
+    MT5.region = region;
+    await mt5FetchAndRender(accountId, false);
+    MT5._lastSync = Date.now();
+    btn.closest('.mm-bg').remove();
+    mt5StartPolling();
+    toast('✓ MT5 conectado — '+label,'ok');
+    renderLive();
+  } catch(e){
+    btn.disabled = false;
+    mt5SetStatus('❌ '+e.message+'. Verifica que el Account ID sea correcto y que la cuenta esté desplegada en MetaApi.','err');
+  }
+}
+
 function openMT5Modal(){
   const modal = document.createElement('div'); modal.className = 'mm-bg';
-  const brokerOpts = MT5_BROKERS.map(b=>`<option value="${b.id}" data-server="${b.server}">${b.name}</option>`).join('');
-  modal.innerHTML = `<div class="mm" style="max-width:460px">
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
-      <div style="width:40px;height:40px;background:rgba(0,168,255,.12);border:1.5px solid rgba(0,168,255,.3);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#00a8ff;font-family:var(--mono)">MT5</div>
+  modal.innerHTML = `<div class="mm" style="max-width:480px">
+    <!-- Header -->
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+      <div style="width:42px;height:42px;background:rgba(0,168,255,.12);border:1.5px solid rgba(0,168,255,.3);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#00a8ff;font-family:var(--mono)">MT5</div>
       <div>
         <div style="font-size:16px;font-weight:700;color:var(--tx)">Conectar cuenta MT5 real</div>
-        <div style="font-size:11px;color:var(--tx3)">Solo lectura · Datos en tiempo real</div>
+        <div style="font-size:11px;color:var(--tx3)">Solo lectura · Datos en tiempo real vía MetaApi</div>
       </div>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:12px">
-      <div style="grid-column:1/-1">
-        <div class="pf-lbl">Broker</div>
-        <select class="mm-in" id="mt5-broker" onchange="mt5UpdateServer(this)">${brokerOpts}</select>
+
+    <!-- Step guide -->
+    <div style="background:rgba(0,168,255,.05);border:1px solid rgba(0,168,255,.18);border-radius:10px;padding:12px 14px;margin-bottom:16px">
+      <div style="font-size:10.5px;font-weight:700;color:#00a8ff;margin-bottom:8px">Pasos para conectar (solo la primera vez)</div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        ${[
+          ['1','Entra en <a href="https://app.metaapi.cloud/mt-accounts" target="_blank" style="color:#00a8ff">app.metaapi.cloud/mt-accounts</a>'],
+          ['2','Pulsa <b style="color:var(--tx)">+ Add account</b> → introduce login, contraseña real (no inversora) y servidor'],
+          ['3','Copia el <b style="color:var(--tx)">Account ID</b> que aparece (formato: uuid largo)'],
+          ['4','Pégalo abajo junto con la región del servidor (normalmente london)'],
+        ].map(([n,t])=>`<div style="display:flex;align-items:flex-start;gap:8px;font-size:10px;color:var(--tx3)">
+          <span style="min-width:18px;height:18px;border-radius:50%;background:rgba(0,168,255,.2);color:#00a8ff;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">${n}</span>
+          <span style="line-height:1.55">${t}</span>
+        </div>`).join('')}
       </div>
-      <div style="grid-column:1/-1">
-        <div class="pf-lbl">Servidor MT5 <span style="color:var(--tx3);font-weight:400">(MetaTrader 5 → Herramientas → Opciones → Servidor)</span></div>
-        <input class="mm-in" id="mt5-server" placeholder="Ej: ICMarkets-Live01" value="ICMarkets-Live01">
-      </div>
+    </div>
+
+    <!-- Account ID + Region -->
+    <div style="display:grid;grid-template-columns:1fr auto;gap:9px;margin-bottom:12px;align-items:end">
       <div>
-        <div class="pf-lbl">Número de cuenta (login)</div>
-        <input class="mm-in" id="mt5-login" type="text" placeholder="12345678">
+        <div class="pf-lbl">MetaApi Account ID</div>
+        <input class="mm-in" id="mt5-account-id" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" style="font-family:var(--mono);font-size:11px">
       </div>
-      <div>
-        <div class="pf-lbl">Contraseña del inversor</div>
-        <input class="mm-in" id="mt5-pass" type="password" placeholder="••••••••">
+      <div style="min-width:120px">
+        <div class="pf-lbl">Región</div>
+        <select class="mm-in" id="mt5-region">
+          <option value="london">🇬🇧 london</option>
+          <option value="new-york">🇺🇸 new-york</option>
+          <option value="singapore">🇸🇬 singapore</option>
+          <option value="sydney">🇦🇺 sydney</option>
+          <option value="tokyo">🇯🇵 tokyo</option>
+        </select>
       </div>
     </div>
-    <div style="padding:9px 12px;background:rgba(0,168,255,.06);border:1px solid rgba(0,168,255,.15);border-radius:7px;font-size:9.5px;color:var(--tx3);margin-bottom:14px;line-height:1.65">
-      🔒 Usa la <strong style="color:var(--tx)">contraseña de inversor</strong> de MT5 — solo permite leer datos, no puede ejecutar órdenes ni mover fondos. La encontrarás en MetaTrader 5 → clic derecho en la cuenta → Cambiar contraseña del inversor.
+
+    <!-- Optional label -->
+    <div style="margin-bottom:14px">
+      <div class="pf-lbl">Etiqueta (opcional)</div>
+      <input class="mm-in" id="mt5-label" type="text" placeholder="Ej: IC Markets Live 150K">
     </div>
+
     <div id="mt5-modal-status" style="display:none;padding:10px 12px;border-radius:7px;font-size:10.5px;margin-bottom:12px;line-height:1.6"></div>
     <div style="display:flex;gap:7px;justify-content:flex-end">
       <button class="btn sm" onclick="this.closest('.mm-bg').remove()">Cancelar</button>
-      <button class="btn bc sm" id="mt5-connect-btn" onclick="connectMT5(this)" style="background:rgba(0,168,255,.15);border-color:rgba(0,168,255,.4);color:#00a8ff">⚡ Conectar</button>
+      <button class="btn bc sm" id="mt5-connect-btn" onclick="connectMT5direct(this)" style="background:rgba(0,168,255,.15);border-color:rgba(0,168,255,.4);color:#00a8ff">⚡ Conectar</button>
     </div>
   </div>`;
   document.body.appendChild(modal);
