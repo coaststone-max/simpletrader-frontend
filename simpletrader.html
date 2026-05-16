@@ -3096,53 +3096,148 @@ try{
 </script>
 <script src="https://unpkg.com/klinecharts@9/dist/umd/klinecharts.min.js"></script>
 <style>
-/* ===== LOGIN v3 — CENTERED AMBIENT ===== */
-#ls{flex-direction:column !important;align-items:stretch !important;justify-content:flex-start !important;background:#07090F !important;overflow-y:auto !important;position:relative !important}
+/* ===== HERO v4 — Premium SaaS Split Layout ===== */
+#ls{flex-direction:column !important;align-items:stretch !important;justify-content:flex-start !important;background:#07090F !important;overflow-y:auto !important;position:relative !important;min-height:100vh !important}
 .ls-l,.ls-r{display:none !important}
-.ls2-glow-a{position:fixed;top:-200px;right:-100px;width:620px;height:620px;background:radial-gradient(circle,rgba(74,104,240,.13) 0%,transparent 65%);pointer-events:none;z-index:0}
-.ls2-glow-b{position:fixed;bottom:-150px;left:-80px;width:520px;height:520px;background:radial-gradient(circle,rgba(139,92,246,.11) 0%,transparent 65%);pointer-events:none;z-index:0}
-.ls2-grid-bg{position:fixed;inset:0;background-image:linear-gradient(rgba(91,124,247,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(91,124,247,.022) 1px,transparent 1px);background-size:56px 56px;pointer-events:none;z-index:0}
-.ls2-nav{position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:60px;border-bottom:1px solid rgba(255,255,255,.05);flex-shrink:0}
-.ls2-logomark{display:flex;align-items:center;gap:9px}
-.ls2-logo-icon{width:30px;height:30px;background:linear-gradient(135deg,#4f6ef7,#7c5bf6);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;color:#fff;font-family:var(--mono);box-shadow:0 3px 12px rgba(91,124,247,.4)}
-.ls2-logo-text{font-size:14px;font-weight:700;color:#EEF2FF;letter-spacing:-.2px}
-.ls2-nav-right{display:flex;align-items:center;gap:14px}
-.ls2-live-pill{display:flex;align-items:center;gap:5px;padding:4px 10px;background:rgba(74,222,128,.07);border:1px solid rgba(74,222,128,.18);border-radius:20px;font-size:10px;font-weight:600;color:#4ade80}
-.ls2-pulse{width:6px;height:6px;background:#4ade80;border-radius:50%;box-shadow:0 0 6px #4ade80;animation:lp 2s infinite;flex-shrink:0}
-.ls2-demo-nav{padding:6px 14px;background:transparent;border:1px solid rgba(255,255,255,.1);border-radius:7px;color:#7E95C0;font-size:11px;font-weight:600;cursor:pointer;font-family:var(--sans);transition:all .15s}
-.ls2-demo-nav:hover{background:rgba(255,255,255,.07);color:#EEF2FF;border-color:rgba(255,255,255,.2)}
-.ls2-body{position:relative;z-index:5;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px 20px 24px;min-height:calc(100vh - 60px)}
-.ls2-chart-header{width:320px;margin-bottom:6px;position:relative}
-.ls2-equity-svg{width:100%;height:48px;display:block}
-.ls2-chart-badge{position:absolute;right:2px;bottom:6px;font-size:9px;font-weight:700;color:#a78bfa;letter-spacing:.4px;font-family:var(--mono)}
-.ls2-eq-line{stroke-dasharray:800;stroke-dashoffset:800;animation:ls2Draw 2s cubic-bezier(.4,0,.2,1) .4s forwards}
-@keyframes ls2Draw{to{stroke-dashoffset:0}}
-.ls2-headline-block{text-align:center;margin-bottom:16px;animation:ls2FadeUp .5s ease .2s both}
-.ls2-hl-main{font-size:28px;font-weight:800;color:#EEF2FF;letter-spacing:-1.4px;line-height:1.18;margin-bottom:5px}
-.ls2-hl-sub{font-size:12px;color:#3D5075;font-weight:500;letter-spacing:.1px}
-.ls2-card{width:100%;max-width:400px;background:rgba(10,13,22,.96);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:22px 28px 18px;backdrop-filter:blur(32px);-webkit-backdrop-filter:blur(32px);box-shadow:0 24px 64px rgba(0,0,0,.55),inset 0 0 0 1px rgba(91,124,247,.06);animation:ls2FadeUp .5s ease .1s both}
-@keyframes ls2FadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-.ls2-card-title{font-size:14px;font-weight:700;color:#EEF2FF;letter-spacing:-.3px;margin-bottom:14px;text-align:center}
-.ls2-card .lf-g{margin-bottom:11px !important}
-.ls2-submit{width:100% !important;padding:12px !important;font-size:14px !important;margin-top:2px !important;border-radius:9px !important;letter-spacing:-.1px !important}
-.ls2-link-sm{font-size:10px;color:#3D5075;cursor:pointer;transition:color .15s;text-decoration:none;background:none;border:none;padding:0}
+
+/* ── Ambient background ── */
+.hero-glow-a{position:fixed;top:-180px;right:-80px;width:700px;height:700px;background:radial-gradient(circle,rgba(91,124,247,.14) 0%,transparent 60%);pointer-events:none;z-index:0}
+.hero-glow-b{position:fixed;bottom:-200px;left:-100px;width:600px;height:600px;background:radial-gradient(circle,rgba(139,92,246,.11) 0%,transparent 60%);pointer-events:none;z-index:0}
+.hero-glow-c{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:900px;height:450px;background:radial-gradient(ellipse,rgba(91,124,247,.04) 0%,transparent 65%);pointer-events:none;z-index:0}
+.hero-grid-bg{position:fixed;inset:0;background-image:linear-gradient(rgba(91,124,247,.024) 1px,transparent 1px),linear-gradient(90deg,rgba(91,124,247,.024) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0}
+
+/* ── Navbar ── */
+.hero-nav{position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:0 44px;height:64px;border-bottom:1px solid rgba(255,255,255,.05);flex-shrink:0}
+.hero-logo{display:flex;align-items:center;gap:10px}
+.hero-logo-mark{width:33px;height:33px;border-radius:9px;background:linear-gradient(135deg,#4f6ef7,#7c5bf6);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;color:#fff;font-family:var(--mono);box-shadow:0 4px 16px rgba(91,124,247,.45);flex-shrink:0}
+.hero-logo-text{font-size:15px;font-weight:700;color:#EEF2FF;letter-spacing:-.3px}
+.hero-nav-r{display:flex;align-items:center;gap:10px}
+.hero-live-pill{display:flex;align-items:center;gap:6px;padding:5px 12px;background:rgba(74,222,128,.07);border:1px solid rgba(74,222,128,.2);border-radius:20px;font-size:10.5px;font-weight:600;color:#4ade80}
+.hero-hpulse{width:6px;height:6px;border-radius:50%;background:#4ade80;box-shadow:0 0 6px #4ade80;flex-shrink:0;animation:hPulse 2.2s ease-in-out infinite}
+@keyframes hPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(.75)}}
+.hero-ghost-btn{padding:6px 14px;background:transparent;border:1px solid rgba(255,255,255,.1);border-radius:8px;color:#7E95C0;font-size:11.5px;font-weight:600;cursor:pointer;font-family:var(--sans);transition:all .18s;letter-spacing:-.1px}
+.hero-ghost-btn:hover{background:rgba(255,255,255,.07);color:#EEF2FF;border-color:rgba(255,255,255,.2)}
+
+/* ── Split layout ── */
+.hero-layout{position:relative;z-index:5;display:grid;grid-template-columns:1fr 420px;min-height:calc(100vh - 64px)}
+
+/* ── LEFT panel ── */
+.hero-left{display:flex;flex-direction:column;justify-content:center;padding:64px 52px 64px 60px;animation:hFadeUp .65s cubic-bezier(.4,0,.2,1) both}
+@keyframes hFadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+
+/* Badge */
+.hero-badge{display:inline-flex;align-items:center;gap:7px;padding:5px 13px 5px 9px;border-radius:20px;background:rgba(91,124,247,.1);border:1px solid rgba(91,124,247,.3);font-size:11px;font-weight:600;color:#7C9BFF;width:fit-content;margin-bottom:24px;letter-spacing:-.1px;animation:hFadeUp .5s ease .08s both}
+.hero-badge-dot{width:6px;height:6px;border-radius:50%;background:#7C9BFF;box-shadow:0 0 9px rgba(91,124,247,.8);flex-shrink:0;animation:hPulse 2.5s ease-in-out infinite}
+
+/* Headline */
+.hero-h1{font-size:clamp(38px,4.8vw,66px);font-weight:800;color:#EEF2FF;letter-spacing:-2.8px;line-height:1.06;margin-bottom:22px;animation:hFadeUp .6s ease .14s both}
+.hero-h1-accent{background:linear-gradient(138deg,#5B7CF7 0%,#8B5CF6 48%,#c084fc 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;display:block}
+
+/* Subheadline */
+.hero-sub{font-size:15.5px;color:#4A6080;font-weight:400;line-height:1.68;max-width:490px;margin-bottom:32px;animation:hFadeUp .6s ease .2s both}
+
+/* CTAs */
+.hero-ctas{display:flex;align-items:center;gap:10px;margin-bottom:40px;flex-wrap:wrap;animation:hFadeUp .6s ease .26s both}
+.hero-cta-pri{display:inline-flex;align-items:center;gap:8px;padding:13px 24px;border-radius:11px;border:none;cursor:pointer;font-size:14px;font-weight:700;font-family:var(--sans);letter-spacing:-.2px;color:#fff;background:linear-gradient(135deg,#4f6ef7 0%,#7c5bf6 100%);box-shadow:0 6px 26px rgba(91,124,247,.42),inset 0 1px 0 rgba(255,255,255,.18);transition:all .22s cubic-bezier(.4,0,.2,1)}
+.hero-cta-pri:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(91,124,247,.56),inset 0 1px 0 rgba(255,255,255,.18)}
+.hero-cta-pri:active{transform:translateY(0);box-shadow:0 4px 16px rgba(91,124,247,.32)}
+.hero-cta-sec{display:inline-flex;align-items:center;gap:7px;padding:12px 20px;border-radius:11px;cursor:pointer;font-size:13.5px;font-weight:600;font-family:var(--sans);letter-spacing:-.1px;color:#7E95C0;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);transition:all .2s}
+.hero-cta-sec:hover{background:rgba(255,255,255,.08);color:#EEF2FF;border-color:rgba(255,255,255,.2);transform:translateY(-1px)}
+
+/* Metrics strip */
+.hero-metrics{display:flex;align-items:stretch;padding:18px 0;border-top:1px solid rgba(255,255,255,.055);border-bottom:1px solid rgba(255,255,255,.055);margin-bottom:24px;animation:hFadeUp .6s ease .32s both}
+.hero-metric{flex:1;padding:0 18px;display:flex;flex-direction:column;gap:5px}
+.hero-metric:first-child{padding-left:0}
+.hero-metric:last-child{padding-right:0}
+.hero-metric-val{font-size:23px;font-weight:800;color:#EEF2FF;letter-spacing:-1.2px;line-height:1;font-family:var(--mono)}
+.hero-metric-lbl{font-size:9.5px;color:#2D4060;font-weight:600;letter-spacing:.4px;text-transform:uppercase}
+.hero-metric-div{width:1px;height:auto;background:rgba(255,255,255,.06);flex-shrink:0}
+
+/* Replication flow */
+.hero-flow{display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:11px;background:rgba(12,15,26,.85);border:1px solid rgba(255,255,255,.06);margin-bottom:22px;animation:hFadeUp .6s ease .38s both;overflow-x:auto}
+.hf-node{display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0}
+.hf-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;font-family:var(--mono);letter-spacing:-.3px;flex-shrink:0}
+.hf-icon.master{background:rgba(91,124,247,.14);border:1.5px solid rgba(91,124,247,.38);color:#7C9BFF}
+.hf-icon.slave{background:rgba(34,197,94,.08);border:1.5px solid rgba(34,197,94,.28);color:#4ade80;font-size:8px}
+.hf-icon.more{background:rgba(139,92,246,.1);border:1.5px solid rgba(139,92,246,.28);color:#c084fc}
+.hf-lbl{font-size:8.5px;color:#253550;font-weight:600;letter-spacing:.15px;text-align:center;line-height:1.35;max-width:54px}
+.hf-connector{display:flex;flex-direction:column;justify-content:center;gap:5px;flex-shrink:0;padding-bottom:18px}
+.hf-line{height:1.5px;width:26px;border-radius:2px;background:linear-gradient(90deg,rgba(91,124,247,.5),rgba(34,197,94,.45));position:relative;overflow:hidden}
+.hf-line::after{content:'';position:absolute;top:0;left:-70%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.7),transparent);animation:flowShimmer 2.2s ease-in-out infinite}
+.hf-line:nth-child(2)::after{animation-delay:.45s}
+.hf-line:nth-child(3)::after{animation-delay:.9s}
+@keyframes flowShimmer{0%{left:-70%}100%{left:120%}}
+.hf-slaves{display:flex;flex-direction:column;gap:7px}
+.hf-slave-row{display:flex;align-items:center;gap:7px}
+.hf-slave-lbl{font-size:9px;color:#253550;font-weight:600;letter-spacing:.1px;white-space:nowrap}
+
+/* Status bar */
+.hero-status{display:flex;align-items:center;gap:12px;font-size:10.5px;color:#22374E;margin-bottom:22px;animation:hFadeUp .6s ease .44s both;flex-wrap:wrap}
+.hero-status-dot{width:7px;height:7px;border-radius:50%;background:#22C55E;box-shadow:0 0 9px rgba(34,197,94,.65);flex-shrink:0;animation:hPulse 2.8s ease-in-out infinite}
+.hero-status-ok{color:#22C55E;font-weight:600}
+.hero-latency-bar{height:3px;width:100px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;flex-shrink:0}
+.hero-latency-fill{height:100%;width:0;border-radius:3px;background:linear-gradient(90deg,#22C55E,#4ade80);animation:latFill 2s cubic-bezier(.4,0,.2,1) 1s forwards}
+@keyframes latFill{to{width:22%}}
+.hero-uptime-bar{height:3px;width:80px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;flex-shrink:0}
+.hero-uptime-fill{height:100%;width:0;border-radius:3px;background:linear-gradient(90deg,#5B7CF7,#8B5CF6);animation:uptFill 2s cubic-bezier(.4,0,.2,1) 1.2s forwards}
+@keyframes uptFill{to{width:99.97%}}
+.hero-stat-mono{font-family:var(--mono);font-weight:700;font-size:10px}
+
+/* Trust row */
+.hero-trust{display:flex;align-items:center;gap:8px;font-size:10px;color:#1C2D44;font-weight:500;flex-wrap:wrap;animation:hFadeUp .6s ease .5s both}
+.hero-trust-sep{color:#121E30}
+.hero-trust-btn{color:#1C2D44;cursor:pointer;background:none;border:none;font-family:var(--sans);font-size:10px;font-weight:500;transition:color .15s;padding:0}
+.hero-trust-btn:hover{color:#3D5075}
+
+/* ── RIGHT panel — Login card ── */
+.hero-right{display:flex;align-items:center;justify-content:center;padding:40px 44px 40px 24px;border-left:1px solid rgba(255,255,255,.04);animation:hFadeUp .65s cubic-bezier(.4,0,.2,1) .1s both}
+.ls2-card{width:100%;max-width:360px;background:rgba(9,12,22,.96);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:28px 28px 22px;backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);box-shadow:0 32px 80px rgba(0,0,0,.65),inset 0 0 0 1px rgba(91,124,247,.05)}
+.ls2-card-title{font-size:15px;font-weight:700;color:#EEF2FF;letter-spacing:-.3px;margin-bottom:20px;text-align:center}
+.ls2-card .lf-g{margin-bottom:12px !important}
+.ls2-submit{width:100% !important;padding:13px !important;font-size:14px !important;margin-top:4px !important;border-radius:10px !important;letter-spacing:-.15px !important}
+.ls2-link-sm{font-size:10.5px;color:#3D5075;cursor:pointer;transition:color .15s;text-decoration:none;background:none;border:none;padding:0;font-family:var(--sans)}
 .ls2-link-sm:hover{color:#7C9BFF}
-.ls2-demo-btn{width:100%;padding:9px 14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:9px;color:#4A5780;font-size:11.5px;font-weight:600;cursor:pointer;font-family:var(--sans);transition:all .15s;display:flex;align-items:center;justify-content:center;gap:8px}
+.ls2-demo-btn{width:100%;padding:10px 14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:9px;color:#4A5780;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans);transition:all .15s;display:flex;align-items:center;justify-content:center;gap:8px}
 .ls2-demo-btn:hover{background:rgba(255,255,255,.08);color:#7E95C0;border-color:rgba(255,255,255,.14)}
-.ls2-register-link{text-align:center;margin-top:12px;font-size:11.5px;color:#2A3A56}
+.ls2-register-link{text-align:center;margin-top:14px;font-size:11.5px;color:#2A3A56}
 .ls2-register-link a{color:#7C9BFF;cursor:pointer;font-weight:600;transition:color .15s}
 .ls2-register-link a:hover{color:#a78bfa}
-.ls2-trust{margin-top:12px;display:flex;align-items:center;gap:7px;font-size:9.5px;color:#1A2740;font-weight:500;flex-wrap:wrap;justify-content:center;animation:ls2FadeUp .5s ease .3s both}
-.ls2-sep{color:#141E30}
-.ls2-trust-link{color:#1A2740;cursor:pointer;transition:color .15s}
-.ls2-trust-link:hover{color:#3D5075}
+.ls2-trust{display:none}
+.ls-div{display:flex;align-items:center}
+.ls-div-l{flex:1;height:1px;background:rgba(255,255,255,.055)}
+
+/* ── Responsive ── */
+@media(max-width:1020px){
+  .hero-layout{grid-template-columns:1fr;min-height:auto}
+  .hero-left{padding:44px 28px 32px;align-items:center;text-align:center}
+  .hero-badge{margin-left:auto;margin-right:auto}
+  .hero-sub{text-align:center;max-width:520px}
+  .hero-ctas{justify-content:center}
+  .hero-flow{justify-content:center}
+  .hero-status{justify-content:center}
+  .hero-trust{justify-content:center}
+  .hero-metric{align-items:center}
+  .hero-right{padding:0 24px 48px;border-left:none}
+}
 @media(max-width:500px){
-  .ls2-nav{padding:0 18px}
-  .ls2-live-pill{display:none}
-  .ls2-chart-header{width:100%;max-width:320px}
-  .ls2-hl-main{font-size:23px}
+  .hero-nav{padding:0 18px;height:58px}
+  .hero-live-pill{display:none}
+  .hero-layout{min-height:auto}
+  .hero-left{padding:32px 18px 28px}
+  .hero-h1{font-size:clamp(30px,9vw,44px);letter-spacing:-1.8px}
+  .hero-sub{font-size:14px}
+  .hero-ctas{flex-direction:column}
+  .hero-cta-pri,.hero-cta-sec{width:100%;justify-content:center}
+  .hero-metrics{gap:0}
+  .hero-metric{padding:0 12px}
+  .hero-metric-val{font-size:19px}
+  .hero-right{padding:0 16px 36px}
   .ls2-card{padding:22px 18px 20px}
-  .ls2-body{padding:24px 14px 40px}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms !important;animation-delay:.01ms !important}
+  .hero-latency-fill{width:22%}
+  .hero-uptime-fill{width:99.97%}
 }
 </style>
 
@@ -3515,108 +3610,197 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 <body>
 <div id="tc"></div>
 
-<!-- LOGIN v3 — Centered Ambient -->
+<!-- HERO v4 — Premium SaaS Split Layout -->
 <div id="ls">
   <!-- Ambient background -->
-  <div class="ls2-glow-a"></div>
-  <div class="ls2-glow-b"></div>
-  <div class="ls2-grid-bg"></div>
+  <div class="hero-glow-a"></div>
+  <div class="hero-glow-b"></div>
+  <div class="hero-glow-c"></div>
+  <div class="hero-grid-bg"></div>
 
-  <!-- Top nav bar -->
-  <div class="ls2-nav">
-    <div class="ls2-logomark">
-      <div class="ls2-logo-icon">ST</div>
-      <span class="ls2-logo-text">Simple<span style="color:#7C9BFF">Trader</span></span>
+  <!-- Navbar -->
+  <nav class="hero-nav">
+    <div class="hero-logo">
+      <div class="hero-logo-mark">ST</div>
+      <span class="hero-logo-text">Simple<span style="color:#7C9BFF">Trader</span></span>
     </div>
-    <div class="ls2-nav-right">
-      <span class="ls2-live-pill">
-        <span class="ls2-pulse"></span>
+    <div class="hero-nav-r">
+      <span class="hero-live-pill">
+        <span class="hero-hpulse"></span>
         7.500+ traders activos
       </span>
-      <button class="ls2-demo-nav" onclick="doDemo()">Ver demo →</button>
+      <button class="hero-ghost-btn" onclick="openRegister()">Empezar gratis</button>
+      <button class="hero-ghost-btn" onclick="doDemo()">Ver demo →</button>
     </div>
-  </div>
+  </nav>
 
-  <!-- Main centered content -->
-  <div class="ls2-body">
+  <!-- Split layout -->
+  <div class="hero-layout">
 
-    <!-- Mini equity curve -->
-    <div class="ls2-chart-header">
-      <svg class="ls2-equity-svg" viewBox="0 0 340 64" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-        <defs>
-          <linearGradient id="eqLine" x1="0" y1="0" x2="340" y2="0" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#5B7CF7" stop-opacity="0.4"/>
-            <stop offset="100%" stop-color="#a78bfa"/>
-          </linearGradient>
-          <linearGradient id="eqArea" x1="0" y1="0" x2="0" y2="64" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#5B7CF7" stop-opacity="0.13"/>
-            <stop offset="100%" stop-color="#5B7CF7" stop-opacity="0"/>
-          </linearGradient>
-        </defs>
-        <path d="M0,58 C15,55 25,52 40,48 S65,42 82,38 S108,44 128,32 S158,15 180,11 S207,16 228,8 S263,3 298,2 L340,1 L340,64 L0,64 Z" fill="url(#eqArea)"/>
-        <path class="ls2-eq-line" d="M0,58 C15,55 25,52 40,48 S65,42 82,38 S108,44 128,32 S158,15 180,11 S207,16 228,8 S263,3 298,2 L340,1" stroke="url(#eqLine)" stroke-width="1.8" stroke-linecap="round" fill="none"/>
-        <circle cx="340" cy="1" r="3.5" fill="#a78bfa"/>
-        <circle cx="340" cy="1" r="7" fill="#a78bfa" fill-opacity="0.2"/>
-      </svg>
-      <div class="ls2-chart-badge">+28.4% · demo</div>
-    </div>
+    <!-- ── LEFT: Hero content ── -->
+    <div class="hero-left">
 
-    <!-- Headline -->
-    <div class="ls2-headline-block">
-      <div class="ls2-hl-main">Opera con datos.<br>No con emociones.</div>
-      <div class="ls2-hl-sub">El copiloto de IA para prop traders serios</div>
-    </div>
-
-    <!-- Card -->
-    <div class="ls2-card">
-      <div class="ls2-card-title">Accede a tu cuenta</div>
-
-      <div class="lf-g">
-        <label class="lf-l">Email</label>
-        <input class="lf-i" type="email" id="li-email" placeholder="tu@email.com" autocomplete="email">
-        <div class="lf-e" id="li-ee">Email inválido</div>
+      <!-- Badge -->
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        Built for Apex &amp; Topstep traders
       </div>
 
-      <div class="lf-g">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
-          <label class="lf-l" style="margin-bottom:0">Contraseña</label>
-          <a class="ls2-link-sm" onclick="forgotPassword()">¿La olvidaste?</a>
+      <!-- Headline -->
+      <h1 class="hero-h1">
+        Opera una vez.<br>
+        <span class="hero-h1-accent">Replica en todas<br>tus cuentas.</span>
+      </h1>
+
+      <!-- Subheadline -->
+      <p class="hero-sub">
+        Conecta Tradovate una sola vez. Cada operación se clona automáticamente en todas tus prop firms — sin alertas manuales, sin EA, en menos de un segundo.
+      </p>
+
+      <!-- CTAs -->
+      <div class="hero-ctas">
+        <button class="hero-cta-pri" onclick="openRegister()">
+          Empezar gratis — 7 días
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+        <button class="hero-cta-sec" onclick="doDemo()">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Ver demo en vivo
+        </button>
+      </div>
+
+      <!-- Metrics strip -->
+      <div class="hero-metrics">
+        <div class="hero-metric">
+          <div class="hero-metric-val">99.97%</div>
+          <div class="hero-metric-lbl">Uptime</div>
         </div>
-        <input class="lf-i" type="password" id="li-pass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
-        <div class="lf-e" id="li-ep">Credenciales incorrectas</div>
+        <div class="hero-metric-div"></div>
+        <div class="hero-metric">
+          <div class="hero-metric-val">2.4M+</div>
+          <div class="hero-metric-lbl">Trades replicados</div>
+        </div>
+        <div class="hero-metric-div"></div>
+        <div class="hero-metric">
+          <div class="hero-metric-val">&lt;120ms</div>
+          <div class="hero-metric-lbl">Latencia media</div>
+        </div>
       </div>
 
-      <button class="btn-pri ls2-submit" id="li-btn" onclick="doLogin()">Iniciar sesión</button>
-
-      <div class="ls-div" style="margin:12px 0">
-        <div class="ls-div-l"></div>
-        <span style="font-size:10px;color:#1E2D44;font-weight:600;padding:0 8px">o</span>
-        <div class="ls-div-l"></div>
+      <!-- Replication flow diagram -->
+      <div class="hero-flow">
+        <!-- Master -->
+        <div class="hf-node">
+          <div class="hf-icon master">TV</div>
+          <div class="hf-lbl">Tradovate Master</div>
+        </div>
+        <!-- Animated connector -->
+        <div class="hf-connector">
+          <div class="hf-line"></div>
+          <div class="hf-line"></div>
+          <div class="hf-line"></div>
+        </div>
+        <!-- Slave accounts -->
+        <div class="hf-slaves">
+          <div class="hf-slave-row">
+            <div class="hf-icon slave">APX</div>
+            <span class="hf-slave-lbl">Apex Account</span>
+          </div>
+          <div class="hf-slave-row">
+            <div class="hf-icon slave">TSX</div>
+            <span class="hf-slave-lbl">Topstep Account</span>
+          </div>
+          <div class="hf-slave-row">
+            <div class="hf-icon more">+3</div>
+            <span class="hf-slave-lbl" style="color:#4A3A6A">Más cuentas</span>
+          </div>
+        </div>
       </div>
 
-      <button class="ls2-demo-btn" onclick="doDemo()">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-        Explorar demo sin registro
-      </button>
+      <!-- System status & latency -->
+      <div class="hero-status">
+        <span class="hero-status-dot"></span>
+        <span class="hero-status-ok">Sistema operativo</span>
+        <span style="color:#182438">·</span>
+        <span style="color:#182438">Latencia</span>
+        <div class="hero-latency-bar"><div class="hero-latency-fill"></div></div>
+        <span class="hero-stat-mono" style="color:#22C55E">~80ms</span>
+        <span style="color:#182438">·</span>
+        <span style="color:#182438">Uptime 30d</span>
+        <div class="hero-uptime-bar"><div class="hero-uptime-fill"></div></div>
+        <span class="hero-stat-mono" style="color:#7C9BFF">99.97%</span>
+      </div>
 
-      <div class="ls2-register-link">
-        ¿Sin cuenta? <a onclick="openRegister()">Créala gratis →</a>
+      <!-- Trust footer -->
+      <div class="hero-trust">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:.7;flex-shrink:0"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        SSL 256-bit
+        <span class="hero-trust-sep">·</span>
+        Sin tarjeta de crédito
+        <span class="hero-trust-sep">·</span>
+        Cancela cuando quieras
+        <span class="hero-trust-sep">·</span>
+        <button onclick="openLegal('privacy')" class="hero-trust-btn">Privacidad</button>
+      </div>
+
+    </div>
+
+    <!-- ── RIGHT: Login card ── -->
+    <div class="hero-right">
+      <div class="ls2-card">
+        <div class="ls2-card-title">Accede a tu cuenta</div>
+
+        <div class="lf-g">
+          <label class="lf-l">Email</label>
+          <input class="lf-i" type="email" id="li-email" placeholder="tu@email.com" autocomplete="email">
+          <div class="lf-e" id="li-ee">Email inválido</div>
+        </div>
+
+        <div class="lf-g">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+            <label class="lf-l" style="margin-bottom:0">Contraseña</label>
+            <button class="ls2-link-sm" onclick="forgotPassword()">¿La olvidaste?</button>
+          </div>
+          <input class="lf-i" type="password" id="li-pass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+          <div class="lf-e" id="li-ep">Credenciales incorrectas</div>
+        </div>
+
+        <button class="btn-pri ls2-submit" id="li-btn" onclick="doLogin()">Iniciar sesión</button>
+
+        <div class="ls-div" style="margin:14px 0">
+          <div class="ls-div-l"></div>
+          <span style="font-size:10px;color:#1E2D44;font-weight:600;padding:0 10px">o</span>
+          <div class="ls-div-l"></div>
+        </div>
+
+        <button class="ls2-demo-btn" onclick="doDemo()">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Explorar demo sin registro
+        </button>
+
+        <div class="ls2-register-link">
+          ¿Sin cuenta? <a onclick="openRegister()">Créala gratis →</a>
+        </div>
       </div>
     </div>
 
-    <!-- Trust footer -->
-    <div class="ls2-trust">
-      <span>🔒 SSL 256-bit</span>
-      <span class="ls2-sep">·</span>
-      <span>Datos cifrados</span>
-      <span class="ls2-sep">·</span>
-      <span>Cancela cuando quieras</span>
-      <span class="ls2-sep">·</span>
-      <a onclick="openLegal('privacy')" class="ls2-trust-link">Privacidad</a>
-    </div>
+  </div><!-- /hero-layout -->
 
+  <!-- DUMMY to keep old IDs alive (ls2 chart still referenced by some paths) -->
+  <div style="display:none">
+    <svg><defs>
+      <linearGradient id="eqLine" x1="0" y1="0" x2="340" y2="0" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#5B7CF7" stop-opacity="0.4"/>
+        <stop offset="100%" stop-color="#a78bfa"/>
+      </linearGradient>
+      <linearGradient id="eqArea" x1="0" y1="0" x2="0" y2="64" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#5B7CF7" stop-opacity="0.13"/>
+        <stop offset="100%" stop-color="#5B7CF7" stop-opacity="0"/>
+      </linearGradient>
+    </defs></svg>
   </div>
-</div>
+
+</div><!-- /ls -->
 
 <!-- PRICING -->
 <div id="pm">
