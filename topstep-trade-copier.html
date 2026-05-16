@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Topstep Trade Copier — Auto-Sync All Your Topstep Accounts | SimpleTrader</title>
+<meta name="description" content="Automatically copy trades from your master Tradovate account to every Topstep funded account. No EA, no alerts, no manual work. Sub-3s latency. Free 7-day trial.">
+<meta name="keywords" content="topstep trade copier, topstep trader copier, topstep copy trading, copy trades to topstep, topstep account replicator, topstep tradovate copier, topstep funded account copier, topstep trader replication, best topstep copier, topstep automation">
+<link rel="canonical" href="https://simpletrader.app/topstep-trade-copier">
+<meta property="og:title" content="Topstep Trade Copier — Auto-Sync All Your Topstep Accounts | SimpleTrader">
+<meta property="og:description" content="Trade once. Replicate instantly to every Topstep funded account. No EA, no manual copying. Sub-3s latency.">
+<meta property="og:url" content="https://simpletrader.app/topstep-trade-copier">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://simpletrader.app/og-topstep.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Topstep Trade Copier — SimpleTrader">
+<meta name="twitter:description" content="Copy trades to all your Topstep accounts automatically. One master, unlimited funded accounts.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://simpletrader.app/topstep-trade-copier",
+      "url": "https://simpletrader.app/topstep-trade-copier",
+      "name": "Topstep Trade Copier — Auto-Sync All Your Topstep Accounts | SimpleTrader",
+      "description": "Automatically copy trades from your master Tradovate account to every Topstep funded account. Sub-3s latency. Free 7-day trial.",
+      "isPartOf": {"@id": "https://simpletrader.app/#website"},
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://simpletrader.app/"},
+          {"@type": "ListItem", "position": 2, "name": "Topstep Trade Copier", "item": "https://simpletrader.app/topstep-trade-copier"}
+        ]
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Does SimpleTrader work with all Topstep account types?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. SimpleTrader works with all Topstep funded accounts traded on Tradovate — Express, Standard, and any evaluation or live funded account. Both the evaluation phase and funded phase are supported."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need to install any EA or plugin to copy trades to Topstep?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. SimpleTrader connects directly to the Tradovate API. There is no EA, no NinjaTrader plugin, no TradingView alert workaround — just a clean browser-based connection that works automatically."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How fast does SimpleTrader replicate trades to Topstep accounts?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Typical replication latency is under 120ms via persistent WebSocket connections. Orders are placed simultaneously to all slave accounts the moment the master order is confirmed, not after a delay."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I scale position size differently across my Topstep accounts?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Each slave account can use a fixed multiplier or a custom lot size. For example, you can trade 1 contract on the master, 1 contract on a $50k Topstep account, and 2 contracts on a $100k account — all configured per account."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does SimpleTrader have access to my Topstep capital or funds?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. SimpleTrader uses read+trade API permissions only — never withdrawal access. Your capital stays fully in your Topstep account. SimpleTrader can place and close orders, but cannot move, withdraw, or transfer any funds."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What happens if my internet goes down while copying to Topstep accounts?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "SimpleTrader runs on cloud infrastructure, not your local machine. Even if your internet drops, the replication engine continues running and will process any trades from your master account without interruption."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07090F;
+  --bg2:#0B0E1A;
+  --card:rgba(10,13,24,.9);
+  --cy:#5B7CF7;
+  --cy2:#8B5CF6;
+  --text:#F1F5FF;
+  --muted:#8B92A8;
+  --border:rgba(255,255,255,.07);
+  --radius:14px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+
+/* ── NAV ── */
+.seo-nav{position:sticky;top:0;z-index:100;backdrop-filter:blur(18px);background:rgba(7,9,15,.82);border-bottom:1px solid var(--border);padding:0 40px;height:60px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-weight:800;font-size:18px;color:var(--text);text-decoration:none;letter-spacing:-.5px}
+.nav-logo span{color:var(--cy)}
+.nav-cta{background:linear-gradient(135deg,#4f6ef7,#7c5bf6);color:#fff;border:none;padding:8px 20px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;text-decoration:none;transition:opacity .2s}
+.nav-cta:hover{opacity:.85}
+
+/* ── HERO ── */
+.seo-hero{padding:88px 40px 72px;max-width:860px;margin:0 auto;text-align:center}
+.seo-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(91,124,247,.12);border:1px solid rgba(91,124,247,.28);color:#a5b4fc;border-radius:99px;padding:5px 14px;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;margin-bottom:28px}
+.seo-badge-dot{width:6px;height:6px;border-radius:50%;background:#5B7CF7;box-shadow:0 0 8px #5B7CF7;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.seo-h1{font-size:clamp(34px,5vw,60px);font-weight:800;letter-spacing:-2.5px;line-height:1.08;margin-bottom:22px}
+.seo-h1 span{background:linear-gradient(138deg,#5B7CF7 0%,#8B5CF6 50%,#c084fc 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.seo-sub{font-size:clamp(16px,2.2vw,20px);color:var(--muted);max-width:640px;margin:0 auto 36px;line-height:1.65}
+.hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.btn-pri{background:linear-gradient(135deg,#4f6ef7,#7c5bf6);color:#fff;border:none;padding:14px 28px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;text-decoration:none;box-shadow:0 6px 26px rgba(91,124,247,.38);transition:transform .18s,box-shadow .18s}
+.btn-pri:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(91,124,247,.5)}
+.btn-sec{background:transparent;color:var(--text);border:1px solid var(--border);padding:14px 28px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;text-decoration:none;transition:border-color .2s,background .2s}
+.btn-sec:hover{border-color:rgba(91,124,247,.5);background:rgba(91,124,247,.06)}
+.hero-metrics{display:flex;gap:32px;justify-content:center;margin-top:44px;flex-wrap:wrap}
+.metric-item{text-align:center}
+.metric-val{font-size:26px;font-weight:800;letter-spacing:-1px;background:linear-gradient(135deg,#5B7CF7,#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.metric-lbl{font-size:12px;color:var(--muted);margin-top:2px}
+
+/* ── SECTIONS ── */
+.seo-section{padding:72px 40px;max-width:1100px;margin:0 auto}
+.seo-section+.seo-section{border-top:1px solid var(--border)}
+.section-label{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--cy);margin-bottom:14px}
+.seo-h2{font-size:clamp(26px,3.6vw,42px);font-weight:800;letter-spacing:-1.8px;line-height:1.12;margin-bottom:16px}
+.seo-h2 span{background:linear-gradient(135deg,#5B7CF7,#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.section-sub{font-size:17px;color:var(--muted);max-width:580px;line-height:1.65;margin-bottom:48px}
+
+/* ── STEPS ── */
+.steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.step-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:32px 28px;position:relative;transition:border-color .25s,transform .25s}
+.step-card:hover{border-color:rgba(91,124,247,.35);transform:translateY(-3px)}
+.step-num{font-size:48px;font-weight:800;line-height:1;background:linear-gradient(135deg,rgba(91,124,247,.25),rgba(139,92,246,.15));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:16px;font-family:'DM Mono',monospace}
+.step-title{font-size:17px;font-weight:700;margin-bottom:10px}
+.step-desc{font-size:14px;color:var(--muted);line-height:1.65}
+
+/* ── FEATURES ── */
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.feat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px 24px;transition:border-color .25s,transform .25s}
+.feat-card:hover{border-color:rgba(91,124,247,.3);transform:translateY(-2px)}
+.feat-icon{width:44px;height:44px;border-radius:10px;background:rgba(91,124,247,.12);border:1px solid rgba(91,124,247,.2);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.feat-icon svg{width:22px;height:22px;stroke:#5B7CF7;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.feat-title{font-size:15px;font-weight:700;margin-bottom:8px}
+.feat-desc{font-size:13px;color:var(--muted);line-height:1.6}
+
+/* ── COMPAT ── */
+.compat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.compat-item{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px 22px;display:flex;align-items:flex-start;gap:14px}
+.compat-check{width:20px;height:20px;border-radius:50%;background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.compat-check svg{width:11px;height:11px;stroke:#22c55e;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.compat-text strong{font-size:14px;font-weight:600;display:block;margin-bottom:3px}
+.compat-text span{font-size:13px;color:var(--muted)}
+
+/* ── FAQ ── */
+.faq-list{display:flex;flex-direction:column;gap:2px}
+.faq-item{border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:border-color .2s}
+.faq-item.open{border-color:rgba(91,124,247,.3)}
+.faq-q{padding:20px 24px;font-size:15px;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;user-select:none;transition:background .2s}
+.faq-q:hover{background:rgba(255,255,255,.03)}
+.faq-chevron{width:20px;height:20px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .25s,border-color .2s}
+.faq-item.open .faq-chevron{transform:rotate(180deg);border-color:rgba(91,124,247,.4)}
+.faq-chevron svg{width:12px;height:12px;stroke:var(--muted);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s cubic-bezier(.4,0,.2,1)}
+.faq-a-inner{padding:0 24px 20px;font-size:14px;color:var(--muted);line-height:1.7}
+
+/* ── CTA BAND ── */
+.cta-band{background:linear-gradient(135deg,rgba(79,110,247,.12),rgba(124,91,246,.08));border:1px solid rgba(91,124,247,.2);border-radius:20px;padding:64px 48px;text-align:center;margin:0 40px 80px}
+.cta-band h2{font-size:clamp(26px,3.5vw,42px);font-weight:800;letter-spacing:-1.5px;margin-bottom:14px}
+.cta-band p{font-size:17px;color:var(--muted);margin-bottom:32px;max-width:500px;margin-left:auto;margin-right:auto}
+.cta-trust{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;margin-top:20px}
+.cta-trust-item{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.cta-trust-item svg{width:14px;height:14px;stroke:#22c55e;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* ── RELATED ── */
+.related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.related-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px 24px;text-decoration:none;color:inherit;transition:border-color .25s,transform .25s;display:block}
+.related-card:hover{border-color:rgba(91,124,247,.35);transform:translateY(-3px)}
+.related-tag{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--cy);margin-bottom:10px}
+.related-title{font-size:16px;font-weight:700;margin-bottom:8px}
+.related-desc{font-size:13px;color:var(--muted);line-height:1.6}
+.related-arrow{margin-top:16px;font-size:13px;color:var(--cy);font-weight:600}
+
+/* ── FOOTER ── */
+.seo-footer{border-top:1px solid var(--border);padding:40px;text-align:center}
+.footer-links{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;margin-bottom:20px}
+.footer-links a{font-size:13px;color:var(--muted);text-decoration:none;transition:color .2s}
+.footer-links a:hover{color:var(--text)}
+.footer-copy{font-size:12px;color:rgba(139,146,168,.5)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .steps-grid,.features-grid,.related-grid{grid-template-columns:repeat(2,1fr)}
+  .compat-grid{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .seo-nav{padding:0 20px}
+  .seo-hero{padding:64px 20px 52px}
+  .seo-section{padding:52px 20px}
+  .steps-grid,.features-grid,.related-grid{grid-template-columns:1fr}
+  .cta-band{padding:44px 24px;margin:0 20px 60px}
+  .hero-metrics{gap:20px}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms !important;transition-duration:.01ms !important}
+}
+</style>
+</head>
+<body>
+
+<nav class="seo-nav">
+  <a href="https://simpletrader.app/" class="nav-logo">Simple<span>Trader</span></a>
+  <a href="https://simpletrader.app/" class="nav-cta">Start free trial</a>
+</nav>
+
+<!-- HERO -->
+<section class="seo-hero">
+  <div class="seo-badge">
+    <span class="seo-badge-dot"></span>
+    Topstep-certified workflow
+  </div>
+  <h1 class="seo-h1">The #1 Topstep Trade Copier<br>for <span>funded account traders</span></h1>
+  <p class="seo-sub">Trade once on your master account. SimpleTrader instantly replicates every entry, exit, and stop to all your Topstep funded accounts — with no EA, no alerts, no manual work.</p>
+  <div class="hero-btns">
+    <a href="https://simpletrader.app/" class="btn-pri">Start free — 7 days</a>
+    <a href="https://simpletrader.app/" class="btn-sec">Watch demo</a>
+  </div>
+  <div class="hero-metrics">
+    <div class="metric-item">
+      <div class="metric-val">99.97%</div>
+      <div class="metric-lbl">Uptime SLA</div>
+    </div>
+    <div class="metric-item">
+      <div class="metric-val">&lt;120ms</div>
+      <div class="metric-lbl">Avg replication latency</div>
+    </div>
+    <div class="metric-item">
+      <div class="metric-val">2.4M+</div>
+      <div class="metric-lbl">Trades replicated</div>
+    </div>
+    <div class="metric-item">
+      <div class="metric-val">Unlimited</div>
+      <div class="metric-lbl">Slave accounts</div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="seo-section">
+  <div class="section-label">How it works</div>
+  <h2 class="seo-h2">Connect your Topstep accounts<br><span>in three steps</span></h2>
+  <p class="section-sub">No technical knowledge required. If you can log in to Tradovate, you can set up SimpleTrader in under five minutes.</p>
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-num">01</div>
+      <div class="step-title">Connect your master account</div>
+      <p class="step-desc">Link any Tradovate account as your master. This is where you'll place your real trades — SimpleTrader monitors it in real time via persistent WebSocket connection.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">02</div>
+      <div class="step-title">Add your Topstep funded accounts</div>
+      <p class="step-desc">Add as many Topstep funded accounts as you have. Each account gets its own settings: multiplier, lot scaling, position limits. No cap on the number of accounts.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">03</div>
+      <div class="step-title">Trade normally — we handle the rest</div>
+      <p class="step-desc">Place trades as usual on your master. Within milliseconds, identical orders appear across all your Topstep accounts. Close your browser — the engine keeps running in the cloud.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="seo-section">
+  <div class="section-label">Built for Topstep traders</div>
+  <h2 class="seo-h2">Everything you need to <span>scale funded accounts</span></h2>
+  <p class="section-sub">SimpleTrader is purpose-built for prop firm traders managing multiple funded accounts across evaluation and live stages.</p>
+  <div class="features-grid">
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+      <div class="feat-title">Sub-120ms WebSocket replication</div>
+      <p class="feat-desc">Orders are sent to all Topstep slave accounts the instant your master order confirms — not after a polling delay or webhook roundtrip.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 12h8M12 8v8"/></svg>
+      </div>
+      <div class="feat-title">Unlimited slave accounts</div>
+      <p class="feat-desc">Add every Topstep evaluation and funded account you own. No limits, no per-account fees. Scale to 10, 20, or 50 accounts on the same subscription.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <div class="feat-title">Read-only capital access</div>
+      <p class="feat-desc">SimpleTrader holds trade permissions, never withdrawal access. Your Topstep capital is always in your account — we can open and close positions, nothing else.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+      </div>
+      <div class="feat-title">Per-account lot scaling</div>
+      <p class="feat-desc">Trade 1 contract on master, apply a 2× multiplier to your $150k Topstep account and 1× to your $50k account. Each account is independently configured.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg>
+      </div>
+      <div class="feat-title">Cloud-hosted engine</div>
+      <p class="feat-desc">The replication engine runs 24/7 on cloud infrastructure. Close your laptop, turn off your PC — your Topstep accounts keep receiving trades without interruption.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <div class="feat-title">Live dashboard + alerts</div>
+      <p class="feat-desc">Monitor every replication event across all accounts in a single real-time dashboard. Push notifications and email alerts on any execution anomaly.</p>
+    </div>
+  </div>
+</section>
+
+<!-- COMPAT -->
+<section class="seo-section">
+  <div class="section-label">Compatibility</div>
+  <h2 class="seo-h2">Works with <span>all Topstep account types</span></h2>
+  <p class="section-sub">SimpleTrader supports every stage of the Topstep trading journey — from evaluation to funded live account.</p>
+  <div class="compat-grid">
+    <div class="compat-item">
+      <div class="compat-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="compat-text">
+        <strong>Topstep Trading Combine (Evaluation)</strong>
+        <span>Full replication during the evaluation phase — all entry, exit, and stop orders.</span>
+      </div>
+    </div>
+    <div class="compat-item">
+      <div class="compat-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="compat-text">
+        <strong>Topstep Funded Account (Live)</strong>
+        <span>Identical support for funded live accounts. Passes all standard Topstep drawdown rules.</span>
+      </div>
+    </div>
+    <div class="compat-item">
+      <div class="compat-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="compat-text">
+        <strong>Multiple account sizes ($50k / $100k / $150k)</strong>
+        <span>Supports all Topstep account tiers. Each size is treated as a separate slave with custom scaling.</span>
+      </div>
+    </div>
+    <div class="compat-item">
+      <div class="compat-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="compat-text">
+        <strong>Mixed Evaluation + Funded</strong>
+        <span>Run evaluations and funded accounts simultaneously from the same master — all replicated in parallel.</span>
+      </div>
+    </div>
+    <div class="compat-item">
+      <div class="compat-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="compat-text">
+        <strong>Tradovate as the execution platform</strong>
+        <span>All Topstep funded accounts use Tradovate. SimpleTrader connects via the official Tradovate API.</span>
+      </div>
+    </div>
+    <div class="compat-item">
+      <div class="compat-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="compat-text">
+        <strong>Futures instruments (ES, NQ, CL, GC, etc.)</strong>
+        <span>Copies all standard CME and NYMEX futures contracts available on Tradovate.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="seo-section">
+  <div class="section-label">FAQ</div>
+  <h2 class="seo-h2">Common questions about<br><span>the Topstep Trade Copier</span></h2>
+  <p class="section-sub">Everything you need to know before connecting your Topstep accounts.</p>
+  <div class="faq-list">
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        Does SimpleTrader work with all Topstep account types?
+        <span class="faq-chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </div>
+      <div class="faq-a"><div class="faq-a-inner">Yes. SimpleTrader works with all Topstep funded accounts traded on Tradovate — Express, Standard, and any evaluation or live funded account. Both the evaluation phase and funded phase are supported without any change in configuration.</div></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        Do I need to install any EA or plugin?
+        <span class="faq-chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </div>
+      <div class="faq-a"><div class="faq-a-inner">No. SimpleTrader connects directly to the Tradovate API. There is no EA, no NinjaTrader plugin, no TradingView alert workaround — just a clean browser-based connection that works automatically without any platform installation.</div></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        How fast does SimpleTrader replicate trades to Topstep accounts?
+        <span class="faq-chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </div>
+      <div class="faq-a"><div class="faq-a-inner">Typical replication latency is under 120ms via persistent WebSocket connections. Orders are placed simultaneously to all slave accounts the moment the master order is confirmed — not after a polling delay or webhook roundtrip.</div></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        Can I scale position size differently across my Topstep accounts?
+        <span class="faq-chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </div>
+      <div class="faq-a"><div class="faq-a-inner">Yes. Each slave account can use a fixed multiplier or a custom lot size. For example, you can trade 1 contract on the master, 1 contract on a $50k Topstep account, and 2 contracts on a $150k account — all configured independently per account.</div></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        Does SimpleTrader have access to my Topstep capital?
+        <span class="faq-chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </div>
+      <div class="faq-a"><div class="faq-a-inner">No. SimpleTrader uses read+trade API permissions only — never withdrawal access. Your capital stays fully in your Topstep account. SimpleTrader can place and close orders, but cannot move, withdraw, or transfer any funds.</div></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        What happens if my internet drops while replication is active?
+        <span class="faq-chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </div>
+      <div class="faq-a"><div class="faq-a-inner">SimpleTrader runs on cloud infrastructure, not your local machine. Even if your internet drops, the replication engine continues running in the cloud and processes trades from your master account without interruption. When reconnected, the dashboard syncs immediately.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BAND -->
+<div class="cta-band">
+  <h2>Start replicating to your Topstep<br>accounts in under 5 minutes</h2>
+  <p>No credit card required. Cancel anytime. 7-day free trial with full access.</p>
+  <a href="https://simpletrader.app/" class="btn-pri">Create free account</a>
+  <div class="cta-trust">
+    <div class="cta-trust-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>No EA required</div>
+    <div class="cta-trust-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>No credit card</div>
+    <div class="cta-trust-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Cancel anytime</div>
+    <div class="cta-trust-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>7-day free trial</div>
+  </div>
+</div>
+
+<!-- RELATED -->
+<section class="seo-section">
+  <div class="section-label">More copier solutions</div>
+  <h2 class="seo-h2">Other <span>trade copier tools</span> from SimpleTrader</h2>
+  <p class="section-sub">SimpleTrader supports all major prop firms. Explore copiers built for each platform.</p>
+  <div class="related-grid">
+    <a href="https://simpletrader.app/apex-trade-copier" class="related-card">
+      <div class="related-tag">Apex Trader Funding</div>
+      <div class="related-title">Apex Trade Copier</div>
+      <p class="related-desc">Replicate trades to all your Apex Trader Funding accounts. Works with all account sizes and evaluation stages.</p>
+      <div class="related-arrow">Learn more →</div>
+    </a>
+    <a href="https://simpletrader.app/tradovate-trade-copier" class="related-card">
+      <div class="related-tag">Tradovate Platform</div>
+      <div class="related-title">Tradovate Trade Copier</div>
+      <p class="related-desc">Copy trades across any Tradovate account — personal, funded, or evaluation. The most comprehensive Tradovate copier.</p>
+      <div class="related-arrow">Learn more →</div>
+    </a>
+    <a href="https://simpletrader.app/prop-firm-trade-copier" class="related-card">
+      <div class="related-tag">All Prop Firms</div>
+      <div class="related-title">Prop Firm Trade Copier</div>
+      <p class="related-desc">One master account, all your prop firms. Copy to Apex, Topstep, Elite, Take Profit Trader, and more simultaneously.</p>
+      <div class="related-arrow">Learn more →</div>
+    </a>
+  </div>
+</section>
+
+<footer class="seo-footer">
+  <div class="footer-links">
+    <a href="https://simpletrader.app/">Home</a>
+    <a href="https://simpletrader.app/apex-trade-copier">Apex Copier</a>
+    <a href="https://simpletrader.app/topstep-trade-copier">Topstep Copier</a>
+    <a href="https://simpletrader.app/tradovate-trade-copier">Tradovate Copier</a>
+    <a href="https://simpletrader.app/prop-firm-trade-copier">Prop Firm Copier</a>
+  </div>
+  <p class="footer-copy">&copy; 2025 SimpleTrader. Not affiliated with Topstep LLC. Topstep is a registered trademark of Topstep LLC.</p>
+</footer>
+
+<script>
+function toggleFaq(btn){
+  const item=btn.parentElement;
+  const ans=item.querySelector('.faq-a');
+  const isOpen=item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(el=>{
+    el.classList.remove('open');
+    el.querySelector('.faq-a').style.maxHeight='0';
+  });
+  if(!isOpen){
+    item.classList.add('open');
+    ans.style.maxHeight=ans.scrollHeight+'px';
+  }
+}
+</script>
+</body>
+</html>

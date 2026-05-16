@@ -1,6 +1,10 @@
 {
   "rewrites": [
-    {"source": "/", "destination": "/simpletrader.html"}
+    {"source": "/", "destination": "/simpletrader.html"},
+    {"source": "/apex-trade-copier", "destination": "/apex-trade-copier.html"},
+    {"source": "/topstep-trade-copier", "destination": "/topstep-trade-copier.html"},
+    {"source": "/tradovate-trade-copier", "destination": "/tradovate-trade-copier.html"},
+    {"source": "/prop-firm-trade-copier", "destination": "/prop-firm-trade-copier.html"}
   ],
   "headers": [
     {

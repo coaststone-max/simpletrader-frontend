@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Apex Trader Funding Copier — Auto-Replicate Trades | SimpleTrader</title>
+<meta name="description" content="Automatically copy trades from your master Tradovate account to all your Apex Trader Funding accounts. No EA, no alerts. Sub-3s latency. Free 7-day trial.">
+<meta name="keywords" content="apex trade copier, apex trader funding copier, apex trader replicator, copy trades to apex, tradovate apex copier, apex prop firm copier, apex funded account replicator, automatic trade copier apex, apex trader funding trade copy">
+<link rel="canonical" href="https://simpletrader.app/apex-trade-copier">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://simpletrader.app/apex-trade-copier">
+<meta property="og:title" content="Apex Trader Funding Copier — Auto-Replicate Trades | SimpleTrader">
+<meta property="og:description" content="Automatically copy trades from your master Tradovate account to all your Apex accounts. No EA required. Sub-3s replication latency.">
+<meta property="og:image" content="https://simpletrader.app/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Apex Trader Funding Copier | SimpleTrader">
+<meta name="twitter:description" content="Auto-replicate trades to all your Apex Trader Funding accounts. No EA, no alerts. 7-day free trial.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@500&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":"WebPage",
+      "@id":"https://simpletrader.app/apex-trade-copier",
+      "url":"https://simpletrader.app/apex-trade-copier",
+      "name":"Apex Trader Funding Trade Copier | SimpleTrader",
+      "description":"Automatically replicate trades from a master Tradovate account to all Apex Trader Funding accounts in real time.",
+      "breadcrumb":{
+        "@type":"BreadcrumbList",
+        "itemListElement":[
+          {"@type":"ListItem","position":1,"name":"SimpleTrader","item":"https://simpletrader.app"},
+          {"@type":"ListItem","position":2,"name":"Apex Trade Copier","item":"https://simpletrader.app/apex-trade-copier"}
+        ]
+      },
+      "publisher":{"@type":"Organization","name":"SimpleTrader","url":"https://simpletrader.app"}
+    },
+    {
+      "@type":"FAQPage",
+      "mainEntity":[
+        {
+          "@type":"Question",
+          "name":"Does SimpleTrader work with all Apex Trader Funding account types?",
+          "acceptedAnswer":{"@type":"Answer","text":"Yes. SimpleTrader works with all Apex Trader Funding account types — Apex Evaluation, Apex Rithmic Live, and funded accounts — as long as they use Tradovate as the execution platform. You can replicate trades to an unlimited number of Apex accounts simultaneously."}
+        },
+        {
+          "@type":"Question",
+          "name":"Do I need an EA or extra software to copy trades to Apex?",
+          "acceptedAnswer":{"@type":"Answer","text":"No. SimpleTrader connects directly to Tradovate's native API using OAuth authentication. There is no Expert Advisor, no TradingView alert setup, and no additional software to install or maintain. The replication engine runs 24/7 on cloud infrastructure."}
+        },
+        {
+          "@type":"Question",
+          "name":"How fast are trades replicated to my Apex accounts?",
+          "acceptedAnswer":{"@type":"Answer","text":"Trades are replicated in under 3 seconds from execution on your master account. The replication engine polls Tradovate every 2.5 seconds and immediately forwards any new position to your slave accounts. Average latency in practice is 2–4 seconds."}
+        },
+        {
+          "@type":"Question",
+          "name":"Can I scale positions differently on each Apex account?",
+          "acceptedAnswer":{"@type":"Answer","text":"Yes. SimpleTrader supports per-account lot multipliers. If your master trades 2 contracts, you can configure each Apex slave account to receive 1 contract, 2 contracts, or any custom multiplier — giving you full control over risk exposure per account."}
+        },
+        {
+          "@type":"Question",
+          "name":"Does SimpleTrader have access to my Apex Trader Funding capital?",
+          "acceptedAnswer":{"@type":"Answer","text":"No. SimpleTrader only reads trade data and replicates orders. We never have access to withdraw, deposit, or move funds. Your credentials are encrypted at rest with AES-256 and the system operates in read-execute mode only — never with financial custody."}
+        },
+        {
+          "@type":"Question",
+          "name":"What happens to my Apex replication if I close the browser?",
+          "acceptedAnswer":{"@type":"Answer","text":"Nothing changes. The replication engine runs on dedicated cloud infrastructure 24/7, completely independent of your browser or computer. You can close your browser, shut down your PC, and trades will continue replicating to your Apex accounts automatically."}
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
+:root{
+  --bg:#07090F;--bg2:#0E1117;--bg3:#151B28;
+  --card:rgba(10,13,24,.9);--border:rgba(255,255,255,.07);
+  --cy:#5B7CF7;--gn:#22C55E;--tx:#EEF2FF;--tx2:#7E95C0;--tx3:#4A6080;--tx4:#2A3A56;
+  --sans:'DM Sans',system-ui,sans-serif;--mono:'DM Mono',monospace;
+  --radius:12px;
+}
+body{background:var(--bg);color:var(--tx);font-family:var(--sans);line-height:1.6;overflow-x:hidden}
+a{color:var(--cy);text-decoration:none;transition:opacity .15s}
+a:hover{opacity:.8}
+img{max-width:100%}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 56px;height:64px;background:rgba(7,9,15,.92);border-bottom:1px solid var(--border);backdrop-filter:blur(20px)}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-logo-mark{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#4f6ef7,#7c5bf6);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;color:#fff;font-family:var(--mono)}
+.nav-logo-text{font-size:15px;font-weight:700;color:var(--tx)}
+.nav-ctas{display:flex;align-items:center;gap:10px}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:8px 18px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--sans);transition:all .2s;border:none}
+.btn-ghost{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--tx2)}
+.btn-ghost:hover{background:rgba(255,255,255,.09);color:var(--tx)}
+.btn-primary{background:linear-gradient(135deg,#4f6ef7,#7c5bf6);color:#fff;box-shadow:0 4px 20px rgba(91,124,247,.35)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 8px 28px rgba(91,124,247,.5);opacity:1}
+
+/* HERO */
+.hero{position:relative;padding:88px 56px 80px;max-width:900px;margin:0 auto;text-align:center;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:700px;height:400px;background:radial-gradient(ellipse,rgba(91,124,247,.1) 0%,transparent 65%);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;padding:5px 14px;border-radius:20px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.22);font-size:11px;font-weight:700;color:var(--gn);letter-spacing:.5px;text-transform:uppercase;margin-bottom:24px}
+.hero-dot{width:6px;height:6px;border-radius:50%;background:var(--gn);box-shadow:0 0 8px var(--gn);animation:pulse 2.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+h1{font-size:clamp(32px,4.5vw,56px);font-weight:800;letter-spacing:-2px;line-height:1.08;margin-bottom:20px;color:var(--tx)}
+h1 em{font-style:normal;background:linear-gradient(135deg,#5B7CF7,#8B5CF6);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{font-size:16px;color:var(--tx3);max-width:600px;margin:0 auto 36px;line-height:1.7}
+.hero-ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:48px}
+.hero-cta-lg{padding:14px 28px;font-size:15px;border-radius:11px}
+.hero-stats{display:flex;align-items:center;justify-content:center;gap:32px;flex-wrap:wrap;padding:20px 0;border-top:1px solid var(--border)}
+.hero-stat-val{font-size:22px;font-weight:800;color:var(--tx);font-family:var(--mono);letter-spacing:-1px}
+.hero-stat-lbl{font-size:10px;color:var(--tx4);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+
+/* SECTIONS */
+.container{max-width:1080px;margin:0 auto;padding:0 56px}
+.section{padding:72px 0}
+.section-eyebrow{font-size:10.5px;font-weight:700;color:var(--cy);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px}
+h2{font-size:clamp(24px,3vw,38px);font-weight:800;letter-spacing:-1.2px;line-height:1.12;margin-bottom:16px;color:var(--tx)}
+.section-sub{font-size:15px;color:var(--tx3);max-width:600px;line-height:1.7;margin-bottom:48px}
+
+/* STEPS */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:0}
+.step{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px 24px;position:relative}
+.step-num{width:32px;height:32px;border-radius:50%;background:rgba(91,124,247,.12);border:1px solid rgba(91,124,247,.3);color:var(--cy);font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-family:var(--mono)}
+.step-title{font-size:14px;font-weight:700;color:var(--tx);margin-bottom:8px}
+.step-body{font-size:12.5px;color:var(--tx3);line-height:1.7}
+
+/* FEATURES GRID */
+.features{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.feature{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;display:flex;gap:16px;align-items:flex-start;transition:border-color .2s,transform .2s}
+.feature:hover{border-color:rgba(91,124,247,.25);transform:translateY(-2px)}
+.feature-icon{width:40px;height:40px;border-radius:10px;background:rgba(91,124,247,.1);border:1px solid rgba(91,124,247,.22);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.feature-icon svg{display:block}
+.feature-title{font-size:13.5px;font-weight:700;color:var(--tx);margin-bottom:6px}
+.feature-body{font-size:12px;color:var(--tx3);line-height:1.65}
+
+/* COMPATIBLE */
+.compat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:32px}
+.compat-item{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 20px;display:flex;align-items:center;gap:10px}
+.compat-dot{width:8px;height:8px;border-radius:50%;background:var(--gn);box-shadow:0 0 8px rgba(34,197,94,.5);flex-shrink:0}
+.compat-name{font-size:12.5px;font-weight:600;color:var(--tx)}
+.compat-tag{margin-left:auto;font-size:9px;font-weight:700;padding:2px 8px;border-radius:5px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.22);color:var(--gn)}
+
+/* FAQ */
+.faq{display:flex;flex-direction:column;gap:8px}
+.faq-item{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.faq-q{width:100%;display:flex;align-items:center;justify-content:space-between;padding:18px 20px;background:none;border:none;cursor:pointer;text-align:left;color:var(--tx);font-family:var(--sans);font-size:13.5px;font-weight:600;gap:16px;transition:background .15s}
+.faq-q:hover{background:rgba(255,255,255,.03)}
+.faq-q-arr{font-size:12px;color:var(--cy);flex-shrink:0;transition:transform .25s}
+.faq-item.open .faq-q-arr{transform:rotate(180deg)}
+.faq-a{display:none;padding:0 20px 18px;font-size:12.5px;color:var(--tx3);line-height:1.75}
+.faq-item.open .faq-a{display:block}
+
+/* RELATED */
+.related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.related-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:22px;text-decoration:none;display:block;transition:border-color .2s,transform .2s}
+.related-card:hover{border-color:rgba(91,124,247,.3);transform:translateY(-2px);opacity:1}
+.related-card-tag{font-size:9.5px;font-weight:700;color:var(--cy);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
+.related-card-title{font-size:13.5px;font-weight:700;color:var(--tx);margin-bottom:6px}
+.related-card-desc{font-size:11.5px;color:var(--tx4);line-height:1.6}
+
+/* CTA BAND */
+.cta-band{background:linear-gradient(135deg,rgba(91,124,247,.08),rgba(139,92,246,.06));border:1px solid rgba(91,124,247,.18);border-radius:16px;padding:56px 40px;text-align:center;margin:0 0 80px}
+.cta-band h2{font-size:clamp(24px,3vw,36px);margin-bottom:14px}
+.cta-band p{font-size:15px;color:var(--tx3);max-width:500px;margin:0 auto 32px}
+.cta-trust{display:flex;align-items:center;justify-content:center;gap:20px;margin-top:20px;flex-wrap:wrap;font-size:11px;color:var(--tx4)}
+.cta-trust-sep{color:var(--tx4);opacity:.4}
+
+/* FOOTER */
+.footer{border-top:1px solid var(--border);padding:36px 56px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.footer-logo{font-size:14px;font-weight:700;color:var(--tx)}
+.footer-links{display:flex;gap:20px;flex-wrap:wrap}
+.footer-link{font-size:11px;color:var(--tx4);text-decoration:none;transition:color .15s}
+.footer-link:hover{color:var(--tx3)}
+.footer-copy{font-size:11px;color:var(--tx4)}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .nav{padding:0 24px}.hero{padding:64px 24px 56px}
+  .container{padding:0 24px}
+  .steps,.features,.compat-grid,.related-grid{grid-template-columns:1fr}
+  .footer{padding:28px 24px;flex-direction:column;align-items:flex-start}
+}
+@media(max-width:600px){
+  .hero-ctas{flex-direction:column;align-items:center}
+  .hero-stats{gap:20px}
+  .nav-ctas .btn-ghost{display:none}
+  .cta-band{padding:40px 20px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="https://simpletrader.app" class="nav-logo">
+    <div class="nav-logo-mark">ST</div>
+    <span class="nav-logo-text">SimpleTrader</span>
+  </a>
+  <div class="nav-ctas">
+    <a href="https://simpletrader.app" class="btn btn-ghost">Sign in</a>
+    <a href="https://simpletrader.app" class="btn btn-primary">Start free trial</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-badge">
+    <span class="hero-dot"></span>
+    Built for Apex Trader Funding
+  </div>
+  <h1>The fastest <em>Apex Trade Copier</em><br>for prop firm traders</h1>
+  <p class="hero-sub">
+    Execute once on your master account. Every trade is automatically replicated to all your Apex Trader Funding accounts in under 3 seconds — no EA, no TradingView alerts, no manual intervention.
+  </p>
+  <div class="hero-ctas">
+    <a href="https://simpletrader.app" class="btn btn-primary hero-cta-lg">
+      Start free — 7 days
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
+    <a href="https://simpletrader.app" class="btn btn-ghost hero-cta-lg">View demo</a>
+  </div>
+  <div class="hero-stats">
+    <div><div class="hero-stat-val">99.97%</div><div class="hero-stat-lbl">Uptime</div></div>
+    <div><div class="hero-stat-val">&lt;3s</div><div class="hero-stat-lbl">Replication latency</div></div>
+    <div><div class="hero-stat-val">2.4M+</div><div class="hero-stat-lbl">Trades replicated</div></div>
+    <div><div class="hero-stat-val">24/7</div><div class="hero-stat-lbl">Autonomous engine</div></div>
+  </div>
+</header>
+
+<!-- HOW IT WORKS -->
+<section class="section">
+  <div class="container">
+    <div class="section-eyebrow">How it works</div>
+    <h2>Three steps to automate your Apex accounts</h2>
+    <p class="section-sub">SimpleTrader connects to Tradovate's native API. No plugins, no bridges, no EA — pure API replication.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-title">Connect Tradovate</div>
+        <div class="step-body">Link your master Tradovate account via secure OAuth. SimpleTrader reads live positions and order flow — no password sharing required.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-title">Add your Apex accounts</div>
+        <div class="step-body">Register each Apex Trader Funding account as a slave. Set individual lot multipliers, instrument filters, and risk limits per account.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-title">Trade normally</div>
+        <div class="step-body">Execute trades on your master account as usual. The replication engine handles everything else — entries, exits, and stop updates — in under 3 seconds.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section" style="padding-top:0">
+  <div class="container">
+    <div class="section-eyebrow">Features</div>
+    <h2>Built specifically for Apex prop traders</h2>
+    <p class="section-sub">Everything you need to manage multiple Apex Trader Funding accounts from a single master position.</p>
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5B7CF7" stroke-width="1.8" stroke-linecap="round"><circle cx="5" cy="5" r="2.5"/><circle cx="19" cy="19" r="2.5"/><circle cx="19" cy="5" r="2.5"/><path d="M7.5 5h9"/><path d="M5 7.5v9" stroke-dasharray="2 2"/><path d="M19 7.5v9"/></svg>
+        </div>
+        <div>
+          <div class="feature-title">Multi-account replication</div>
+          <div class="feature-body">Replicate to unlimited Apex Trader Funding accounts simultaneously. One execution on your master account triggers all slave accounts in parallel.</div>
+        </div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon" style="background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.25)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="1.8" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10" stroke-width="2"/></svg>
+        </div>
+        <div>
+          <div class="feature-title">No EA required</div>
+          <div class="feature-body">SimpleTrader connects directly to Tradovate's REST API. No Expert Advisor, no MetaTrader bridge, no TradingView alert setup needed.</div>
+        </div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon" style="background:rgba(6,182,212,.1);border-color:rgba(6,182,212,.25)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div>
+          <div class="feature-title">Sub-3s replication latency</div>
+          <div class="feature-body">The replication engine polls Tradovate every 2.5 seconds. Average end-to-end latency from master execution to Apex account fill is under 3 seconds.</div>
+        </div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon" style="background:rgba(139,92,246,.1);border-color:rgba(139,92,246,.25)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="1.8" stroke-linecap="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+        </div>
+        <div>
+          <div class="feature-title">Per-account lot multipliers</div>
+          <div class="feature-body">Scale position size independently for each Apex account. Trade 10 contracts on your master and replicate 2 contracts to a smaller Apex evaluation account.</div>
+        </div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon" style="background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.25)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="1.8" stroke-linecap="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
+        </div>
+        <div>
+          <div class="feature-title">24/7 cloud engine</div>
+          <div class="feature-body">The replication engine runs autonomously on cloud infrastructure. Close your browser, shut down your PC — your Apex accounts keep receiving trades around the clock.</div>
+        </div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon" style="background:rgba(20,184,166,.1);border-color:rgba(20,184,166,.25)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2dd4bf" stroke-width="1.8" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        </div>
+        <div>
+          <div class="feature-title">Auto-reconnect</div>
+          <div class="feature-body">If a connection drops due to broker maintenance or API timeout, SimpleTrader automatically reconnects and resumes replication — no manual intervention required.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPATIBLE -->
+<section class="section" style="padding-top:0">
+  <div class="container">
+    <div class="section-eyebrow">Compatibility</div>
+    <h2>Compatible with all Apex Trader Funding account types</h2>
+    <p class="section-sub">Any Apex account that executes on Tradovate is compatible. SimpleTrader works across all account categories.</p>
+    <div class="compat-grid">
+      <div class="compat-item"><span class="compat-dot"></span><span class="compat-name">Apex Evaluation Accounts</span><span class="compat-tag">Supported</span></div>
+      <div class="compat-item"><span class="compat-dot"></span><span class="compat-name">Apex Performance Accounts</span><span class="compat-tag">Supported</span></div>
+      <div class="compat-item"><span class="compat-dot"></span><span class="compat-name">Apex Funded Accounts</span><span class="compat-tag">Supported</span></div>
+      <div class="compat-item"><span class="compat-dot"></span><span class="compat-name">Multiple accounts simultaneously</span><span class="compat-tag">Supported</span></div>
+      <div class="compat-item"><span class="compat-dot"></span><span class="compat-name">All Tradovate instruments (ES, NQ, CL…)</span><span class="compat-tag">Supported</span></div>
+      <div class="compat-item"><span class="compat-dot"></span><span class="compat-name">Mixed account sizes</span><span class="compat-tag">Supported</span></div>
+    </div>
+    <p style="font-size:12px;color:var(--tx4)">SimpleTrader also works with Topstep, Bulenox, TradeDay, Take Profit Trader, and any other prop firm using Tradovate. <a href="/prop-firm-trade-copier">See all compatible prop firms →</a></p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" style="padding-top:0">
+  <div class="container">
+    <div class="section-eyebrow">FAQ</div>
+    <h2>Common questions about the Apex Trade Copier</h2>
+    <p class="section-sub" style="margin-bottom:32px">Everything you need to know before connecting your first Apex account.</p>
+    <div class="faq">
+      <div class="faq-item">
+        <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          Does SimpleTrader work with all Apex Trader Funding account types?
+          <span class="faq-q-arr">▼</span>
+        </button>
+        <div class="faq-a">Yes. SimpleTrader works with all Apex Trader Funding account types — Evaluation, Performance, and funded accounts — as long as they use Tradovate as the execution platform. You can replicate trades to an unlimited number of Apex accounts simultaneously, including accounts of different sizes.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          Do I need an EA or additional software to copy trades to Apex?
+          <span class="faq-q-arr">▼</span>
+        </button>
+        <div class="faq-a">No. SimpleTrader connects directly to Tradovate's native API using OAuth authentication. There is no Expert Advisor to install, no TradingView alert setup, and no additional software. The replication engine runs 24/7 on cloud infrastructure — you only need a web browser to manage it.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          How fast are trades replicated to my Apex accounts?
+          <span class="faq-q-arr">▼</span>
+        </button>
+        <div class="faq-a">Trades are replicated in 2–4 seconds from execution on your master account. The replication engine polls Tradovate's API every 2.5 seconds and immediately forwards detected positions to all configured Apex slave accounts in parallel. This is more than sufficient for intraday futures trading.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          Can I use different position sizes per Apex account?
+          <span class="faq-q-arr">▼</span>
+        </button>
+        <div class="faq-a">Yes. SimpleTrader supports per-account lot multipliers. You can configure each Apex slave to receive a different contract size. For example, if you trade 4 ES contracts on your master, one Apex account can receive 2 contracts and another can receive 1 — independently configured per account.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          Does SimpleTrader have access to my Apex Trader Funding capital?
+          <span class="faq-q-arr">▼</span>
+        </button>
+        <div class="faq-a">No. SimpleTrader operates in read-execute mode only — we read market data and replicate trade instructions. We never have custody of your funds, cannot withdraw or deposit, and cannot access your financial information. All credentials are encrypted at rest with AES-256 and stored with strict user-level isolation.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          What happens to replication if I close my browser or shut down my PC?
+          <span class="faq-q-arr">▼</span>
+        </button>
+        <div class="faq-a">Nothing changes. The replication engine runs autonomously on dedicated cloud infrastructure, completely independent of your local computer or browser session. You can close everything — trades will continue replicating to your Apex accounts 24/7 until you manually pause the engine.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section" style="padding-top:0">
+  <div class="container">
+    <div class="cta-band">
+      <div class="section-eyebrow" style="margin-bottom:16px">Start today</div>
+      <h2>Connect your first Apex account in under 5 minutes</h2>
+      <p>No credit card required. Full platform access for 7 days. Cancel any time.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <a href="https://simpletrader.app" class="btn btn-primary" style="padding:13px 28px;font-size:14px">
+          Start free trial
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+        <a href="https://simpletrader.app" class="btn btn-ghost" style="padding:13px 24px;font-size:14px">View live demo</a>
+      </div>
+      <div class="cta-trust">
+        <span>No credit card required</span>
+        <span class="cta-trust-sep">·</span>
+        <span>7-day free trial</span>
+        <span class="cta-trust-sep">·</span>
+        <span>Cancel any time</span>
+        <span class="cta-trust-sep">·</span>
+        <span>AES-256 encrypted</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RELATED -->
+<section class="section" style="padding-top:0;padding-bottom:80px">
+  <div class="container">
+    <div class="section-eyebrow">Related pages</div>
+    <h2 style="margin-bottom:24px">Other trade copier solutions</h2>
+    <div class="related-grid">
+      <a href="/topstep-trade-copier" class="related-card">
+        <div class="related-card-tag">Topstep</div>
+        <div class="related-card-title">Topstep Trade Copier</div>
+        <div class="related-card-desc">Automatically replicate trades to your Topstep funded and evaluation accounts via Tradovate.</div>
+      </a>
+      <a href="/tradovate-trade-copier" class="related-card">
+        <div class="related-card-tag">Tradovate</div>
+        <div class="related-card-title">Tradovate Trade Copier</div>
+        <div class="related-card-desc">Copy trades between multiple Tradovate accounts across any prop firm simultaneously.</div>
+      </a>
+      <a href="/prop-firm-trade-copier" class="related-card">
+        <div class="related-card-tag">All prop firms</div>
+        <div class="related-card-title">Prop Firm Trade Copier</div>
+        <div class="related-card-desc">One master account, replicated across Apex, Topstep, Bulenox, TradeDay and more.</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div>
+    <div class="nav-logo" style="margin-bottom:8px;display:flex;align-items:center;gap:9px">
+      <div class="nav-logo-mark" style="width:26px;height:26px;font-size:9px">ST</div>
+      <span class="footer-logo">SimpleTrader</span>
+    </div>
+    <div class="footer-copy">© 2026 SimpleTrader. All rights reserved.</div>
+  </div>
+  <div class="footer-links">
+    <a href="https://simpletrader.app" class="footer-link">Platform</a>
+    <a href="/apex-trade-copier" class="footer-link">Apex Copier</a>
+    <a href="/topstep-trade-copier" class="footer-link">Topstep Copier</a>
+    <a href="/tradovate-trade-copier" class="footer-link">Tradovate Copier</a>
+    <a href="/prop-firm-trade-copier" class="footer-link">Prop Firm Copier</a>
+    <a href="https://simpletrader.app" class="footer-link">Privacy</a>
+    <a href="https://simpletrader.app" class="footer-link">Terms</a>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('.faq-q').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const item=btn.parentElement;
+    document.querySelectorAll('.faq-item.open').forEach(el=>{if(el!==item)el.classList.remove('open')});
+    item.classList.toggle('open');
+  });
+});
+</script>
+</body>
+</html>
