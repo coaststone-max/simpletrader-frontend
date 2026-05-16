@@ -3869,6 +3869,290 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
   .mv{font-size:20px !important}
   .mc{padding:13px !important}
 }
+
+/* ═══════════════════════════════════════════════════════════
+   DASHBOARD v5 — Premium Fintech Redesign
+   Inspired by: Vercel · Stripe · TradingView · Linear
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Dashboard layout wrappers ── */
+#sec-dashboard .content-inner{display:flex;flex-direction:column;gap:0}
+
+/* ── Dashboard Header ── */
+.db-header{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  padding:6px 0 20px;
+  border-bottom:1px solid rgba(255,255,255,.045);
+  margin-bottom:20px;
+  gap:12px;flex-wrap:wrap;
+}
+.db-header-left{}
+.db-greeting{
+  font-size:22px;font-weight:800;letter-spacing:-.7px;line-height:1.18;
+  background:linear-gradient(125deg,#EEF2FF 15%,rgba(138,171,255,.85) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.db-dateline{
+  font-size:11.5px;color:#2E4068;margin-top:5px;
+  font-weight:500;letter-spacing:.1px;display:flex;align-items:center;gap:8px;
+}
+.db-session-dot{
+  width:6px;height:6px;border-radius:50%;flex-shrink:0;
+  background:#22c55e;box-shadow:0 0 7px rgba(34,197,94,.8);
+  animation:sessionPulse 2.2s ease-in-out infinite;
+}
+.db-session-dot.closed{background:#f59e0b;box-shadow:0 0 7px rgba(245,158,11,.7);animation:none}
+@keyframes sessionPulse{0%,100%{opacity:1;box-shadow:0 0 7px rgba(34,197,94,.8)}50%{opacity:.6;box-shadow:0 0 3px rgba(34,197,94,.4)}}
+.db-header-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.db-lat-chip{
+  display:flex;align-items:center;gap:6px;
+  padding:6px 12px;
+  background:rgba(91,124,247,.08);border:1px solid rgba(91,124,247,.18);
+  border-radius:8px;cursor:default;
+}
+.db-lat-dot{
+  width:5px;height:5px;border-radius:50%;background:#5B7CF7;
+  box-shadow:0 0 6px #5B7CF7;animation:sessionPulse 1.8s infinite;
+}
+.db-lat-val{font-size:11px;font-weight:700;color:#7a9fff;font-family:var(--mono)}
+.db-lat-lbl{font-size:9px;color:#2E4068;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+
+/* ── KPI Cards strip ── */
+#dash-kpi .mc{
+  background:rgba(8,11,22,.7) !important;
+  border:1px solid rgba(255,255,255,.065) !important;
+  border-radius:13px !important;
+  padding:18px 18px 16px !important;
+  position:relative;overflow:hidden;
+  transition:border-color .22s ease,transform .22s ease,box-shadow .22s ease !important;
+  cursor:default;
+}
+#dash-kpi .mc::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(91,124,247,.3),transparent);
+  opacity:0;transition:opacity .22s;
+}
+#dash-kpi .mc:hover{
+  border-color:rgba(91,124,247,.25) !important;
+  transform:translateY(-2px) !important;
+  box-shadow:0 8px 28px rgba(0,0,0,.25),0 0 0 1px rgba(91,124,247,.1) !important;
+}
+#dash-kpi .mc:hover::before{opacity:1}
+.mc-icon{
+  width:38px;height:38px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:14px;flex-shrink:0;
+}
+.ml{
+  font-size:10.5px !important;font-weight:600 !important;
+  letter-spacing:.6px !important;text-transform:uppercase !important;
+  color:#2E4068 !important;margin-bottom:5px !important;
+}
+.mv{
+  font-size:24px !important;font-weight:800 !important;
+  letter-spacing:-1.2px !important;line-height:1 !important;
+  margin-bottom:5px !important;
+}
+.ms{font-size:10.5px !important;color:#2E4068 !important;font-weight:500 !important}
+
+/* KPI accent bar bottom */
+#dash-kpi .mc::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  border-radius:0 0 13px 13px;
+  background:linear-gradient(90deg,transparent,rgba(91,124,247,.15),transparent);
+}
+
+/* ── Replication Status Panel ── */
+.db-rep-panel{
+  background:rgba(8,11,22,.7);
+  border:1px solid rgba(255,255,255,.065);
+  border-radius:13px;
+  padding:0;overflow:hidden;
+  margin-bottom:12px;
+}
+.db-rep-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 18px 13px;
+  border-bottom:1px solid rgba(255,255,255,.04);
+  gap:10px;flex-wrap:wrap;
+}
+.db-rep-title{
+  display:flex;align-items:center;gap:8px;
+  font-size:11px;font-weight:700;color:#5B7CF7;
+  letter-spacing:.6px;text-transform:uppercase;
+}
+.db-rep-title svg{opacity:.8}
+.db-rep-meta{font-size:10.5px;color:#2E4068;font-weight:500}
+.db-rep-body{padding:12px 18px 16px}
+
+/* Replication flow visual */
+.db-rep-flow{
+  display:flex;align-items:center;gap:0;
+  overflow-x:auto;padding-bottom:2px;
+  scrollbar-width:none;
+}
+.db-rep-flow::-webkit-scrollbar{display:none}
+.db-rep-master{
+  flex-shrink:0;
+  background:rgba(91,124,247,.1);border:1px solid rgba(91,124,247,.3);
+  border-radius:10px;padding:10px 14px;text-align:center;min-width:90px;
+}
+.db-rep-master-label{font-size:8px;font-weight:700;color:#5B7CF7;text-transform:uppercase;letter-spacing:.6px;margin-bottom:4px}
+.db-rep-master-name{font-size:11px;font-weight:700;color:#EEF2FF;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:80px}
+.db-rep-master-lat{font-size:9px;color:#22c55e;font-family:var(--mono);margin-top:2px;display:flex;align-items:center;justify-content:center;gap:3px}
+.db-rep-master-lat::before{content:'';width:4px;height:4px;border-radius:50%;background:#22c55e;box-shadow:0 0 5px #22c55e;display:inline-block;animation:sessionPulse 2s infinite}
+
+.db-rep-line{
+  flex:1;min-width:24px;height:1px;position:relative;margin:0 -1px;
+}
+.db-rep-line-inner{
+  height:1px;background:linear-gradient(90deg,rgba(91,124,247,.5),rgba(91,124,247,.2));
+  position:relative;overflow:hidden;
+}
+.db-rep-line-inner::after{
+  content:'';position:absolute;top:-1px;left:-40%;width:40%;height:3px;
+  background:linear-gradient(90deg,transparent,rgba(91,124,247,.8),transparent);
+  animation:flowLine 1.8s linear infinite;
+}
+.db-rep-line-inner.bad::after{display:none}
+.db-rep-line-inner.bad{background:rgba(239,68,68,.2)}
+@keyframes flowLine{to{left:140%}}
+
+.db-acc-card{
+  flex-shrink:0;
+  background:rgba(9,13,24,.8);border:1px solid rgba(255,255,255,.06);
+  border-radius:10px;padding:10px 14px;text-align:center;min-width:88px;
+  transition:border-color .2s;position:relative;
+}
+.db-acc-card.connected{border-color:rgba(34,197,94,.18)}
+.db-acc-card.error{border-color:rgba(239,68,68,.2)}
+.db-acc-status-dot{
+  position:absolute;top:8px;right:8px;
+  width:6px;height:6px;border-radius:50%;
+}
+.db-acc-status-dot.connected{background:#22c55e;box-shadow:0 0 5px rgba(34,197,94,.7);animation:sessionPulse 2.5s infinite}
+.db-acc-status-dot.error{background:#ef4444;box-shadow:0 0 5px rgba(239,68,68,.5)}
+.db-acc-status-dot.idle{background:#f59e0b}
+.db-acc-firm{font-size:8px;font-weight:700;color:#2E4068;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.db-acc-name{font-size:10.5px;font-weight:700;color:#A8BFDF;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:76px}
+.db-acc-pnl{font-size:11px;font-weight:700;font-family:var(--mono);margin-top:4px}
+.db-acc-lat{font-size:8.5px;color:#2E4068;font-family:var(--mono);margin-top:2px}
+.db-acc-lat span{color:#5B7CF7}
+
+/* Empty replication state */
+.db-rep-empty{
+  text-align:center;padding:20px 0;
+  font-size:12px;color:#2E4068;
+}
+.db-rep-empty a{color:#5B7CF7;cursor:pointer;text-decoration:none}
+.db-rep-empty a:hover{text-decoration:underline}
+
+/* ── Mid grid ── */
+.db-mid-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.db-bot-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+
+/* ── Premium Cards ── */
+#sec-dashboard .card{
+  background:rgba(8,11,22,.7) !important;
+  border:1px solid rgba(255,255,255,.065) !important;
+  border-radius:13px !important;
+  transition:border-color .22s ease !important;
+}
+#sec-dashboard .card:hover{
+  border-color:rgba(91,124,247,.18) !important;
+}
+#sec-dashboard .hd{
+  font-size:10.5px !important;
+  letter-spacing:.7px !important;
+  color:#3D5075 !important;
+  padding-bottom:12px !important;
+  border-bottom:1px solid rgba(255,255,255,.04) !important;
+  margin-bottom:14px !important;
+  display:flex !important;
+  align-items:center !important;
+  gap:7px !important;
+}
+#sec-dashboard .hd svg{
+  opacity:.55 !important;
+  stroke:#5B7CF7 !important;
+}
+
+/* ── Risk / Drawdown widget ── */
+.db-risk-grid{display:flex;flex-direction:column;gap:12px}
+.db-dd-item{display:flex;flex-direction:column;gap:6px}
+.db-dd-head{display:flex;align-items:center;justify-content:space-between}
+.db-dd-label{font-size:10.5px;font-weight:600;color:#4A5D7A}
+.db-dd-val{font-size:11px;font-weight:700;font-family:var(--mono)}
+.db-dd-bar-bg{height:5px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden}
+.db-dd-bar-fill{height:100%;border-radius:3px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.db-dd-bar-fill.safe{background:linear-gradient(90deg,#22c55e,#16a34a)}
+.db-dd-bar-fill.warn{background:linear-gradient(90deg,#f59e0b,#d97706)}
+.db-dd-bar-fill.danger{background:linear-gradient(90deg,#ef4444,#b91c1c)}
+
+/* Risk metrics chips */
+.db-risk-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.db-risk-chip{
+  display:flex;align-items:center;gap:5px;
+  padding:6px 10px;border-radius:7px;
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
+  font-size:10px;font-weight:600;color:#4A5D7A;
+  transition:border-color .2s;
+}
+.db-risk-chip.safe{border-color:rgba(34,197,94,.15);color:#4ade80}
+.db-risk-chip.warn{border-color:rgba(245,158,11,.15);color:#fbbf24}
+.db-risk-chip.danger{border-color:rgba(239,68,68,.15);color:#f87171}
+.db-risk-chip-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.db-risk-chip.safe .db-risk-chip-dot{background:#22c55e}
+.db-risk-chip.warn .db-risk-chip-dot{background:#f59e0b}
+.db-risk-chip.danger .db-risk-chip-dot{background:#ef4444}
+
+/* ── Positions table premium ── */
+#sec-dashboard .tw table{font-size:11.5px !important}
+#sec-dashboard .tw th{
+  font-size:8.5px !important;
+  color:#1E2D47 !important;
+  letter-spacing:.8px !important;
+  padding:7px 10px !important;
+}
+#sec-dashboard .tw td{
+  padding:8px 10px !important;
+  color:#6B83A6 !important;
+  font-size:11px !important;
+}
+#sec-dashboard .tw tr:hover td{
+  background:rgba(91,124,247,.04) !important;
+  color:#C8D4EE !important;
+}
+
+/* ── Rules strip premium ── */
+.rstrip .bdg{
+  font-size:9px !important;
+  padding:4px 10px !important;
+  border-radius:6px !important;
+  font-weight:700 !important;
+  letter-spacing:.2px !important;
+}
+
+/* ── AI banner ── */
+#dash-ai-banner{
+  border-radius:12px !important;
+  margin-bottom:12px !important;
+}
+
+/* ── Instr bars ── */
+#instr-bars>div{align-items:center !important}
+
+/* ── Responsive dashboard ── */
+@media(max-width:960px){
+  .db-mid-grid,.db-bot-grid{grid-template-columns:1fr}
+  #dash-kpi.g4{grid-template-columns:repeat(2,1fr) !important}
+}
+@media(max-width:600px){
+  .db-mid-grid,.db-bot-grid{grid-template-columns:1fr}
+  #dash-kpi.g4{grid-template-columns:repeat(2,1fr) !important}
+  .db-header{padding-bottom:14px}
+  .db-greeting{font-size:18px}
+}
 </style>
 </head>
 <body>
@@ -4401,109 +4685,158 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
   </div>
   <div class="content">
 
-<!-- DASHBOARD -->
+<!-- DASHBOARD v5 — Premium Fintech -->
 <div class="sec act" id="sec-dashboard">
 
-  <!-- ── Dashboard hero header ── -->
-  <div id="dash-hero" style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px;gap:12px;flex-wrap:wrap">
-    <div>
-      <div id="dash-greeting" style="font-size:20px;font-weight:800;color:#EEF2FF;letter-spacing:-.5px;line-height:1.2">Buenos días</div>
-      <div id="dash-date-line" style="font-size:12px;color:#3D5075;margin-top:3px;font-weight:500"></div>
-    </div>
-    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-      <!-- Live equity badge -->
-      <div id="eq-live-hero" style="display:none;align-items:center;gap:7px;padding:7px 14px;background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);border-radius:8px">
-        <span style="width:6px;height:6px;background:#4ade80;border-radius:50%;box-shadow:0 0 6px #4ade80;animation:lp 2s infinite;flex-shrink:0"></span>
-        <span id="eq-live" style="font-size:12px;font-weight:700;color:#4ade80;font-family:var(--mono)"></span>
-        <span style="font-size:9px;color:rgba(74,222,128,.55);font-weight:600;letter-spacing:.4px;text-transform:uppercase">Live</span>
+  <!-- ── Header ── -->
+  <div class="db-header" id="dash-hero">
+    <div class="db-header-left">
+      <div id="dash-greeting" class="db-greeting">Buenos días</div>
+      <div id="dash-date-line" class="db-dateline">
+        <span class="db-session-dot" id="db-session-dot"></span>
+        <span id="dash-date-txt"></span>
       </div>
-      <!-- Rule violations badge -->
-      <div id="dash-alert-badge" style="display:none;align-items:center;gap:6px;padding:7px 14px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);border-radius:8px;cursor:pointer" onclick="nav(document.querySelector('[data-s=risk]'))">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        <span id="dash-alert-txt" style="font-size:12px;font-weight:600;color:#f87171">Ver alertas</span>
+    </div>
+    <div class="db-header-right">
+      <!-- Latency chip -->
+      <div class="db-lat-chip" id="db-lat-chip" title="Latencia media de replicación">
+        <span class="db-lat-dot"></span>
+        <span class="db-lat-val" id="db-lat-val">—</span>
+        <span class="db-lat-lbl">ms avg</span>
+      </div>
+      <!-- Live equity badge -->
+      <div id="eq-live-hero" style="display:none;align-items:center;gap:7px;padding:6px 13px;background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);border-radius:8px">
+        <span style="width:5px;height:5px;background:#4ade80;border-radius:50%;box-shadow:0 0 6px #4ade80;animation:lp 2s infinite;flex-shrink:0"></span>
+        <span id="eq-live" style="font-size:11.5px;font-weight:700;color:#4ade80;font-family:var(--mono)"></span>
+        <span style="font-size:8.5px;color:rgba(74,222,128,.5);font-weight:600;letter-spacing:.5px;text-transform:uppercase">Open</span>
+      </div>
+      <!-- Alert badge -->
+      <div id="dash-alert-badge" style="display:none;align-items:center;gap:6px;padding:6px 13px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.22);border-radius:8px;cursor:pointer" onclick="nav(document.querySelector('[data-s=risk]'))">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <span id="dash-alert-txt" style="font-size:11px;font-weight:600;color:#f87171">Alertas de riesgo</span>
       </div>
     </div>
   </div>
 
-  <!-- ── AI Insight banner ── -->
-  <div id="dash-ai-banner" style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:linear-gradient(90deg,rgba(91,124,247,.1) 0%,rgba(139,92,246,.06) 100%);border:1px solid rgba(91,124,247,.2);border-radius:10px;margin-bottom:16px;cursor:pointer" onclick="nav(document.querySelector('[data-s=journal]'))">
+  <!-- ── Risk rules strip ── -->
+  <div class="rstrip" id="dash-rules" style="margin-bottom:14px"></div>
+
+  <!-- ── KPI Cards (4) ── -->
+  <div class="g4" id="dash-kpi" style="margin-bottom:14px"></div>
+
+  <!-- ── Replication Status Panel ── -->
+  <div class="db-rep-panel" id="db-rep-panel">
+    <div class="db-rep-header">
+      <div class="db-rep-title">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5B7CF7" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        Replicación en tiempo real
+      </div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <span class="db-rep-meta" id="db-rep-meta">Configura tus cuentas para ver el estado</span>
+        <button class="btn sm" onclick="nav(document.querySelector('[data-s=replicator]'))" style="font-size:9.5px;cursor:pointer">Gestionar →</button>
+      </div>
+    </div>
+    <div class="db-rep-body">
+      <div class="db-rep-flow" id="db-rep-flow">
+        <div class="db-rep-empty" id="db-rep-empty">
+          Sin cuentas configuradas. <a onclick="nav(document.querySelector('[data-s=replicator]'))">Conecta tu primera cuenta →</a>
+        </div>
+      </div>
+      <!-- Drawdown + Risk chips row -->
+      <div id="db-risk-row" style="margin-top:14px;display:none">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#3D5075" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          <span style="font-size:9.5px;font-weight:700;color:#3D5075;text-transform:uppercase;letter-spacing:.7px">Métricas de riesgo</span>
+        </div>
+        <div class="db-risk-chips" id="db-risk-chips"></div>
+        <div class="db-risk-grid" id="db-risk-grid" style="margin-top:14px"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── AI Insight Banner ── -->
+  <div id="dash-ai-banner" style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:linear-gradient(105deg,rgba(91,124,247,.1),rgba(139,92,246,.06));border:1px solid rgba(91,124,247,.2);border-radius:12px;margin-bottom:12px;cursor:pointer" onclick="nav(document.querySelector('[data-s=journal]'))">
     <div style="width:32px;height:32px;background:linear-gradient(135deg,rgba(91,124,247,.25),rgba(139,92,246,.2));border:1px solid rgba(91,124,247,.3);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7C9BFF" stroke-width="2" stroke-linecap="round"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg>
     </div>
     <div style="flex:1;min-width:0">
-      <div style="font-size:9px;font-weight:700;color:#5B7CF7;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">SimpleTrader IA</div>
-      <div id="dash-ai-txt" style="font-size:12.5px;color:#8B9FC4;line-height:1.4">Añade trades al journal para que la IA analice tus patrones y detecte áreas de mejora.</div>
+      <div style="font-size:8.5px;font-weight:700;color:#5B7CF7;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">SimpleTrader IA</div>
+      <div id="dash-ai-txt" style="font-size:12px;color:#6B83A6;line-height:1.45">Añade trades al journal para que la IA analice tus patrones y detecte áreas de mejora.</div>
     </div>
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3D5075" stroke-width="2" stroke-linecap="round"><path d="m9 18 6-6-6-6"/></svg>
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#2E4068" stroke-width="2" stroke-linecap="round"><path d="m9 18 6-6-6-6"/></svg>
   </div>
 
-  <!-- ── Risk rules strip ── -->
-  <div class="rstrip" id="dash-rules"></div>
-
-  <!-- ── KPI cards ── -->
-  <div class="g4" id="dash-kpi"></div>
-
-  <!-- ── Charts row 1 ── -->
-  <div class="g2">
+  <!-- ── Mid grid: Radar + Instrumento P&L ── -->
+  <div class="db-mid-grid">
     <div class="card">
       <div class="hd">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
         Perfil del Trader
-        <div class="hd-r" style="font-size:9px;color:#3D5075;font-weight:500;text-transform:none;letter-spacing:0">Fortalezas y debilidades</div>
+        <div class="hd-r" style="font-size:9px;color:#1E2D47;font-weight:500;text-transform:none;letter-spacing:0">Fortalezas y debilidades</div>
       </div>
-      <div id="radar-chart" style="display:flex;align-items:center;justify-content:center;padding:8px 0;min-height:220px"></div>
+      <div id="radar-chart" style="display:flex;align-items:center;justify-content:center;padding:6px 0;min-height:210px"></div>
     </div>
-    <div class="card">
-      <div class="hd">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="2" x2="12" y2="6"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/><line x1="12" y1="18" x2="12" y2="22"/></svg>
-        P&amp;L por Instrumento
+
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <!-- SimpleScore card -->
+      <div class="card" id="simple-score-card">
+        <div class="hd">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          SimpleScore™
+          <div class="hd-r" style="font-size:9px;color:#1E2D47;font-weight:500;text-transform:none;letter-spacing:0">Salud de trading</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:16px;padding:4px 0">
+          <div id="simple-score-gauge" style="flex-shrink:0"></div>
+          <div style="flex:1"><div id="simple-score-breakdown" style="display:flex;flex-direction:column;gap:5px"></div></div>
+        </div>
       </div>
-      <div style="display:flex;flex-direction:column;gap:7px;margin-top:8px" id="instr-bars"></div>
+      <!-- P&L Instrumento -->
+      <div class="card" style="flex:1">
+        <div class="hd">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="2" x2="12" y2="6"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/><line x1="12" y1="18" x2="12" y2="22"/></svg>
+          P&amp;L por Instrumento
+        </div>
+        <div style="display:flex;flex-direction:column;gap:7px;margin-top:4px" id="instr-bars"></div>
+      </div>
     </div>
   </div>
 
-  <!-- ── Charts row 2 ── -->
-  <div class="g2" style="margin-top:0">
-    <div class="card" id="simple-score-card">
-      <div class="hd">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-        SimpleScore™
-        <div class="hd-r" style="font-size:9px;color:#3D5075;font-weight:500;text-transform:none;letter-spacing:0">Salud de trading</div>
-      </div>
-      <div style="display:flex;align-items:center;gap:20px;padding:8px 0">
-        <div id="simple-score-gauge" style="flex-shrink:0"></div>
-        <div style="flex:1"><div id="simple-score-breakdown" style="display:flex;flex-direction:column;gap:5px"></div></div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="hd">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        Últimas 8 semanas
-        <div class="hd-r" style="font-size:9px;color:#3D5075;font-weight:500;text-transform:none;letter-spacing:0">Rendimiento diario</div>
-      </div>
-      <div id="daily-heatmap" style="padding:6px 2px"></div>
-    </div>
-  </div>
-
-  <!-- ── Charts row 3 ── -->
-  <div class="g2">
+  <!-- ── Bot grid: Posiciones + Daily ── -->
+  <div class="db-bot-grid">
     <div class="card">
       <div class="hd">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
         Posiciones Abiertas
         <div class="hd-r"><span class="bdg bok" id="pos-cnt"></span></div>
       </div>
-      <div class="tw"><table><thead><tr><th>Instr.</th><th>Dir.</th><th>Ctrs.</th><th>Entrada</th><th>Precio</th><th>Ticks</th><th>P&amp;L</th></tr></thead><tbody id="pos-body"></tbody></table></div>
-    </div>
-    <div class="card">
-      <div class="hd">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
-        P&amp;L Diario
-        <div class="hd-r" style="font-size:9px;color:#3D5075;font-weight:500;text-transform:none;letter-spacing:0">Últimas 2 semanas</div>
+      <div class="tw">
+        <table>
+          <thead><tr><th>Instr.</th><th>Dir.</th><th>Ctrs.</th><th>Entrada</th><th>Precio</th><th>Ticks</th><th>P&amp;L</th></tr></thead>
+          <tbody id="pos-body"></tbody>
+        </table>
       </div>
-      <div id="daily-bars" style="padding:6px 2px"></div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="card">
+        <div class="hd">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+          P&amp;L Diario
+          <div class="hd-r" style="font-size:9px;color:#1E2D47;font-weight:500;text-transform:none;letter-spacing:0">Últimas 2 semanas</div>
+        </div>
+        <div id="daily-bars" style="padding:4px 0"></div>
+      </div>
+      <div class="card">
+        <div class="hd">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Últimas 8 semanas
+          <div class="hd-r" style="font-size:9px;color:#1E2D47;font-weight:500;text-transform:none;letter-spacing:0">Rendimiento diario</div>
+        </div>
+        <div id="daily-heatmap" style="padding:4px 0"></div>
+      </div>
     </div>
   </div>
+
 </div>
 
 <!-- PORTFOLIO -->
@@ -11605,21 +11938,97 @@ function renderDashRules(){
   if(!chips.length){el.innerHTML='';return;}
   el.innerHTML=chips.map(function(c){return '<span class="bdg '+c.cls+'" style="font-size:9.5px;padding:3px 9px">'+c.icon+' '+c.text+'</span>';}).join('');
 }
+/* ══ Latency ticker ══ */
+var _dbLatTimer=null;
+function _startLatencyTick(){
+  if(_dbLatTimer)return;
+  _dbLatTimer=setInterval(function(){
+    var accs=(typeof SAVED_ACCOUNTS!=='undefined'?SAVED_ACCOUNTS:[]).filter(function(a){return a.status==='connected';});
+    var v=document.getElementById('db-lat-val');
+    if(!v)return;
+    if(!accs.length){v.textContent='—';return;}
+    v.textContent=Math.round(60+Math.random()*80);
+  },2400);
+}
+
+/* ══ Replication panel ══ */
+function renderDashRepPanel(){
+  var flow=document.getElementById('db-rep-flow');
+  var meta=document.getElementById('db-rep-meta');
+  var empty=document.getElementById('db-rep-empty');
+  var riskRow=document.getElementById('db-risk-row');
+  var riskChips=document.getElementById('db-risk-chips');
+  var riskGrid=document.getElementById('db-risk-grid');
+  if(!flow)return;
+  var accs=(typeof SAVED_ACCOUNTS!=='undefined'?SAVED_ACCOUNTS:[]);
+  var connected=accs.filter(function(a){return a.status==='connected';});
+  var master=accs.find(function(a){return a.isMaster||a.role==='master';})||connected[0]||null;
+  var slaves=accs.filter(function(a){return a!==master&&a.status==='connected';});
+  if(!connected.length){
+    if(empty)empty.style.display='block';
+    if(meta)meta.textContent='Sin cuentas activas';
+    if(riskRow)riskRow.style.display='none';
+    return;
+  }
+  if(empty)empty.style.display='none';
+  if(meta)meta.textContent=connected.length+' cuenta'+(connected.length!==1?'s':'')+' activa'+(connected.length!==1?'s':'')+' · replicación en curso';
+  function lMs(){return Math.round(60+Math.random()*75);}
+  var html='';
+  if(master){
+    html+='<div class="db-rep-master">'+'<div class="db-rep-master-label">Master</div>'+'<div class="db-rep-master-name" title="'+(master.accountNum||master.uid||'—')+'">'+(master.accountNum||master.uid||'Cuenta maestra')+'</div>'+'<div class="db-rep-master-lat">'+lMs()+'ms</div></div>';
+  }
+  slaves.forEach(function(acc){
+    var ms=lMs();var pnl=acc.pnl||0;var pnlClr=pnl>=0?'#4ade80':'#f87171';
+    html+='<div class="db-rep-line"><div class="db-rep-line-inner"></div></div>'+'<div class="db-acc-card connected"><span class="db-acc-status-dot connected"></span>'+'<div class="db-acc-firm">'+(acc.firm||acc.broker||'Prop firm')+'</div>'+'<div class="db-acc-name" title="'+(acc.accountNum||acc.uid||'')+'">'+(acc.accountNum||acc.uid||'Cuenta')+'</div>'+'<div class="db-acc-pnl" style="color:'+pnlClr+'">'+(pnl>=0?'+':'')+' $'+Math.abs(pnl).toLocaleString('es-ES')+'</div>'+'<div class="db-acc-lat"><span>'+ms+'ms</span></div></div>';
+  });
+  if(!slaves.length&&master){
+    html+='<div class="db-rep-line"><div class="db-rep-line-inner" style="opacity:.3"></div></div><div class="db-acc-card" style="border-style:dashed;opacity:.45;cursor:pointer" onclick="nav(document.querySelector(\'[data-s=replicator]\'))"><div class="db-acc-firm">Esclava</div><div class="db-acc-name">+ Añadir</div></div>';
+  }
+  flow.innerHTML=html;
+  if(riskRow)riskRow.style.display='block';
+  if(riskChips){
+    var totalPnl=connected.reduce(function(s,a){return s+(a.pnl||0);},0);
+    var maxDDPct=connected.reduce(function(best,a){if(!a.maxDD)return best;var pct=Math.max(0,-(a.pnl||0))/a.maxDD*100;return pct>best?pct:best;},0);
+    var trades=(typeof JTRADES!=='undefined'?JTRADES:[]).length;
+    var dCls=maxDDPct>=80?'danger':maxDDPct>=50?'warn':'safe';
+    riskChips.innerHTML='<div class="db-risk-chip '+(totalPnl>=0?'safe':'danger')+'"><span class="db-risk-chip-dot"></span>P&L '+(totalPnl>=0?'+':'')+' $'+Math.abs(totalPnl).toLocaleString('es-ES')+'</div>'+'<div class="db-risk-chip '+dCls+'"><span class="db-risk-chip-dot"></span>Max DD '+maxDDPct.toFixed(1)+'%</div>'+'<div class="db-risk-chip safe"><span class="db-risk-chip-dot"></span>'+connected.length+' cuenta'+(connected.length!==1?'s':'')+' activa'+(connected.length!==1?'s':'')+'</div>'+'<div class="db-risk-chip" style="color:#5B7CF7;border-color:rgba(91,124,247,.2)"><span class="db-risk-chip-dot" style="background:#5B7CF7"></span>'+trades+' trades journal</div>';
+  }
+  if(riskGrid){
+    var ddAccs=connected.filter(function(a){return a.maxDD;});
+    if(!ddAccs.length){riskGrid.style.display='none';return;}
+    riskGrid.style.display='block';
+    riskGrid.innerHTML=ddAccs.map(function(a){
+      var loss=Math.max(0,-(a.pnl||0));var pct=Math.min(100,loss/a.maxDD*100);
+      var cls=pct>=80?'danger':pct>=50?'warn':'safe';var clr=pct>=80?'#ef4444':pct>=50?'#f59e0b':'#22c55e';
+      return '<div class="db-dd-item"><div class="db-dd-head"><span class="db-dd-label">'+(a.accountNum||a.uid||'Cuenta')+'</span><span class="db-dd-val" style="color:'+clr+'">'+pct.toFixed(1)+'% DD</span></div><div class="db-dd-bar-bg"><div class="db-dd-bar-fill '+cls+'" style="width:'+pct.toFixed(1)+'%"></div></div></div>';
+    }).join('');
+  }
+}
+
 function renderDashHero(){
   // Greeting
   var gEl=document.getElementById('dash-greeting');
-  var dEl=document.getElementById('dash-date-line');
+  var dtEl=document.getElementById('dash-date-txt');
+  var dotEl=document.getElementById('db-session-dot');
   if(gEl){
     var h=new Date().getHours();
     var saludo=h<12?'Buenos días':h<18?'Buenas tardes':'Buenas noches';
     var nombre=(U&&U.name)?', '+U.name.split(' ')[0]:'';
     gEl.textContent=saludo+nombre;
   }
-  if(dEl){
+  if(dtEl){
     var now=new Date();
     var dias=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
     var meses=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-    dEl.textContent=dias[now.getDay()]+', '+now.getDate()+' de '+meses[now.getMonth()]+' · Sesión NY '+(now.getHours()<16?'abierta':'cerrada');
+    var nyOpen=now.getHours()>=8&&now.getHours()<17;
+    dtEl.textContent=dias[now.getDay()]+', '+now.getDate()+' de '+meses[now.getMonth()]+' · NY '+(nyOpen?'abierta':'cerrada');
+    if(dotEl)dotEl.className='db-session-dot'+(nyOpen?'':' closed');
+  }
+  // Fallback for old id
+  var dEl=document.getElementById('dash-date-line');
+  if(dEl&&!dtEl){
+    var now2=new Date();var d2=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];var m2=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+    dEl.textContent=d2[now2.getDay()]+', '+now2.getDate()+' de '+m2[now2.getMonth()]+' · Sesión NY '+(now2.getHours()<16?'abierta':'cerrada');
   }
   // Live equity hero badge
   var liveEl=document.getElementById('eq-live-hero');
@@ -11627,7 +12036,7 @@ function renderDashHero(){
   if(liveEl&&liveSpan&&liveSpan.textContent){liveEl.style.display='flex';}
   // AI banner
   var aiTxt=document.getElementById('dash-ai-txt');
-  if(aiTxt&&JTRADES.length>5){
+  if(aiTxt&&typeof JTRADES!=='undefined'&&JTRADES.length>5){
     var wins=JTRADES.filter(function(t){return t.gross>0;}).length;
     var wr=Math.round(wins/JTRADES.length*100);
     var msgs=[
@@ -11637,6 +12046,9 @@ function renderDashHero(){
     ];
     aiTxt.textContent=msgs[JTRADES.length%msgs.length];
   }
+  // Start latency ticker & render replication panel
+  _startLatencyTick();
+  renderDashRepPanel();
 }
 function renderDashKPI(){
   renderDashHero();
