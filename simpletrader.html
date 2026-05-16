@@ -3239,6 +3239,270 @@ try{
   .hero-latency-fill{width:22%}
   .hero-uptime-fill{width:99.97%}
 }
+
+/* ═══════════════════════════════════════════════════════
+   TRUST SECTION — Fintech premium · Security & Infra
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Trust section wrapper ── */
+.trust-section{
+  position:relative;z-index:5;
+  padding:72px 60px 80px;
+  border-top:1px solid rgba(255,255,255,.05);
+  background:linear-gradient(180deg,rgba(7,9,15,0) 0%,rgba(9,12,20,.7) 100%);
+}
+.trust-section::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(91,124,247,.045) 0%,transparent 70%);
+}
+
+/* ── Section header ── */
+.trust-header{text-align:center;margin-bottom:52px;position:relative}
+.trust-eyebrow{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:5px 14px;border-radius:20px;
+  background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.22);
+  font-size:10.5px;font-weight:700;color:#22C55E;letter-spacing:.6px;
+  text-transform:uppercase;margin-bottom:18px;
+}
+.trust-eyebrow-dot{
+  width:5px;height:5px;border-radius:50%;background:#22C55E;
+  box-shadow:0 0 7px rgba(34,197,94,.7);flex-shrink:0;
+  animation:hPulse 2.5s ease-in-out infinite;
+}
+.trust-title{
+  font-size:clamp(26px,3.2vw,40px);font-weight:800;
+  color:#EEF2FF;letter-spacing:-1.6px;line-height:1.1;
+  margin-bottom:14px;
+}
+.trust-title em{
+  font-style:normal;
+  background:linear-gradient(130deg,#22C55E 0%,#4ade80 100%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.trust-subtitle{
+  font-size:14.5px;color:#3A5270;font-weight:400;
+  line-height:1.65;max-width:560px;margin:0 auto;
+}
+
+/* ── Reassurance banner ── */
+.trust-banner{
+  display:flex;align-items:center;justify-content:center;gap:0;
+  margin-bottom:48px;flex-wrap:wrap;
+  border:1px solid rgba(34,197,94,.14);border-radius:10px;
+  background:rgba(34,197,94,.04);
+  padding:12px 20px;max-width:680px;margin-left:auto;margin-right:auto;
+  margin-bottom:52px;
+}
+.trust-banner-item{
+  display:flex;align-items:center;gap:7px;
+  padding:4px 18px;font-size:11px;font-weight:600;color:#22C55E;
+  border-right:1px solid rgba(34,197,94,.12);
+}
+.trust-banner-item:last-child{border-right:none}
+.trust-banner-item svg{flex-shrink:0;opacity:.85}
+
+/* ── Main grid ── */
+.trust-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+  max-width:1100px;
+  margin:0 auto 48px;
+}
+
+/* ── Trust card ── */
+.trust-card{
+  position:relative;
+  background:rgba(9,13,24,.8);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:14px;
+  padding:28px 26px 26px;
+  overflow:hidden;
+  transition:border-color .25s ease,transform .25s ease,box-shadow .25s ease;
+  cursor:default;
+}
+.trust-card::before{
+  content:'';position:absolute;inset:0;border-radius:14px;
+  background:var(--card-shine-clr,transparent);
+  opacity:0;transition:opacity .3s ease;pointer-events:none;
+}
+.trust-card:hover{
+  border-color:var(--card-accent,.rgba(255,255,255,.14));
+  transform:translateY(-3px);
+  box-shadow:0 16px 48px rgba(0,0,0,.45),0 0 0 1px var(--card-accent,transparent);
+}
+.trust-card:hover::before{opacity:1}
+
+/* Card accent glow (top-edge) */
+.trust-card::after{
+  content:'';position:absolute;top:0;left:0;right:0;
+  height:2px;border-radius:14px 14px 0 0;
+  background:linear-gradient(90deg,transparent,var(--card-glow,rgba(91,124,247,.6)),transparent);
+  opacity:0;transition:opacity .3s ease;
+}
+.trust-card:hover::after{opacity:1}
+
+/* ── Card icon ── */
+.tc-icon-wrap{
+  width:44px;height:44px;border-radius:11px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--icon-bg,rgba(91,124,247,.12));
+  border:1px solid var(--icon-border,rgba(91,124,247,.25));
+  margin-bottom:18px;
+  transition:box-shadow .25s ease;
+  flex-shrink:0;
+}
+.trust-card:hover .tc-icon-wrap{
+  box-shadow:0 0 20px var(--icon-glow,rgba(91,124,247,.25));
+}
+.tc-icon-wrap svg{display:block;flex-shrink:0}
+
+/* ── Card content ── */
+.tc-title{
+  font-size:14px;font-weight:700;color:#EEF2FF;
+  letter-spacing:-.3px;line-height:1.3;margin-bottom:8px;
+}
+.tc-body{
+  font-size:12.5px;color:#304560;font-weight:400;
+  line-height:1.7;margin-bottom:16px;
+}
+.tc-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:3px 9px;border-radius:6px;
+  background:var(--badge-bg,rgba(91,124,247,.1));
+  border:1px solid var(--badge-border,rgba(91,124,247,.22));
+  font-size:9.5px;font-weight:700;color:var(--badge-clr,#7C9BFF);
+  font-family:var(--mono);letter-spacing:.3px;
+}
+
+/* ── Accent variants ── */
+/* Green — Encryption/Security */
+.tc-green{
+  --card-accent:rgba(34,197,94,.18);
+  --card-glow:rgba(34,197,94,.5);
+  --card-shine-clr:radial-gradient(ellipse 60% 40% at 50% 0%,rgba(34,197,94,.04) 0%,transparent 70%);
+  --icon-bg:rgba(34,197,94,.1);
+  --icon-border:rgba(34,197,94,.25);
+  --icon-glow:rgba(34,197,94,.25);
+  --badge-bg:rgba(34,197,94,.09);
+  --badge-border:rgba(34,197,94,.22);
+  --badge-clr:#4ade80;
+}
+/* Blue — Connectivity/TLS */
+.tc-blue{
+  --card-accent:rgba(91,124,247,.2);
+  --card-glow:rgba(91,124,247,.55);
+  --card-shine-clr:radial-gradient(ellipse 60% 40% at 50% 0%,rgba(91,124,247,.05) 0%,transparent 70%);
+  --icon-bg:rgba(91,124,247,.12);
+  --icon-border:rgba(91,124,247,.28);
+  --icon-glow:rgba(91,124,247,.28);
+  --badge-bg:rgba(91,124,247,.1);
+  --badge-border:rgba(91,124,247,.25);
+  --badge-clr:#7C9BFF;
+}
+/* Purple — Credentials */
+.tc-purple{
+  --card-accent:rgba(139,92,246,.2);
+  --card-glow:rgba(139,92,246,.5);
+  --card-shine-clr:radial-gradient(ellipse 60% 40% at 50% 0%,rgba(139,92,246,.05) 0%,transparent 70%);
+  --icon-bg:rgba(139,92,246,.11);
+  --icon-border:rgba(139,92,246,.28);
+  --icon-glow:rgba(139,92,246,.28);
+  --badge-bg:rgba(139,92,246,.1);
+  --badge-border:rgba(139,92,246,.25);
+  --badge-clr:#c084fc;
+}
+/* Cyan — Latency/Speed */
+.tc-cyan{
+  --card-accent:rgba(6,182,212,.18);
+  --card-glow:rgba(6,182,212,.5);
+  --card-shine-clr:radial-gradient(ellipse 60% 40% at 50% 0%,rgba(6,182,212,.05) 0%,transparent 70%);
+  --icon-bg:rgba(6,182,212,.1);
+  --icon-border:rgba(6,182,212,.25);
+  --icon-glow:rgba(6,182,212,.25);
+  --badge-bg:rgba(6,182,212,.09);
+  --badge-border:rgba(6,182,212,.22);
+  --badge-clr:#22d3ee;
+}
+/* Amber — Infrastructure */
+.tc-amber{
+  --card-accent:rgba(245,158,11,.16);
+  --card-glow:rgba(245,158,11,.45);
+  --card-shine-clr:radial-gradient(ellipse 60% 40% at 50% 0%,rgba(245,158,11,.04) 0%,transparent 70%);
+  --icon-bg:rgba(245,158,11,.1);
+  --icon-border:rgba(245,158,11,.25);
+  --icon-glow:rgba(245,158,11,.25);
+  --badge-bg:rgba(245,158,11,.09);
+  --badge-border:rgba(245,158,11,.22);
+  --badge-clr:#fbbf24;
+}
+/* Teal — Auto-reconnect */
+.tc-teal{
+  --card-accent:rgba(20,184,166,.18);
+  --card-glow:rgba(20,184,166,.5);
+  --card-shine-clr:radial-gradient(ellipse 60% 40% at 50% 0%,rgba(20,184,166,.05) 0%,transparent 70%);
+  --icon-bg:rgba(20,184,166,.1);
+  --icon-border:rgba(20,184,166,.25);
+  --icon-glow:rgba(20,184,166,.25);
+  --badge-bg:rgba(20,184,166,.09);
+  --badge-border:rgba(20,184,166,.22);
+  --badge-clr:#2dd4bf;
+}
+
+/* ── Bottom trust bar ── */
+.trust-bottom{
+  max-width:1100px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 28px;border-radius:12px;
+  background:rgba(14,17,28,.7);
+  border:1px solid rgba(255,255,255,.05);
+  flex-wrap:wrap;gap:16px;
+}
+.trust-bottom-label{
+  font-size:10.5px;font-weight:600;color:#22374E;
+  letter-spacing:.3px;text-transform:uppercase;flex-shrink:0;
+}
+.trust-firms{
+  display:flex;align-items:center;gap:20px;flex-wrap:wrap;
+}
+.trust-firm{
+  font-size:11.5px;font-weight:600;color:#253650;
+  letter-spacing:-.1px;transition:color .18s;
+}
+.trust-firm:hover{color:#4A6080}
+.trust-bottom-cta{
+  display:flex;align-items:center;gap:6px;
+  font-size:11px;font-weight:600;color:#3D5075;
+  cursor:pointer;background:none;border:none;
+  font-family:var(--sans);transition:color .15s;padding:0;
+}
+.trust-bottom-cta:hover{color:#7C9BFF}
+.trust-bottom-cta svg{transition:transform .2s}
+.trust-bottom-cta:hover svg{transform:translateX(3px)}
+
+/* ── Scroll-reveal animation ── */
+.trust-reveal{
+  opacity:0;transform:translateY(18px);
+  transition:opacity .55s cubic-bezier(.4,0,.2,1),transform .55s cubic-bezier(.4,0,.2,1);
+}
+.trust-reveal.visible{opacity:1;transform:translateY(0)}
+
+/* ── Responsive ── */
+@media(max-width:900px){
+  .trust-section{padding:56px 28px 64px}
+  .trust-grid{grid-template-columns:repeat(2,1fr)}
+  .trust-bottom{flex-direction:column;align-items:flex-start;gap:12px}
+  .trust-banner-item{padding:4px 12px}
+}
+@media(max-width:600px){
+  .trust-section{padding:44px 18px 52px}
+  .trust-grid{grid-template-columns:1fr}
+  .trust-banner{flex-direction:column;align-items:flex-start;gap:4px;padding:14px 16px}
+  .trust-banner-item{border-right:none;border-bottom:1px solid rgba(34,197,94,.1);padding:6px 0;width:100%}
+  .trust-banner-item:last-child{border-bottom:none}
+}
 </style>
 
 <style>
@@ -3786,19 +4050,166 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 
   </div><!-- /hero-layout -->
 
-  <!-- DUMMY to keep old IDs alive (ls2 chart still referenced by some paths) -->
-  <div style="display:none">
-    <svg><defs>
-      <linearGradient id="eqLine" x1="0" y1="0" x2="340" y2="0" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#5B7CF7" stop-opacity="0.4"/>
-        <stop offset="100%" stop-color="#a78bfa"/>
-      </linearGradient>
-      <linearGradient id="eqArea" x1="0" y1="0" x2="0" y2="64" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#5B7CF7" stop-opacity="0.13"/>
-        <stop offset="100%" stop-color="#5B7CF7" stop-opacity="0"/>
-      </linearGradient>
-    </defs></svg>
-  </div>
+  <!-- ══════════════════════════════════════════════════════
+       TRUST SECTION — Security & Infrastructure
+       ══════════════════════════════════════════════════════ -->
+  <section class="trust-section" id="trust-section" aria-label="Seguridad e infraestructura">
+
+    <!-- Header -->
+    <div class="trust-header trust-reveal">
+      <div class="trust-eyebrow">
+        <span class="trust-eyebrow-dot"></span>
+        Infraestructura de nivel bancario
+      </div>
+      <h2 class="trust-title">
+        Conecta tus cuentas con<br>
+        <em>total seguridad.</em>
+      </h2>
+      <p class="trust-subtitle">
+        SimpleTrader nunca tiene acceso a tu capital. Solo lee datos de mercado y replica órdenes
+        con las credenciales que tú controlas — cifradas, protegidas y siempre bajo tu custodia.
+      </p>
+    </div>
+
+    <!-- Reassurance banner -->
+    <div class="trust-banner trust-reveal">
+      <div class="trust-banner-item">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Solo lectura de datos
+      </div>
+      <div class="trust-banner-item">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Sin acceso a tu capital
+      </div>
+      <div class="trust-banner-item">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Credenciales cifradas en reposo
+      </div>
+      <div class="trust-banner-item">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Tú mantienes el control absoluto
+      </div>
+    </div>
+
+    <!-- Trust cards grid -->
+    <div class="trust-grid">
+
+      <!-- 1 · AES-256 Encryption -->
+      <div class="trust-card tc-green trust-reveal">
+        <div class="tc-icon-wrap" style="--icon-bg:rgba(34,197,94,.1);--icon-border:rgba(34,197,94,.25)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="M9 12l2 2 4-4" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="tc-title">Cifrado AES-256</div>
+        <div class="tc-body">
+          Todas las credenciales de Tradovate y prop firms se almacenan cifradas con el estándar AES-256 — el mismo que usa la banca militar y los sistemas financieros institucionales.
+        </div>
+        <span class="tc-badge">AES-256-GCM</span>
+      </div>
+
+      <!-- 2 · HTTPS / TLS 1.3 -->
+      <div class="trust-card tc-blue trust-reveal">
+        <div class="tc-icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7C9BFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            <circle cx="12" cy="16" r="1.2" fill="#7C9BFF" stroke="none"/>
+          </svg>
+        </div>
+        <div class="tc-title">HTTPS / TLS 1.3</div>
+        <div class="tc-body">
+          Toda la comunicación entre tu navegador, nuestros servidores y las APIs de los brokers viaja encriptada con TLS 1.3. Ningún dato sensible circula en texto plano, nunca.
+        </div>
+        <span class="tc-badge">TLS 1.3 · Perfect Forward Secrecy</span>
+      </div>
+
+      <!-- 3 · Credentials protected -->
+      <div class="trust-card tc-purple trust-reveal">
+        <div class="tc-icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <ellipse cx="12" cy="5" rx="9" ry="3"/>
+            <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+            <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+          </svg>
+        </div>
+        <div class="tc-title">Credenciales cifradas en reposo</div>
+        <div class="tc-body">
+          Tus tokens de API y claves de acceso se almacenan cifrados en base de datos. Nuestro equipo no puede ver tus credenciales en texto plano — solo el sistema cifrado las lee.
+        </div>
+        <span class="tc-badge">Encrypted at rest</span>
+      </div>
+
+      <!-- 4 · Realtime replication -->
+      <div class="trust-card tc-cyan trust-reveal">
+        <div class="tc-icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="5" cy="5" r="2.5"/>
+            <circle cx="19" cy="19" r="2.5"/>
+            <circle cx="19" cy="5" r="2.5"/>
+            <path d="M7.5 5h9" stroke-width="1.6"/>
+            <path d="M5 7.5v9" stroke-dasharray="2 2.2" stroke-width="1.6"/>
+            <path d="M19 7.5v9" stroke-width="1.6"/>
+            <path d="M7.5 19h3" stroke-width="1.6"/>
+          </svg>
+        </div>
+        <div class="tc-title">Replicación en tiempo real</div>
+        <div class="tc-body">
+          El motor de copia monitoriza tu cuenta maestra cada 2.5 segundos y propaga cada orden a tus prop firms con latencia media por debajo de 120ms — sin pérdida de señal.
+        </div>
+        <span class="tc-badge">&lt;120ms avg · WebSocket</span>
+      </div>
+
+      <!-- 5 · Cloud infrastructure -->
+      <div class="trust-card tc-amber trust-reveal">
+        <div class="tc-icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+          </svg>
+        </div>
+        <div class="tc-title">Infraestructura cloud multi-región</div>
+        <div class="tc-body">
+          Desplegado en múltiples regiones con redundancia activa. Si un nodo falla, otro toma el relevo en milisegundos. 99.97% de uptime garantizado en los últimos 30 días.
+        </div>
+        <span class="tc-badge">99.97% Uptime · Multi-region</span>
+      </div>
+
+      <!-- 6 · Auto-reconnect -->
+      <div class="trust-card tc-teal trust-reveal">
+        <div class="tc-icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2dd4bf" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="23 4 23 10 17 10"/>
+            <polyline points="1 20 1 14 7 14"/>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+          </svg>
+        </div>
+        <div class="tc-title">Reconexión automática</div>
+        <div class="tc-body">
+          El sistema auto-heal detecta caídas de conexión con el broker y reconecta automáticamente sin intervención manual — tus operaciones siguen replicándose sin interrupciones.
+        </div>
+        <span class="tc-badge">Auto-heal · Zero downtime</span>
+      </div>
+
+    </div><!-- /trust-grid -->
+
+    <!-- Bottom trust bar -->
+    <div class="trust-bottom trust-reveal">
+      <span class="trust-bottom-label">Usado por traders de</span>
+      <div class="trust-firms">
+        <span class="trust-firm">Apex Trader Funding</span>
+        <span class="trust-firm">Topstep</span>
+        <span class="trust-firm">Elite Trader Funding</span>
+        <span class="trust-firm">Funded Trading Plus</span>
+        <span class="trust-firm">Take Profit Trader</span>
+      </div>
+      <button class="trust-bottom-cta" onclick="openRegister()">
+        Empezar gratis
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </div>
+
+  </section><!-- /trust-section -->
 
 </div><!-- /ls -->
 
@@ -5193,6 +5604,22 @@ async function hydrateUser(user){
   try{globalRefresh();}catch(e){console.warn('globalRefresh:',e);}
   enterApp();
 }
+
+/* ── Trust section scroll-reveal ── */
+(function initTrustReveal(){
+  const els=document.querySelectorAll('.trust-reveal');
+  if(!els.length) return;
+  const io=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        const delay=Array.from(els).indexOf(e.target)*80;
+        setTimeout(()=>e.target.classList.add('visible'),delay);
+        io.unobserve(e.target);
+      }
+    });
+  },{threshold:.12});
+  els.forEach(el=>io.observe(el));
+})();
 
 async function doLogin(){
   const em=document.getElementById('li-email').value.trim();
