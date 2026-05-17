@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pricing — SimpleTrader | Trade Copier for Prop Firm Traders</title>
+<meta name="description" content="Simple, transparent pricing for prop firm traders. Copy trades from one master account to unlimited funded accounts. Start free for 7 days."/>
+<meta property="og:title" content="Pricing — SimpleTrader"/>
+<meta property="og:description" content="Copy trades across all your funded accounts. Start free."/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;500;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          background: '#07090F',
+          surface: 'rgba(8,11,22,0.9)',
+          primary: '#5B7CF7',
+          secondary: '#8B5CF6',
+          success: '#22C55E',
+          warning: '#F59E0B',
+          danger: '#EF4444',
+          outline: 'rgba(255,255,255,0.07)'
+        },
+        fontFamily: {
+          headline: ["DM Sans","sans-serif"],
+          display: ["DM Sans","sans-serif"],
+          body: ["DM Sans","sans-serif"],
+          mono: ["DM Mono","monospace"]
+        }
+      }
+    }
+  }
+</script>
+<style>
+  body { background-color: #07090F; color: #EEF2FF; }
+  .glass-card {
+    background: rgba(8,11,22,0.8);
+    border: 1px solid rgba(255,255,255,0.07);
+    backdrop-filter: blur(12px);
+  }
+  .glow-primary { box-shadow: 0 0 40px rgba(91,124,247,0.15); }
+  .glow-border-primary {
+    background: linear-gradient(#07090F,#07090F) padding-box,
+                linear-gradient(to bottom right,#5B7CF7,#8B5CF6) border-box;
+    border: 1.5px solid transparent;
+  }
+  @keyframes pulse-dot {
+    0%,100%{opacity:1;transform:scale(1)}
+    50%{opacity:.5;transform:scale(1.5)}
+  }
+  .animate-pulse-dot { animation: pulse-dot 2s cubic-bezier(.4,0,.6,1) infinite; }
+  .faq-item { cursor:pointer; }
+  .faq-body { display:none; }
+  .faq-item.open .faq-body { display:block; }
+  .faq-item.open .faq-icon { transform:rotate(45deg); }
+  .faq-icon { transition:transform .2s; }
+  .check-primary { color:#5B7CF7; }
+  .check-muted { color:#3D5075; }
+</style>
+</head>
+<body class="font-body antialiased min-h-screen relative overflow-x-hidden">
+
+<!-- Ambient glows -->
+<div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+  <div class="absolute -top-[15%] -left-[5%] w-[45%] h-[45%] rounded-full blur-[140px]" style="background:rgba(91,124,247,0.12)"></div>
+  <div class="absolute top-[50%] -right-[8%] w-[35%] h-[35%] rounded-full blur-[120px]" style="background:rgba(139,92,246,0.08)"></div>
+</div>
+
+<!-- Navbar -->
+<nav class="fixed top-4 left-4 right-4 z-50 flex justify-between items-center px-6 py-3 rounded-2xl glass-card">
+  <a href="/" class="flex items-center gap-2.5 no-underline">
+    <div class="w-7 h-7 rounded-lg flex items-center justify-center font-headline font-black text-sm" style="background:linear-gradient(135deg,#5B7CF7,#8B5CF6);color:#fff">ST</div>
+    <span class="font-headline font-bold text-base text-white">SimpleTrader</span>
+  </a>
+  <div class="hidden md:flex items-center gap-7">
+    <a href="/" class="text-sm font-medium hover:text-white transition-colors" style="color:rgba(255,255,255,.5)">Dashboard</a>
+    <a href="/apex-trade-copier" class="text-sm font-medium hover:text-white transition-colors" style="color:rgba(255,255,255,.5)">Trade Copier</a>
+    <a href="/pricing" class="text-sm font-medium text-primary">Pricing</a>
+  </div>
+  <div class="flex items-center gap-3">
+    <a href="/" class="text-sm font-medium hover:text-white transition-colors" style="color:rgba(255,255,255,.5)">Log in</a>
+    <a href="/" class="text-sm font-semibold px-4 py-2 rounded-xl text-white transition-all hover:opacity-90 active:scale-95" style="background:linear-gradient(135deg,#5B7CF7,#8B5CF6)">Start free →</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<main class="relative z-10 pt-36 pb-16 px-6 md:px-12 max-w-6xl mx-auto">
+  <header class="text-center max-w-3xl mx-auto mb-18">
+    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-6 border" style="background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.2);color:#4ade80">
+      <span class="w-1.5 h-1.5 rounded-full bg-success animate-pulse-dot"></span>
+      7-day free trial · No credit card required
+    </div>
+    <h1 class="text-5xl md:text-6xl font-headline font-black tracking-tight mb-5 text-white leading-tight">
+      Simple pricing,<br/>
+      <span style="background:linear-gradient(to right,#5B7CF7,#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent">real performance.</span>
+    </h1>
+    <p class="text-lg md:text-xl mb-10 leading-relaxed" style="color:rgba(255,255,255,.5)">
+      Copy trades from one master to all your funded accounts simultaneously.<br class="hidden md:block"/> Cancel anytime.
+    </p>
+    <!-- Billing toggle -->
+    <div class="inline-flex items-center gap-1 p-1.5 rounded-full" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)">
+      <button id="toggle-monthly" onclick="setBilling('monthly')" class="px-5 py-2 rounded-full text-sm font-semibold transition-all text-white" style="background:rgba(91,124,247,.25);border:1px solid rgba(91,124,247,.4)">Monthly</button>
+      <button id="toggle-annual" onclick="setBilling('annual')" class="px-5 py-2 rounded-full text-sm font-medium transition-all" style="color:rgba(255,255,255,.5)">
+        Annual
+        <span class="ml-2 text-xs px-2 py-0.5 rounded-full font-bold" style="background:rgba(34,197,94,.1);color:#4ade80">2 months free</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Pricing cards -->
+  <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-24 items-start mt-14" id="pricing-cards">
+
+    <!-- Starter -->
+    <div class="glass-card rounded-2xl p-8 flex flex-col h-full hover:border-white/15 transition-colors">
+      <div class="mb-7">
+        <div class="text-xs font-semibold uppercase tracking-widest mb-3" style="color:rgba(255,255,255,.4)">Starter</div>
+        <div class="flex items-baseline gap-1 mb-2">
+          <span class="text-4xl font-black font-headline text-white">$0</span>
+          <span class="text-sm" style="color:rgba(255,255,255,.4)">/mo</span>
+        </div>
+        <p class="text-xs" style="color:rgba(255,255,255,.35)">Free forever · No card needed</p>
+      </div>
+      <ul class="flex flex-col gap-3.5 mb-8 flex-grow text-sm" style="color:rgba(255,255,255,.6)">
+        <li class="flex items-center gap-3"><span class="material-symbols-outlined text-sm check-primary" style="font-variation-settings:'FILL' 1">check_circle</span>1 master account</li>
+        <li class="flex items-center gap-3"><span class="material-symbols-outlined text-sm check-primary" style="font-variation-settings:'FILL' 1">check_circle</span>3 slave accounts</li>
+        <li class="flex items-center gap-3"><span class="material-symbols-outlined text-sm check-primary" style="font-variation-settings:'FILL' 1">check_circle</span>&lt;500ms latency</li>
+        <li class="flex items-center gap-3"><span class="material-symbols-outlined text-sm check-primary" style="font-variation-settings:'FILL' 1">check_circle</span>Tradovate supported</li>
+        <li class="flex items-center gap-3"><span class="material-symbols-outlined text-sm check-muted" style="font-variation-settings:'FILL' 1">check_circle</span><span style="color:rgba(255,255,255,.3)">Analytics dashboard</span></li>
+        <li class="flex items-center gap-3"><span class="material-symbols-outlined text-sm check-muted" style="font-variation-settings:'FILL' 1">check_circle</span><span style="color:rgba(255,255,255,.3)">Push alerts</span></li>
+      </ul>
+      <a href="/" class="block w-full py-3 rounded-xl text-sm font-semibold text-center transition-all hover:opacity-80" style="border:1.5px solid rgba(255,255,255,.12);color:rgba(255,255,255,.75)">
+        Get started free
+      </a>
+    </div>
+
+    <!-- Pro (featured) -->
+    <div class="glow-border-primary rounded-2xl p-8 flex flex-col h-full relative md:-translate-y-5 glow-primary" style="background:rgba(8,11,22,0.95)">
+      <div class="absolute -top-3.5 left-1/2 -translate-x-1/2">
+        <span class="text-xs font-bold uppercase tracking-wider px-4 py-1.5 rounded-full text-white" style="background:linear-gradient(to right,#5B7CF7,#8B5CF6)">Most popular</span>
+      </div>
+      <div class="mb-7 pt-2">
+        <div class="text-xs font-semibold uppercase tracking-widest mb-3" style="color:rgba(91,124,247,.8)">Pro</div>
+        <div class="flex items-baseline gap-1 mb-2">
+          <span id="pro-price" class="text-4xl font-black font-headline text-white">$29</span>
+          <span class="text-sm" style="color:rgba(255,255,255,.4)">/mo</span>
+        </div>
+        <p id="pro-billed" class="text-xs" style="color:rgba(255,255,255,.35)">Billed monthly · Cancel anytime</p>
+      </div>
+      <ul class="flex flex-col gap-3.5 mb-8 flex-grow text-sm text-white">
+        <li class="flex items-center gap-3"><span class="material-symbols-outlined text-sm text-primary" style="font-variation-settings:'FILL' 1">check_circle</span>Unlimited master accounts</li>
+        <li class="flex items-center gap-3"><span class="material-symbols-outlined text-sm text-primary" style="font-variation-settings:'FILL' 1">check_circle</span>Unlimited slave accounts</li>
+        <li class="flex items-center gap-3"><span class="material-symbols-outlined text-sm text-primary" style="font-variation-settings:'FILL' 1">check_circle</span><span class="font-mono text-primary font-bold">&lt;120ms</span> latency</li>
+        <li class="flex items-center gap-3"><span class="material-symbols-outlined text-sm text-primary" style="font-variation-settings:'FILL' 1">check_circle</span>All prop firms (Apex, Topstep…)</li>
+        <li class="flex items-center gap-3"><span class="material-symbols-outlined text-sm text-primary" style="font-variation-settings:'FILL' 1">check_circle</span>Analytics dashboard</li>
+        <li class="flex items-center gap-3"><span class="material-symbols-outlined text-sm text-primary" style="font-variation-settings:'FILL' 1">check_circle</span>Push + email alerts</li>
+        <li class="flex items-center gap-3"><span class="material-symbols-outlined text-sm text-primary" style="font-variation-settings:'FILL' 1">check_circle</span>Priority support (12h)</li>
+      </ul>
+      <a href="/" class="block w-full py-3 rounded-xl text-sm font-bold text-center transition-all active:scale-95 text-white" style="background:linear-gradient(135deg,#5B7CF7,#4F46E5);box-shadow:0 0 30px rgba(91,124,247,0.35)">
+        Start free — 7 days
+      </a>
+    </div>
+
+    <!-- Elite -->
+    <div class="glass-card rounded-2xl p-8 flex flex-col h-full hover:border-white/15 transition-colors">
+      <div class="mb-7">
+        <div class="text-xs font-semibold uppercase tracking-widest mb-3" style="color:rgba(139,92,246,.8)">Elite</div>
+        <div class="flex items-baseline gap-1 mb-2">
+          <span id="elite-price" class="text-4xl font-black font-headline text-white">$79</span>
+          <span class="text-sm" style="color:rgba(255,255,255,.4)">/mo</span>
+        </div>
+        <p id="elite-billed" class="text-xs" style="color:rgba(255,255,255,.35)">For serious prop firm traders</p>
+      </div>
+      <ul class="flex flex-col gap-3.5 mb-8 flex-grow text-sm" style="color:rgba(255,255,255,.75)">
+        <li class="flex items-center gap-3"><span class="material-symbols-outlined text-sm check-primary" style="font-variation-settings:'FILL' 1">check_circle</span>Everything in Pro</li>
+        <li class="flex items-center gap-3"><span class="material-symbols-outlined text-sm check-primary" style="font-variation-settings:'FILL' 1">check_circle</span><span class="font-mono text-primary font-bold">&lt;50ms</span> dedicated infra</li>
+        <li class="flex items-center gap-3"><span class="material-symbols-outlined text-sm check-primary" style="font-variation-settings:'FILL' 1">check_circle</span>99.99% uptime SLA</li>
+        <li class="flex items-center gap-3"><span class="material-symbols-outlined text-sm check-primary" style="font-variation-settings:'FILL' 1">check_circle</span>Personalized onboarding</li>
+        <li class="flex items-center gap-3"><span class="material-symbols-outlined text-sm check-primary" style="font-variation-settings:'FILL' 1">check_circle</span>Account manager 24/7</li>
+        <li class="flex items-center gap-3"><span class="material-symbols-outlined text-sm check-primary" style="font-variation-settings:'FILL' 1">check_circle</span>White-label option</li>
+      </ul>
+      <a href="mailto:support@simpletrader.app?subject=Elite plan" class="block w-full py-3 rounded-xl text-sm font-semibold text-center transition-all hover:opacity-80" style="border:1.5px solid rgba(139,92,246,.35);color:rgba(168,139,250,.9)">
+        Talk to sales
+      </a>
+    </div>
+
+  </section>
+
+  <!-- Feature comparison table -->
+  <section class="mb-24">
+    <h2 class="text-3xl font-headline font-bold text-center mb-12 text-white">Compare features</h2>
+    <div class="glass-card rounded-2xl overflow-hidden w-full overflow-x-auto">
+      <table class="w-full text-left border-collapse min-w-[640px]">
+        <thead>
+          <tr style="border-bottom:1px solid rgba(255,255,255,.06)">
+            <th class="py-5 px-7 text-sm font-semibold" style="color:rgba(255,255,255,.4);width:35%">Feature</th>
+            <th class="py-5 px-7 text-sm font-semibold text-white">Starter</th>
+            <th class="py-5 px-7 text-sm font-semibold text-primary">Pro</th>
+            <th class="py-5 px-7 text-sm font-semibold text-white">Elite</th>
+          </tr>
+        </thead>
+        <tbody class="text-sm">
+          <tr style="border-bottom:1px solid rgba(255,255,255,.04)" class="hover:bg-white/[.02] transition-colors">
+            <td class="py-4 px-7" style="color:rgba(255,255,255,.45)">Master accounts</td>
+            <td class="py-4 px-7 text-white">1</td>
+            <td class="py-4 px-7 text-white">Unlimited</td>
+            <td class="py-4 px-7 text-white">Unlimited</td>
+          </tr>
+          <tr style="border-bottom:1px solid rgba(255,255,255,.04)" class="hover:bg-white/[.02] transition-colors">
+            <td class="py-4 px-7" style="color:rgba(255,255,255,.45)">Slave accounts</td>
+            <td class="py-4 px-7 text-white">3</td>
+            <td class="py-4 px-7 text-white">Unlimited</td>
+            <td class="py-4 px-7 text-white">Unlimited</td>
+          </tr>
+          <tr style="border-bottom:1px solid rgba(255,255,255,.04)" class="hover:bg-white/[.02] transition-colors">
+            <td class="py-4 px-7" style="color:rgba(255,255,255,.45)">Replication latency</td>
+            <td class="py-4 px-7 font-mono text-white">&lt;500ms</td>
+            <td class="py-4 px-7 font-mono text-primary font-bold">&lt;120ms</td>
+            <td class="py-4 px-7 font-mono text-white">&lt;50ms (dedicated)</td>
+          </tr>
+          <tr style="border-bottom:1px solid rgba(255,255,255,.04)" class="hover:bg-white/[.02] transition-colors">
+            <td class="py-4 px-7" style="color:rgba(255,255,255,.45)">Prop firms</td>
+            <td class="py-4 px-7 text-white">Tradovate only</td>
+            <td class="py-4 px-7 text-white">Apex, Topstep, Elite, TPT…</td>
+            <td class="py-4 px-7 text-white">All + custom</td>
+          </tr>
+          <tr style="border-bottom:1px solid rgba(255,255,255,.04)" class="hover:bg-white/[.02] transition-colors">
+            <td class="py-4 px-7" style="color:rgba(255,255,255,.45)">Analytics dashboard</td>
+            <td class="py-4 px-7"><span class="material-symbols-outlined text-sm" style="color:rgba(255,255,255,.2)">close</span></td>
+            <td class="py-4 px-7"><span class="material-symbols-outlined text-sm text-primary" style="font-variation-settings:'FILL' 1">check_circle</span></td>
+            <td class="py-4 px-7"><span class="material-symbols-outlined text-sm text-primary" style="font-variation-settings:'FILL' 1">check_circle</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid rgba(255,255,255,.04)" class="hover:bg-white/[.02] transition-colors">
+            <td class="py-4 px-7" style="color:rgba(255,255,255,.45)">Push + email alerts</td>
+            <td class="py-4 px-7"><span class="material-symbols-outlined text-sm" style="color:rgba(255,255,255,.2)">close</span></td>
+            <td class="py-4 px-7"><span class="material-symbols-outlined text-sm text-primary" style="font-variation-settings:'FILL' 1">check_circle</span></td>
+            <td class="py-4 px-7"><span class="material-symbols-outlined text-sm text-primary" style="font-variation-settings:'FILL' 1">check_circle</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid rgba(255,255,255,.04)" class="hover:bg-white/[.02] transition-colors">
+            <td class="py-4 px-7" style="color:rgba(255,255,255,.45)">Support</td>
+            <td class="py-4 px-7 text-white">Email (48h)</td>
+            <td class="py-4 px-7 text-white">Priority (12h)</td>
+            <td class="py-4 px-7 text-white">Account manager 24/7</td>
+          </tr>
+          <tr class="hover:bg-white/[.02] transition-colors">
+            <td class="py-4 px-7" style="color:rgba(255,255,255,.45)">Uptime SLA</td>
+            <td class="py-4 px-7"><span class="material-symbols-outlined text-sm" style="color:rgba(255,255,255,.2)">close</span></td>
+            <td class="py-4 px-7"><span class="material-symbols-outlined text-sm" style="color:rgba(255,255,255,.2)">close</span></td>
+            <td class="py-4 px-7 font-semibold" style="color:rgba(255,255,255,.8)">99.99% guaranteed</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Social proof strip -->
+  <section class="mb-24 text-center">
+    <p class="text-sm mb-8" style="color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.1em">Trusted by traders at</p>
+    <div class="flex flex-wrap items-center justify-center gap-8 md:gap-14">
+      <span class="text-sm font-bold" style="color:rgba(255,255,255,.25)">Apex Trader Funding</span>
+      <span class="text-sm font-bold" style="color:rgba(255,255,255,.25)">Topstep</span>
+      <span class="text-sm font-bold" style="color:rgba(255,255,255,.25)">Elite Trader Funding</span>
+      <span class="text-sm font-bold" style="color:rgba(255,255,255,.25)">TakeProfitTrader</span>
+      <span class="text-sm font-bold" style="color:rgba(255,255,255,.25)">Bulenox</span>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="max-w-2xl mx-auto mb-24">
+    <h2 class="text-3xl font-headline font-bold text-center mb-10 text-white">Frequently asked questions</h2>
+    <div class="flex flex-col gap-3" id="faq">
+      <div class="faq-item glass-card rounded-xl p-5" onclick="this.classList.toggle('open')">
+        <div class="flex justify-between items-center gap-4">
+          <h4 class="font-semibold text-sm text-white">How does the free trial work?</h4>
+          <span class="material-symbols-outlined text-sm faq-icon flex-shrink-0" style="color:rgba(255,255,255,.4)">add</span>
+        </div>
+        <div class="faq-body mt-3 text-sm leading-relaxed" style="color:rgba(255,255,255,.5)">Start with full Pro access for 7 days — no credit card required. At the end of the trial you can choose any plan or continue with Starter for free.</div>
+      </div>
+      <div class="faq-item glass-card rounded-xl p-5" onclick="this.classList.toggle('open')">
+        <div class="flex justify-between items-center gap-4">
+          <h4 class="font-semibold text-sm text-white">Do I need coding knowledge?</h4>
+          <span class="material-symbols-outlined text-sm faq-icon flex-shrink-0" style="color:rgba(255,255,255,.4)">add</span>
+        </div>
+        <div class="faq-body mt-3 text-sm leading-relaxed" style="color:rgba(255,255,255,.5)">Zero. SimpleTrader connects directly to Tradovate's API. You just enter your credentials, link your accounts, and the replicator does the rest.</div>
+      </div>
+      <div class="faq-item glass-card rounded-xl p-5" onclick="this.classList.toggle('open')">
+        <div class="flex justify-between items-center gap-4">
+          <h4 class="font-semibold text-sm text-white">Which prop firms are supported?</h4>
+          <span class="material-symbols-outlined text-sm faq-icon flex-shrink-0" style="color:rgba(255,255,255,.4)">add</span>
+        </div>
+        <div class="faq-body mt-3 text-sm leading-relaxed" style="color:rgba(255,255,255,.5)">Any prop firm that uses Tradovate as their trading platform: Apex Trader Funding, Topstep, Elite Trader Funding, TakeProfitTrader, Bulenox, and more. If it runs on Tradovate, SimpleTrader works.</div>
+      </div>
+      <div class="faq-item glass-card rounded-xl p-5" onclick="this.classList.toggle('open')">
+        <div class="flex justify-between items-center gap-4">
+          <h4 class="font-semibold text-sm text-white">Can I change plans later?</h4>
+          <span class="material-symbols-outlined text-sm faq-icon flex-shrink-0" style="color:rgba(255,255,255,.4)">add</span>
+        </div>
+        <div class="faq-body mt-3 text-sm leading-relaxed" style="color:rgba(255,255,255,.5)">Yes, upgrade or downgrade at any time from your account settings. Changes take effect immediately and billing is prorated.</div>
+      </div>
+      <div class="faq-item glass-card rounded-xl p-5" onclick="this.classList.toggle('open')">
+        <div class="flex justify-between items-center gap-4">
+          <h4 class="font-semibold text-sm text-white">How is such low latency achieved?</h4>
+          <span class="material-symbols-outlined text-sm faq-icon flex-shrink-0" style="color:rgba(255,255,255,.4)">add</span>
+        </div>
+        <div class="faq-body mt-3 text-sm leading-relaxed" style="color:rgba(255,255,255,.5)">SimpleTrader's replication engine polls your master account every 2.5 seconds via Tradovate's WebSocket API and dispatches copy orders in parallel to all slave accounts. Elite plans run on dedicated infrastructure co-located with Tradovate servers.</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- CTA Band -->
+<div class="relative overflow-hidden py-20 px-6 z-10" style="background:linear-gradient(135deg,rgba(91,124,247,.15) 0%,rgba(139,92,246,.1) 100%);border-top:1px solid rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.05)">
+  <div class="absolute inset-0" style="background:radial-gradient(ellipse at center,rgba(91,124,247,.2) 0%,transparent 70%)"></div>
+  <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
+    <div>
+      <h2 class="text-3xl md:text-4xl font-headline font-black text-white mb-2">Ready to replicate?</h2>
+      <p class="text-sm" style="color:rgba(255,255,255,.5)">One master. All your funded accounts. No code.</p>
+    </div>
+    <a href="/" class="whitespace-nowrap py-4 px-9 rounded-xl font-bold text-base transition-all active:scale-95 text-white" style="background:linear-gradient(135deg,#5B7CF7,#8B5CF6);box-shadow:0 0 30px rgba(91,124,247,.4)">
+      Start for free →
+    </a>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="relative z-10 flex flex-col md:flex-row justify-between items-center px-8 py-6 border-t" style="border-color:rgba(255,255,255,.06)">
+  <div class="text-xs mb-4 md:mb-0" style="color:rgba(255,255,255,.25)">© 2025 SimpleTrader · All systems operational</div>
+  <div class="flex flex-wrap items-center gap-6">
+    <a href="#" class="text-xs hover:text-white transition-colors" style="color:rgba(255,255,255,.3)">Terms</a>
+    <a href="#" class="text-xs hover:text-white transition-colors" style="color:rgba(255,255,255,.3)">Privacy</a>
+    <a href="#" class="text-xs hover:text-white transition-colors" style="color:rgba(255,255,255,.3)">Risk Disclosure</a>
+    <a href="/apex-trade-copier" class="text-xs hover:text-white transition-colors" style="color:rgba(255,255,255,.3)">Apex Copier</a>
+    <a href="/topstep-trade-copier" class="text-xs hover:text-white transition-colors" style="color:rgba(255,255,255,.3)">Topstep Copier</a>
+  </div>
+</footer>
+
+<script>
+const PRICES = { pro: { monthly: 29, annual: 24 }, elite: { monthly: 79, annual: 65 } };
+let billing = 'monthly';
+function setBilling(b) {
+  billing = b;
+  const monthly = document.getElementById('toggle-monthly');
+  const annual = document.getElementById('toggle-annual');
+  if (b === 'monthly') {
+    monthly.style.cssText = 'background:rgba(91,124,247,.25);border:1px solid rgba(91,124,247,.4);color:#fff;';
+    annual.style.cssText = 'background:none;border:none;color:rgba(255,255,255,.5);';
+  } else {
+    annual.style.cssText = 'background:rgba(91,124,247,.25);border:1px solid rgba(91,124,247,.4);color:#fff;';
+    monthly.style.cssText = 'background:none;border:none;color:rgba(255,255,255,.5);';
+  }
+  document.getElementById('pro-price').textContent = '$' + PRICES.pro[b];
+  document.getElementById('elite-price').textContent = '$' + PRICES.elite[b];
+  document.getElementById('pro-billed').textContent = b === 'annual' ? 'Billed $' + (PRICES.pro.annual * 12) + '/yr · Save $60' : 'Billed monthly · Cancel anytime';
+  document.getElementById('elite-billed').textContent = b === 'annual' ? 'Billed $' + (PRICES.elite.annual * 12) + '/yr · Save $168' : 'For serious prop firm traders';
+}
+</script>
+
+</body>
+</html>

@@ -10,10 +10,15 @@
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#5B7CF7">
 
-<!-- DM Sans — Premium SaaS Typography -->
+<!-- DM Sans + Material Symbols — Stitch Design System -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;0,9..40,900;1,9..40,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<style>
+.material-symbols-outlined{font-family:'Material Symbols Outlined';font-weight:normal;font-style:normal;font-size:20px;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
+</style>
 
 <!-- Open Graph -->
 <meta property="og:type" content="website">
@@ -3858,6 +3863,96 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
   color:#8AABFF;
 }
 
+/* ── Replicator v2 — Premium header & layout ── */
+.rep2-head{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  margin-bottom:18px;padding-bottom:16px;
+  border-bottom:1px solid rgba(255,255,255,.045);
+}
+.rep2-title{
+  font-size:20px;font-weight:800;letter-spacing:-.5px;
+  background:linear-gradient(120deg,#EEF2FF 20%,rgba(138,171,255,.8) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  margin-bottom:3px;
+}
+.rep2-sub{ font-size:11px;color:var(--tx3);line-height:1.5; }
+.rep2-acts{ display:flex;align-items:center;gap:8px;flex-shrink:0;margin-top:4px; }
+.rep2-lat{
+  display:flex;align-items:center;gap:6px;padding:5px 12px;
+  background:rgba(91,124,247,.08);border:1px solid rgba(91,124,247,.18);
+  border-radius:8px;font-size:11px;color:var(--tx2);
+}
+.rep2-lat .dot{
+  width:6px;height:6px;border-radius:50%;background:var(--gn);
+  box-shadow:0 0 6px rgba(34,197,94,.7);animation:sessionPulse 2s infinite;
+}
+/* KPI cards — replicator variant */
+#sec-replicator .mc{
+  background:rgba(8,11,22,.7)!important;
+  border:1px solid rgba(255,255,255,.065)!important;
+  border-radius:13px!important;
+  transition:border-color .2s,transform .2s,box-shadow .2s!important;
+  position:relative;overflow:hidden;
+}
+#sec-replicator .mc::before{
+  content:'';position:absolute;top:0;right:0;width:60px;height:60px;
+  border-radius:50%;opacity:.35;pointer-events:none;
+  background:radial-gradient(circle,rgba(91,124,247,.15) 0%,transparent 70%);
+}
+#sec-replicator .mc:hover{
+  border-color:rgba(91,124,247,.22)!important;
+  transform:translateY(-2px)!important;
+  box-shadow:0 8px 24px rgba(0,0,0,.25)!important;
+}
+/* Master card enhanced */
+.rep-master-card{
+  background:linear-gradient(135deg,rgba(91,124,247,.08) 0%,rgba(8,11,22,.9) 100%);
+  border:1px solid rgba(91,124,247,.25)!important;
+  border-radius:14px;padding:16px 18px;margin-bottom:14px;
+  box-shadow:0 0 30px rgba(91,124,247,.07);position:relative;overflow:hidden;
+}
+.rep-master-card::before{
+  content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;
+  border-radius:50%;background:radial-gradient(circle,rgba(91,124,247,.12) 0%,transparent 70%);
+  pointer-events:none;
+}
+/* Slave card enhanced */
+.scard{
+  background:rgba(8,11,22,.8)!important;
+  border:1px solid rgba(255,255,255,.065)!important;
+  border-radius:12px!important;
+  transition:border-color .2s,box-shadow .2s,transform .2s!important;
+}
+.scard:hover{ transform:translateY(-2px)!important;box-shadow:0 6px 20px rgba(0,0,0,.2)!important; }
+.scard.s-on{ border-color:rgba(34,197,94,.15)!important; }
+.scard.s-w{ border-color:rgba(245,158,11,.2)!important; }
+.scard.s-e{ border-color:rgba(239,68,68,.2)!important; }
+/* Log card */
+.rep2-log-card{
+  background:rgba(8,11,22,.7);border:1px solid rgba(255,255,255,.065);
+  border-radius:13px;padding:14px 16px;margin-bottom:10px;
+}
+/* Cloud engine card */
+.rep2-engine-card{
+  background:rgba(8,11,22,.7);border:1px solid rgba(255,255,255,.065);
+  border-radius:13px;padding:14px 16px;
+}
+/* Stats bar */
+.rep2-stats-bar{
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;
+  background:rgba(8,11,22,.6);border:1px solid rgba(255,255,255,.05);
+  border-radius:14px;padding:16px 20px;margin-top:14px;
+}
+.rep2-stat-item{ display:flex;align-items:center;gap:12px; }
+.rep2-stat-ico{
+  width:36px;height:36px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.rep2-stat-lbl{ font-size:9.5px;text-transform:uppercase;letter-spacing:.7px;color:var(--tx3);margin-bottom:2px; }
+.rep2-stat-val{ font-size:17px;font-weight:800;color:var(--tx);font-family:var(--mono); }
+.rep2-divider{ width:1px;height:36px;background:rgba(255,255,255,.07);flex-shrink:0; }
+@media(max-width:900px){ .rep2-head{flex-direction:column;gap:10px} .rep2-stats-bar{gap:16px} .rep2-divider{display:none} }
+
 /* ── Responsive ── */
 @media(max-width:900px){
   .content{padding:14px 14px 80px !important}
@@ -4153,6 +4248,618 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
   .db-header{padding-bottom:14px}
   .db-greeting{font-size:18px}
 }
+
+/* ═══════════════════════════════════════════════════════════
+   PREMIUM UI UPGRADE v2 — Sidebar · Topbar · Cards · Shell
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Sidebar — premium glass dark ── */
+.sb{
+  background:rgba(7,9,15,.98)!important;
+  border-right:1px solid rgba(255,255,255,.05)!important;
+  box-shadow:2px 0 24px rgba(0,0,0,.4)!important;
+}
+.sb-logo{
+  padding:16px 14px!important;
+  border-bottom:1px solid rgba(255,255,255,.05)!important;
+}
+.sb-mark{
+  background:linear-gradient(135deg,#5B7CF7,#6D4FE8)!important;
+  border-radius:8px!important;
+  box-shadow:0 2px 12px rgba(91,124,247,.35)!important;
+  font-size:11px!important;
+  font-weight:900!important;
+}
+.sb-mark:hover{border-radius:12px!important}
+.sg{
+  font-size:8.5px!important;
+  font-weight:700!important;
+  letter-spacing:1.1px!important;
+  color:rgba(61,80,117,.9)!important;
+  padding:14px 9px 5px!important;
+}
+.ni{
+  border-radius:9px!important;
+  padding:8px 11px!important;
+  font-size:11.5px!important;
+  font-weight:500!important;
+  color:rgba(126,149,192,.75)!important;
+  border:1px solid transparent!important;
+  gap:10px!important;
+  transition:background .15s,color .15s,border-color .15s!important;
+}
+.ni:hover{
+  background:rgba(255,255,255,.04)!important;
+  color:var(--tx)!important;
+  border-color:rgba(255,255,255,.06)!important;
+}
+.ni.act{
+  background:linear-gradient(to right,rgba(91,124,247,.14),rgba(91,124,247,.05))!important;
+  color:#8AABFF!important;
+  border-color:rgba(91,124,247,.25)!important;
+  border-left:2px solid var(--cy)!important;
+  padding-left:10px!important;
+  font-weight:600!important;
+}
+.ni.act svg{opacity:1!important;filter:drop-shadow(0 0 4px rgba(91,124,247,.5))}
+.ni svg{width:14px!important;height:14px!important;opacity:.5!important;flex-shrink:0!important}
+.ni-tip{
+  background:rgba(8,11,22,.95)!important;
+  border:1px solid rgba(255,255,255,.09)!important;
+  box-shadow:0 8px 24px rgba(0,0,0,.5)!important;
+  border-radius:8px!important;
+  font-size:11px!important;
+  padding:5px 11px!important;
+}
+.nb{
+  font-size:7.5px!important;
+  padding:1px 6px!important;
+  border-radius:8px!important;
+}
+/* User row at bottom */
+.sb-foot{
+  padding:12px!important;
+  border-top:1px solid rgba(255,255,255,.05)!important;
+  background:rgba(7,9,15,.5)!important;
+}
+.up-row{
+  background:rgba(255,255,255,.03)!important;
+  border:1px solid rgba(255,255,255,.06)!important;
+  border-radius:10px!important;
+  padding:9px 11px!important;
+}
+.up-row:hover{
+  background:rgba(255,255,255,.06)!important;
+  border-color:rgba(255,255,255,.1)!important;
+  box-shadow:0 4px 16px rgba(0,0,0,.3)!important;
+}
+.uav{
+  background:linear-gradient(135deg,#5B7CF7,#8B5CF6)!important;
+  width:28px!important;height:28px!important;min-width:28px!important;
+  font-size:10px!important;font-weight:800!important;
+  box-shadow:0 0 10px rgba(91,124,247,.3)!important;
+}
+.uname{font-size:11.5px!important;font-weight:600!important}
+.uplan{font-size:8px!important;letter-spacing:.4px!important;font-weight:700!important}
+.ll{
+  box-shadow:0 0 8px rgba(34,197,94,.6)!important;
+  animation:lp 2.5s infinite!important;
+}
+
+/* ── Topbar — premium dark ── */
+.topbar{
+  background:rgba(7,9,15,.95)!important;
+  border-bottom:1px solid rgba(255,255,255,.05)!important;
+  backdrop-filter:blur(10px)!important;
+  height:48px!important;min-height:48px!important;
+}
+.tb-t{
+  font-size:13px!important;font-weight:800!important;letter-spacing:.1px!important;
+  color:var(--tx)!important;
+  border-right:1px solid rgba(255,255,255,.06)!important;
+}
+.tick-sym{color:rgba(126,149,192,.6)!important;font-size:9px!important}
+.tick-px{font-size:10px!important;font-weight:700!important}
+.tbtn{
+  border:1px solid rgba(255,255,255,.07)!important;
+  border-radius:8px!important;
+  background:rgba(255,255,255,.02)!important;
+  color:rgba(126,149,192,.7)!important;
+}
+.tbtn:hover{
+  background:rgba(255,255,255,.06)!important;
+  border-color:rgba(255,255,255,.12)!important;
+  color:var(--tx)!important;
+  transform:translateY(-1px)!important;
+}
+.ws-p{
+  border-radius:7px!important;
+  font-size:9px!important;
+  padding:4px 10px!important;
+  background:rgba(255,255,255,.03)!important;
+}
+
+/* ── Cards — global upgrade ── */
+.card{
+  background:rgba(8,11,22,.75)!important;
+  border:1px solid rgba(255,255,255,.065)!important;
+  border-radius:13px!important;
+  transition:border-color .2s,box-shadow .2s!important;
+}
+.card:hover{
+  border-color:rgba(255,255,255,.1)!important;
+  box-shadow:0 4px 20px rgba(0,0,0,.3)!important;
+}
+.hd{
+  font-size:10.5px!important;
+  font-weight:700!important;
+  color:rgba(255,255,255,.5)!important;
+  letter-spacing:.2px!important;
+  border-bottom:1px solid rgba(255,255,255,.05)!important;
+  margin-bottom:11px!important;
+  padding-bottom:10px!important;
+}
+.hd svg{opacity:.6!important}
+
+/* ── Metric cards (mc) — global upgrade ── */
+.mc{
+  background:rgba(8,11,22,.7)!important;
+  border:1px solid rgba(255,255,255,.06)!important;
+  border-radius:13px!important;
+  transition:border-color .2s,transform .2s,box-shadow .2s!important;
+}
+.mc:hover{
+  border-color:rgba(255,255,255,.1)!important;
+  transform:translateY(-2px)!important;
+  box-shadow:0 8px 24px rgba(0,0,0,.25)!important;
+}
+.ml{
+  font-size:9.5px!important;
+  text-transform:uppercase!important;
+  letter-spacing:.6px!important;
+  color:rgba(126,149,192,.7)!important;
+  margin-bottom:6px!important;
+}
+.mv{
+  font-size:22px!important;
+  font-weight:800!important;
+  letter-spacing:-.6px!important;
+  font-family:var(--mono)!important;
+}
+.ms{
+  font-size:9.5px!important;
+  color:rgba(61,80,117,.9)!important;
+  margin-top:4px!important;
+}
+
+/* ── Master tabs upgrade ── */
+.master-tabs{gap:6px!important}
+.mtab{
+  background:rgba(255,255,255,.03)!important;
+  border:1px solid rgba(255,255,255,.06)!important;
+  border-radius:10px!important;
+  padding:8px 12px!important;
+  transition:all .18s!important;
+}
+.mtab:hover{
+  background:rgba(255,255,255,.06)!important;
+  border-color:rgba(255,255,255,.1)!important;
+}
+.mtab.act{
+  background:rgba(91,124,247,.12)!important;
+  border-color:rgba(91,124,247,.3)!important;
+}
+.mtab-add{
+  border-style:dashed!important;
+  color:rgba(91,124,247,.6)!important;
+}
+.mtab-add:hover{
+  background:rgba(91,124,247,.07)!important;
+  border-color:rgba(91,124,247,.25)!important;
+  color:var(--cy)!important;
+}
+
+/* ── Section header — universal ── */
+.sec-hd{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  margin-bottom:16px;padding-bottom:14px;
+  border-bottom:1px solid rgba(255,255,255,.045);
+}
+
+/* ── Content area ── */
+.content{
+  background:var(--bg)!important;
+  scrollbar-color:rgba(255,255,255,.06) transparent!important;
+}
+
+/* ── Btn upgrades ── */
+.btn{
+  border-radius:8px!important;
+  font-weight:600!important;
+  transition:all .15s!important;
+}
+.btn:hover{transform:translateY(-1px)!important}
+.btn.bc{
+  background:linear-gradient(135deg,rgba(91,124,247,.18),rgba(91,124,247,.08))!important;
+  border:1px solid rgba(91,124,247,.3)!important;
+  color:var(--cy)!important;
+}
+.btn.bc:hover{
+  background:linear-gradient(135deg,rgba(91,124,247,.28),rgba(91,124,247,.15))!important;
+  border-color:rgba(91,124,247,.45)!important;
+}
+.btn.br{
+  border:1px solid rgba(239,68,68,.25)!important;
+  color:rgba(248,113,113,.85)!important;
+  background:rgba(239,68,68,.05)!important;
+}
+.btn.br:hover{
+  background:rgba(239,68,68,.1)!important;
+  border-color:rgba(239,68,68,.4)!important;
+}
+
+/* ── Modal/overlay ── */
+.modal{
+  background:rgba(7,9,15,.96)!important;
+  border:1px solid rgba(255,255,255,.08)!important;
+  border-radius:16px!important;
+  box-shadow:0 24px 80px rgba(0,0,0,.7)!important;
+}
+.mhd{
+  border-bottom:1px solid rgba(255,255,255,.06)!important;
+  font-size:14px!important;font-weight:700!important;
+}
+
+/* ── Form inputs ── */
+.inp,input[type=text],input[type=email],input[type=password],input[type=number],select,textarea{
+  background:rgba(255,255,255,.03)!important;
+  border:1px solid rgba(255,255,255,.08)!important;
+  border-radius:8px!important;
+  color:var(--tx)!important;
+  transition:border-color .15s,box-shadow .15s!important;
+}
+.inp:focus,input[type=text]:focus,input[type=email]:focus,input[type=password]:focus,input[type=number]:focus,select:focus,textarea:focus{
+  border-color:rgba(91,124,247,.45)!important;
+  box-shadow:0 0 0 3px rgba(91,124,247,.1)!important;
+  outline:none!important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   STITCH DESIGN SYSTEM — Glass cards · Glows · Animations
+   ═══════════════════════════════════════════════════════════ */
+
+/* Glass card — Stitch signature */
+.glass-card{
+  background:rgba(8,11,22,0.85);
+  border:1px solid rgba(255,255,255,0.07);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+}
+.glass-card:hover{ border-color:rgba(255,255,255,0.11)!important; }
+
+/* Glow utilities */
+.glow-blue{ box-shadow:0 0 24px rgba(91,124,247,0.18); }
+.glow-green{ box-shadow:0 0 20px rgba(34,197,94,0.12); }
+.glow-warning{ box-shadow:0 0 16px rgba(245,158,11,0.12); }
+.glow-border-indigo{
+  background:linear-gradient(#07090F,#07090F) padding-box,
+             linear-gradient(to right,#5B7CF7,#4F46E5) border-box;
+  border:1.5px solid transparent;
+}
+
+/* Shimmer flow line */
+.shimmer-line{
+  background:linear-gradient(90deg,rgba(255,255,255,.03) 0%,rgba(91,124,247,.4) 50%,rgba(255,255,255,.03) 100%);
+  background-size:200% 100%;
+  animation:stitch-shimmer 2.2s linear infinite;
+}
+@keyframes stitch-shimmer{ to{background-position:200% center} }
+
+/* Pulse dot */
+@keyframes stitch-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.6)}}
+.animate-pulse-dot{ animation:stitch-pulse 2s cubic-bezier(.4,0,.6,1) infinite }
+.animate-pulse{ animation:stitch-pulse 2s ease-in-out infinite }
+
+/* ── STITCH SIDEBAR ── */
+.sb{
+  width:72px!important;min-width:72px!important;
+  background:rgba(7,9,15,0.97)!important;
+  border-right:1px solid rgba(255,255,255,0.055)!important;
+  box-shadow:2px 0 32px rgba(0,0,0,.5)!important;
+  backdrop-filter:blur(20px)!important;
+  display:flex!important;flex-direction:column!important;
+  align-items:center!important;padding:20px 0!important;
+  overflow:visible!important;
+  transition:width .25s cubic-bezier(.4,0,.2,1)!important;
+}
+.sb.col{width:72px!important;min-width:72px!important}
+/* Expanded mode */
+.sb:not(.col){width:220px!important;min-width:220px!important;align-items:flex-start!important}
+.sb-logo{
+  width:100%!important;padding:0 0 20px 0!important;
+  border-bottom:1px solid rgba(255,255,255,.05)!important;
+  display:flex!important;flex-direction:column!important;align-items:center!important;
+  gap:0!important;margin-bottom:0!important;
+}
+.sb:not(.col) .sb-logo{flex-direction:row!important;align-items:center!important;gap:10px!important;padding:0 14px 16px!important}
+.sb-mark{
+  width:32px!important;height:32px!important;min-width:32px!important;
+  background:linear-gradient(135deg,#5B7CF7,#4F46E5)!important;
+  border-radius:9px!important;font-size:12px!important;font-weight:900!important;
+  box-shadow:0 0 16px rgba(91,124,247,.4),0 2px 8px rgba(0,0,0,.4)!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  color:#fff!important;cursor:pointer!important;flex-shrink:0!important;
+  transition:border-radius .2s,box-shadow .2s!important;
+}
+.sb-mark:hover{border-radius:50%!important;box-shadow:0 0 24px rgba(91,124,247,.55)!important}
+.sb-plan-chip{
+  font-size:8.5px!important;font-weight:700!important;letter-spacing:.8px!important;
+  text-transform:uppercase!important;color:#5B7CF7!important;
+  background:rgba(91,124,247,.15)!important;
+  border:1px solid rgba(91,124,247,.3)!important;
+  border-radius:6px!important;padding:2px 7px!important;
+  margin-top:5px!important;
+}
+.sb:not(.col) .sb-plan-chip{margin-top:0!important}
+.sb-nav{
+  flex:1!important;width:100%!important;
+  display:flex!important;flex-direction:column!important;
+  gap:2px!important;padding:12px 10px!important;
+  overflow-y:auto!important;scrollbar-width:none!important;
+}
+.sb-nav::-webkit-scrollbar{display:none}
+.sg{
+  font-size:8px!important;font-weight:700!important;letter-spacing:1.2px!important;
+  text-transform:uppercase!important;color:rgba(61,80,117,.7)!important;
+  padding:12px 4px 4px!important;white-space:nowrap!important;
+  transition:opacity .18s!important;
+}
+.sb.col .sg,.sb-logo-txt,.sb-txt{display:none!important}
+.sb:not(.col) .sg{display:block!important}
+.sb:not(.col) .sb-logo-txt{display:flex!important;flex-direction:column!important}
+/* Nav item — Stitch style */
+.ni{
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  padding:10px!important;border-radius:12px!important;
+  cursor:pointer!important;border:1px solid transparent!important;
+  background:transparent!important;color:rgba(148,163,184,.65)!important;
+  transition:all .18s!important;width:100%!important;
+  font-family:var(--sans)!important;position:relative!important;
+  gap:10px!important;
+}
+.sb:not(.col) .ni{justify-content:flex-start!important;padding:10px 12px!important}
+.ni:hover{
+  background:rgba(255,255,255,.05)!important;
+  color:rgba(255,255,255,.9)!important;
+  border-color:rgba(255,255,255,.06)!important;
+}
+.ni.act{
+  background:rgba(91,124,247,.14)!important;
+  color:#8AABFF!important;
+  border-color:rgba(91,124,247,.28)!important;
+}
+.ni svg,.ni .ms-ico{
+  width:20px!important;height:20px!important;flex-shrink:0!important;
+  font-size:20px!important;
+}
+.ni svg{opacity:.7!important}
+.ni.act svg,.ni.act .ms-ico{opacity:1!important;filter:drop-shadow(0 0 5px rgba(91,124,247,.5))}
+/* Labels hidden in collapsed mode */
+.ni-lbl{
+  font-size:12px!important;font-weight:500!important;
+  white-space:nowrap!important;overflow:hidden!important;
+  transition:opacity .18s,max-width .22s!important;
+}
+.sb.col .ni-lbl{display:none!important}
+.sb:not(.col) .ni-lbl{display:block!important;max-width:160px!important}
+/* Badge */
+.nb{
+  font-size:7.5px!important;padding:1.5px 6px!important;border-radius:8px!important;
+  font-family:var(--mono)!important;font-weight:700!important;
+  transition:opacity .18s!important;flex-shrink:0!important;
+}
+.sb.col .nb{display:none!important}
+/* Tooltip (collapsed mode) */
+.ni-tip{
+  position:absolute!important;left:calc(100% + 10px)!important;top:50%!important;
+  transform:translateY(-50%)!important;
+  background:rgba(12,17,32,.97)!important;
+  border:1px solid rgba(255,255,255,.1)!important;
+  border-radius:8px!important;padding:5px 12px!important;
+  font-size:11.5px!important;font-weight:600!important;color:#EEF2FF!important;
+  white-space:nowrap!important;pointer-events:none!important;
+  opacity:0!important;transition:opacity .12s!important;
+  box-shadow:0 8px 24px rgba(0,0,0,.5)!important;z-index:999!important;
+}
+.sb.col .ni:hover .ni-tip{opacity:1!important}
+.sb:not(.col) .ni-tip{display:none!important}
+
+/* Sidebar footer */
+.sb-foot{
+  width:100%!important;padding:12px 10px!important;
+  border-top:1px solid rgba(255,255,255,.05)!important;
+  flex-shrink:0!important;
+}
+.up-row{
+  display:flex!important;align-items:center!important;gap:8px!important;
+  padding:8px 10px!important;
+  background:rgba(255,255,255,.03)!important;
+  border:1px solid rgba(255,255,255,.06)!important;
+  border-radius:10px!important;cursor:pointer!important;
+  transition:all .15s!important;
+}
+.up-row:hover{background:rgba(255,255,255,.07)!important;border-color:rgba(255,255,255,.1)!important}
+.uav{
+  width:30px!important;height:30px!important;min-width:30px!important;
+  background:linear-gradient(135deg,#5B7CF7,#8B5CF6)!important;
+  border-radius:50%!important;font-size:10px!important;font-weight:800!important;
+  color:#fff!important;display:flex!important;align-items:center!important;justify-content:center!important;
+  box-shadow:0 0 12px rgba(91,124,247,.35)!important;flex-shrink:0!important;
+}
+.u-info{flex:1!important;min-width:0!important;overflow:hidden!important}
+.uname{font-size:11.5px!important;font-weight:600!important;color:var(--tx)!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+.uplan{font-size:8px!important;color:#5B7CF7!important;font-weight:700!important;letter-spacing:.4px!important}
+.ll{width:7px!important;height:7px!important;background:#22C55E!important;border-radius:50%!important;box-shadow:0 0 8px rgba(34,197,94,.7)!important;animation:lp 2.5s infinite!important;flex-shrink:0!important}
+.sb.col .u-info,.sb.col .ll,.sb.col .sb-legal-links,.sb.col .foot-btns{display:none!important}
+.foot-btns{display:flex!important;gap:5px!important;margin-top:6px!important}
+
+/* ── STITCH TOPBAR ── */
+.topbar{
+  height:56px!important;min-height:56px!important;
+  background:rgba(7,9,15,.92)!important;
+  border-bottom:1px solid rgba(255,255,255,.055)!important;
+  backdrop-filter:blur(16px)!important;
+  -webkit-backdrop-filter:blur(16px)!important;
+  padding:0 20px!important;gap:12px!important;
+}
+.tb-t{
+  font-size:13.5px!important;font-weight:800!important;letter-spacing:-.1px!important;
+  color:var(--tx)!important;padding-right:16px!important;
+  border-right:1px solid rgba(255,255,255,.06)!important;
+}
+.tb-search{
+  flex:1!important;max-width:360px!important;
+  display:flex!important;align-items:center!important;
+  background:rgba(255,255,255,.04)!important;
+  border:1px solid rgba(255,255,255,.08)!important;
+  border-radius:24px!important;padding:6px 12px 6px 10px!important;gap:7px!important;
+  transition:all .18s!important;
+}
+.tb-search:focus-within{
+  background:rgba(255,255,255,.07)!important;
+  border-color:rgba(91,124,247,.4)!important;
+  box-shadow:0 0 0 3px rgba(91,124,247,.08)!important;
+}
+.tb-search input{
+  background:transparent!important;border:none!important;outline:none!important;
+  font-size:12px!important;color:rgba(255,255,255,.75)!important;width:100%!important;
+  font-family:var(--sans)!important;
+}
+.tb-search input::placeholder{color:rgba(148,163,184,.4)!important}
+.tb-icon-btn{
+  width:34px!important;height:34px!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  border:1px solid rgba(255,255,255,.07)!important;border-radius:9px!important;
+  background:rgba(255,255,255,.02)!important;color:rgba(148,163,184,.6)!important;
+  cursor:pointer!important;transition:all .15s!important;font-size:18px!important;
+  position:relative!important;
+}
+.tb-icon-btn:hover{background:rgba(255,255,255,.07)!important;border-color:rgba(255,255,255,.12)!important;color:var(--tx)!important}
+.tb-notif-dot{
+  position:absolute!important;top:5px!important;right:5px!important;
+  width:7px!important;height:7px!important;background:#5B7CF7!important;
+  border-radius:50%!important;border:1.5px solid rgba(7,9,15,.95)!important;
+}
+.tb-av-wrap{
+  width:34px!important;height:34px!important;
+  background:linear-gradient(135deg,#5B7CF7,#8B5CF6)!important;
+  border-radius:50%!important;padding:1.5px!important;
+  cursor:pointer!important;flex-shrink:0!important;
+}
+.tb-av-inner{
+  width:100%!important;height:100%!important;
+  background:rgba(7,9,15,.9)!important;
+  border-radius:50%!important;display:flex!important;
+  align-items:center!important;justify-content:center!important;
+  font-size:10px!important;font-weight:800!important;color:#fff!important;
+}
+/* .tbtn hidden by default — tb-icon-btn variant shown via that class */
+.tbtn:not(.tb-icon-btn){display:none!important}
+
+/* ── STITCH CARDS (global) ── */
+.card{
+  background:rgba(8,11,22,0.82)!important;
+  border:1px solid rgba(255,255,255,0.07)!important;
+  border-radius:14px!important;
+  backdrop-filter:blur(12px)!important;
+  transition:border-color .2s,box-shadow .2s,transform .2s!important;
+}
+.card:hover{
+  border-color:rgba(255,255,255,0.11)!important;
+  box-shadow:0 8px 32px rgba(0,0,0,.3)!important;
+}
+.mc{
+  background:rgba(8,11,22,0.82)!important;
+  border:1px solid rgba(255,255,255,0.07)!important;
+  border-radius:14px!important;
+  backdrop-filter:blur(10px)!important;
+  transition:border-color .2s,transform .2s,box-shadow .2s!important;
+  overflow:hidden!important;position:relative!important;
+}
+.mc::before{
+  content:'';position:absolute;top:-20px;right:-20px;
+  width:80px;height:80px;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle,rgba(91,124,247,.08) 0%,transparent 70%);
+}
+.mc:hover{border-color:rgba(91,124,247,.2)!important;transform:translateY(-3px)!important;box-shadow:0 12px 32px rgba(0,0,0,.3)!important}
+.ml{font-size:10px!important;font-weight:600!important;text-transform:uppercase!important;letter-spacing:.7px!important;color:rgba(148,163,184,.6)!important;margin-bottom:8px!important}
+.mv{font-size:24px!important;font-weight:800!important;letter-spacing:-.7px!important;font-family:var(--mono)!important}
+.ms{font-size:10px!important;color:rgba(61,80,117,.85)!important;margin-top:5px!important}
+.hd{
+  font-size:11px!important;font-weight:700!important;
+  color:rgba(148,163,184,.55)!important;
+  border-bottom:1px solid rgba(255,255,255,.05)!important;
+  margin-bottom:12px!important;padding-bottom:10px!important;
+  display:flex!important;align-items:center!important;gap:7px!important;
+}
+.hd svg{opacity:.55!important;flex-shrink:0!important}
+
+/* ── STITCH MASTER TABS ── */
+.master-tabs{gap:6px!important}
+.mtab{
+  background:rgba(255,255,255,.03)!important;
+  border:1px solid rgba(255,255,255,.07)!important;
+  border-radius:11px!important;padding:9px 13px!important;
+  transition:all .18s!important;
+}
+.mtab:hover{background:rgba(255,255,255,.06)!important;border-color:rgba(255,255,255,.11)!important}
+.mtab.act{background:rgba(91,124,247,.13)!important;border-color:rgba(91,124,247,.3)!important}
+.mtab-add{border-style:dashed!important;color:rgba(91,124,247,.6)!important}
+.mtab-add:hover{background:rgba(91,124,247,.08)!important;border-color:rgba(91,124,247,.3)!important;color:var(--cy)!important}
+
+/* ── Slave cards ── */
+.scard{background:rgba(8,11,22,.82)!important;border:1px solid rgba(255,255,255,.065)!important;border-radius:12px!important;transition:border-color .18s,box-shadow .18s,transform .18s!important}
+.scard:hover{transform:translateY(-2px)!important;box-shadow:0 8px 24px rgba(0,0,0,.25)!important}
+.scard.s-on{border-color:rgba(34,197,94,.18)!important}
+.scard.s-w{border-color:rgba(245,158,11,.22)!important}
+.scard.s-e{border-color:rgba(239,68,68,.22)!important}
+
+/* ── Rep master card ── */
+.rep-master-card{
+  background:linear-gradient(135deg,rgba(91,124,247,.09) 0%,rgba(8,11,22,.95) 100%)!important;
+  border:1px solid rgba(91,124,247,.28)!important;
+  border-radius:14px!important;padding:16px 18px!important;
+  box-shadow:0 0 32px rgba(91,124,247,.08)!important;
+  position:relative!important;overflow:hidden!important;
+}
+.rep-master-card::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(91,124,247,.1) 0%,transparent 70%);pointer-events:none}
+
+/* Modal Stitch upgrade */
+.modal{background:rgba(8,11,22,.97)!important;border:1px solid rgba(255,255,255,.09)!important;border-radius:18px!important;box-shadow:0 32px 80px rgba(0,0,0,.7)!important}
+.mhd{border-bottom:1px solid rgba(255,255,255,.06)!important;font-size:14px!important;font-weight:700!important}
+
+/* Inputs Stitch */
+.inp,input[type=text],input[type=email],input[type=password],input[type=number],select,textarea{
+  background:rgba(255,255,255,.03)!important;border:1px solid rgba(255,255,255,.08)!important;
+  border-radius:9px!important;color:var(--tx)!important;transition:border-color .15s,box-shadow .15s!important;
+}
+.inp:focus,input[type=text]:focus,input[type=email]:focus,input[type=password]:focus,input[type=number]:focus,select:focus,textarea:focus{
+  border-color:rgba(91,124,247,.45)!important;box-shadow:0 0 0 3px rgba(91,124,247,.1)!important;outline:none!important;
+}
+
+/* Btn Stitch */
+.btn{border-radius:9px!important;font-weight:600!important;transition:all .15s!important}
+.btn:hover{transform:translateY(-1px)!important}
+.btn.bc{background:linear-gradient(135deg,rgba(91,124,247,.18),rgba(91,124,247,.07))!important;border:1px solid rgba(91,124,247,.32)!important;color:var(--cy)!important}
+.btn.bc:hover{background:linear-gradient(135deg,rgba(91,124,247,.28),rgba(91,124,247,.15))!important;border-color:rgba(91,124,247,.5)!important}
+.btn.br{border:1px solid rgba(239,68,68,.25)!important;color:rgba(248,113,113,.85)!important;background:rgba(239,68,68,.05)!important}
+.btn.br:hover{background:rgba(239,68,68,.1)!important;border-color:rgba(239,68,68,.4)!important}
+
+/* Content & scrollbars */
+.content{background:#07090F!important;scrollbar-color:rgba(255,255,255,.06) transparent!important}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-thumb{background:rgba(91,124,247,.2);border-radius:4px}
+::-webkit-scrollbar-track{background:transparent}
 </style>
 </head>
 <body>
@@ -4528,81 +5235,112 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 <aside class="sb" id="sb">
   <div class="sb-logo">
     <div class="sb-mark" onclick="toggleSB()" title="Colapsar menú">ST</div>
-    <div class="sb-txt"><div style="font-size:14px;font-weight:700;color:var(--tx)">Simple<span style="color:var(--cy)">Trader</span></div><div style="font-size:7.5px;color:var(--tx3);letter-spacing:1px;text-transform:uppercase;margin-top:1px">Futures · Prop Firms</div></div>
+    <div class="sb-txt">
+      <div style="font-size:14px;font-weight:700;color:var(--tx)">Simple<span style="color:#8AABFF">Trader</span></div>
+      <div style="font-size:7.5px;color:rgba(148,163,184,.5);letter-spacing:1px;text-transform:uppercase;margin-top:1px">Futures · Prop Firms</div>
+    </div>
   </div>
   <nav class="sb-nav">
     <div class="sg">Principal</div>
-    <button class="ni act" data-s="dashboard" onclick="nav(this)" style="position:relative">
-      <svg viewBox="0 0 24 24" width="16" height="16"><rect x="3" y="3" width="7" height="7" rx="2" fill="currentColor"/><rect x="14" y="3" width="7" height="7" rx="2" fill="currentColor" opacity=".4"/><rect x="14" y="14" width="7" height="7" rx="2" fill="currentColor"/><rect x="3" y="14" width="7" height="7" rx="2" fill="currentColor" opacity=".4"/></svg>
-      <span class="ni-lbl">Dashboard</span><span class="ni-tip">Dashboard</span>
+    <button class="ni act" data-s="dashboard" onclick="nav(this)">
+      <span class="material-symbols-outlined ms-ico" style="font-variation-settings:'FILL' 1,'wght' 500">grid_view</span>
+      <span class="ni-lbl">Dashboard</span>
+      <span class="ni-tip">Dashboard</span>
     </button>
-    <button class="ni" data-s="portfolio" onclick="nav(this)" style="position:relative">
-      <svg viewBox="0 0 24 24" width="16" height="16"><circle cx="12" cy="12" r="9" fill="currentColor" opacity=".18"/><path d="M12 3a9 9 0 0 1 9 9H12z" fill="currentColor"/><path d="M12 12l9 0a9 9 0 0 1-5.56 8.28z" fill="currentColor" opacity=".55"/><circle cx="12" cy="12" r="3.5" fill="#0a0d16"/><circle cx="12" cy="12" r="1.5" fill="currentColor" opacity=".5"/></svg>
-      <span class="ni-lbl">Portafolio</span><span class="ni-tip">Portafolio</span>
+    <button class="ni" data-s="portfolio" onclick="nav(this)">
+      <span class="material-symbols-outlined ms-ico" style="font-variation-settings:'FILL' 1,'wght' 400">donut_large</span>
+      <span class="ni-lbl">Portafolio</span>
+      <span class="ni-tip">Portafolio</span>
     </button>
-    <button class="ni" data-s="backtesting" onclick="nav(this)" style="position:relative">
-      <svg viewBox="0 0 24 24" width="16" height="16"><rect x="3" y="9" width="3.5" height="7" rx="1" fill="currentColor" opacity=".35"/><line x1="4.75" y1="6" x2="4.75" y2="9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="4.75" y1="16" x2="4.75" y2="19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><rect x="10.25" y="5" width="3.5" height="10" rx="1" fill="currentColor"/><line x1="12" y1="2.5" x2="12" y2="5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="15" x2="12" y2="18.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><rect x="17.5" y="11" width="3.5" height="5" rx="1" fill="currentColor" opacity=".55"/><line x1="19.25" y1="8" x2="19.25" y2="11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="19.25" y1="16" x2="19.25" y2="19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-      <span class="ni-lbl">Backtesting</span><span class="nb nb-c" id="nb-backtesting">Nuevo</span><span class="ni-tip">Backtesting</span>
+    <button class="ni" data-s="backtesting" onclick="nav(this)">
+      <span class="material-symbols-outlined ms-ico" style="font-variation-settings:'FILL' 1,'wght' 400">candlestick_chart</span>
+      <span class="ni-lbl">Backtesting</span>
+      <span class="nb nb-c" id="nb-backtesting">Nuevo</span>
+      <span class="ni-tip">Backtesting</span>
     </button>
-    <button class="ni" data-s="journal" onclick="nav(this)" style="position:relative">
-      <svg viewBox="0 0 24 24" width="16" height="16"><rect x="5" y="2" width="14" height="20" rx="2.5" fill="currentColor" opacity=".2"/><rect x="5" y="2" width="5" height="20" rx="2.5" fill="currentColor" opacity=".5"/><rect x="5" y="2" width="14" height="20" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.5" opacity=".4"/><line x1="12" y1="8" x2="16" y2="8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="12" x2="16" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="16" x2="15" y2="16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-      <span class="ni-lbl">Journal</span><span class="ni-tip">Journal</span>
+    <button class="ni" data-s="journal" onclick="nav(this)">
+      <span class="material-symbols-outlined ms-ico" style="font-variation-settings:'FILL' 1,'wght' 400">menu_book</span>
+      <span class="ni-lbl">Journal</span>
+      <span class="ni-tip">Journal</span>
     </button>
     <div class="sg">Herramientas</div>
-    <button class="ni" data-s="replicator" onclick="nav(this)" style="position:relative">
-      <svg viewBox="0 0 24 24" width="16" height="16"><circle cx="5" cy="5" r="3" fill="currentColor"/><circle cx="19" cy="19" r="3" fill="currentColor" opacity=".45"/><circle cx="19" cy="5" r="3" fill="currentColor" opacity=".7"/><path d="M8 5h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M5 8v8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="2 2"/><path d="M19 8v8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-      <span class="ni-lbl">Replicador</span><span class="nb nb-g" id="rep-badge">0M·0E</span><span id="nb-replicator"></span><span class="ni-tip">Replicador</span>
+    <button class="ni" data-s="replicator" onclick="nav(this)">
+      <span class="material-symbols-outlined ms-ico" style="font-variation-settings:'FILL' 1,'wght' 500">fork_right</span>
+      <span class="ni-lbl">Replicador</span>
+      <span class="nb nb-g" id="rep-badge">0M·0E</span>
+      <span id="nb-replicator"></span>
+      <span class="ni-tip">Replicador</span>
     </button>
-    <button class="ni" data-s="copytrader" onclick="nav(this)" style="position:relative;opacity:.6">
-      <svg viewBox="0 0 24 24" width="16" height="16"><circle cx="8" cy="7" r="4" fill="currentColor"/><path d="M2 21a6 6 0 0 1 12 0" fill="currentColor" opacity=".4"/><circle cx="17" cy="8" r="3" fill="currentColor" opacity=".5"/><path d="M14 21a5 5 0 0 1 8 0" fill="currentColor" opacity=".25"/></svg>
-      <span class="ni-lbl">Copy Trader</span><span class="nb" style="background:rgba(139,92,246,.15);border-color:rgba(139,92,246,.4);color:#a78bfa">Pronto</span><span class="ni-tip">Próximamente</span>
+    <button class="ni" data-s="copytrader" onclick="nav(this)" style="opacity:.55">
+      <span class="material-symbols-outlined ms-ico" style="font-variation-settings:'FILL' 1,'wght' 400">group</span>
+      <span class="ni-lbl">Copy Trader</span>
+      <span class="nb" style="background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.35);color:#a78bfa">Pronto</span>
+      <span class="ni-tip">Próximamente</span>
     </button>
-    <button class="ni" data-s="risk" onclick="nav(this);renderRules()" style="position:relative">
-      <svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 2L4 6v6c0 5.25 3.5 9.74 8 11 4.5-1.26 8-5.75 8-11V6z" fill="currentColor" opacity=".25"/><path d="M12 2L4 6v6c0 5.25 3.5 9.74 8 11 4.5-1.26 8-5.75 8-11V6z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><polyline points="9 12 11 14 15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
-      <span class="ni-lbl">Riesgo</span><span class="ni-tip">Gestión de Riesgo</span>
+    <button class="ni" data-s="risk" onclick="nav(this);renderRules()">
+      <span class="material-symbols-outlined ms-ico" style="font-variation-settings:'FILL' 1,'wght' 500">shield</span>
+      <span class="ni-lbl">Riesgo</span>
+      <span class="ni-tip">Gestión de Riesgo</span>
     </button>
-    <button class="ni" data-s="planner" onclick="nav(this)" style="position:relative">
-      <svg viewBox="0 0 24 24" width="16" height="16"><rect x="3" y="5" width="18" height="17" rx="2.5" fill="currentColor" opacity=".2"/><rect x="3" y="5" width="18" height="17" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="5" width="18" height="6" rx="2.5" fill="currentColor" opacity=".5"/><line x1="8" y1="3" x2="8" y2="7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="16" y1="3" x2="16" y2="7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="7" y1="15" x2="9" y2="17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="9" y1="17" x2="13" y2="13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-      <span class="ni-lbl">Planner</span><span class="ni-tip">Planner Diario</span>
+    <button class="ni" data-s="planner" onclick="nav(this)">
+      <span class="material-symbols-outlined ms-ico" style="font-variation-settings:'FILL' 1,'wght' 400">event_note</span>
+      <span class="ni-lbl">Planner</span>
+      <span class="ni-tip">Planner Diario</span>
     </button>
     <div class="sg">Finanzas</div>
-    <button class="ni" data-s="manager" onclick="nav(this)" style="position:relative">
-      <svg viewBox="0 0 24 24" width="16" height="16"><circle cx="12" cy="12" r="9" fill="currentColor" opacity=".18"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" fill="none"/><text x="12" y="16.5" text-anchor="middle" font-size="11" font-weight="700" fill="currentColor" font-family="system-ui">$</text></svg>
-      <span class="ni-lbl">Manager</span><span class="nb nb-c">Nuevo</span><span class="ni-tip">Manager Financiero</span>
+    <button class="ni" data-s="manager" onclick="nav(this)">
+      <span class="material-symbols-outlined ms-ico" style="font-variation-settings:'FILL' 1,'wght' 400">payments</span>
+      <span class="ni-lbl">Manager</span>
+      <span class="nb nb-c">Nuevo</span>
+      <span class="ni-tip">Manager Financiero</span>
     </button>
-    <button class="ni" data-s="accounts" onclick="nav(this)" style="position:relative">
-      <svg viewBox="0 0 24 24" width="16" height="16"><rect x="2" y="6" width="20" height="14" rx="3" fill="currentColor" opacity=".2"/><rect x="2" y="6" width="20" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="2" y="10" width="20" height="3.5" fill="currentColor" opacity=".4"/><rect x="6" y="16" width="6" height="1.5" rx=".75" fill="currentColor" opacity=".6"/><rect x="14" y="15.5" width="4" height="2.5" rx="1" fill="currentColor"/></svg>
-      <span class="ni-lbl">Cuentas Fondeo</span><span class="ni-tip">Cuentas</span>
+    <button class="ni" data-s="accounts" onclick="nav(this)">
+      <span class="material-symbols-outlined ms-ico" style="font-variation-settings:'FILL' 1,'wght' 400">credit_card</span>
+      <span class="ni-lbl">Cuentas Fondeo</span>
+      <span class="ni-tip">Cuentas</span>
     </button>
-    <button class="ni" data-s="live" onclick="nav(this)" style="position:relative">
-      <svg viewBox="0 0 24 24" width="16" height="16"><rect x="2" y="3" width="20" height="14" rx="2.5" fill="currentColor" opacity=".2"/><rect x="2" y="3" width="20" height="14" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 21h8M12 17v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="17" cy="7.5" r="2" fill="currentColor"/><circle cx="17" cy="7.5" r="3.5" fill="none" stroke="currentColor" stroke-width="1" opacity=".4"/></svg>
-      <span class="ni-lbl">Cuentas Live</span><span class="nb nb-g">MT4/5</span><span class="ni-tip">Cuentas Live MT4/MT5</span>
+    <button class="ni" data-s="live" onclick="nav(this)">
+      <span class="material-symbols-outlined ms-ico" style="font-variation-settings:'FILL' 1,'wght' 400">monitor</span>
+      <span class="ni-lbl">Cuentas Live</span>
+      <span class="nb nb-g">MT4/5</span>
+      <span class="ni-tip">Cuentas Live MT4/MT5</span>
     </button>
     <div class="sg">Análisis</div>
-    <button class="ni" data-s="markets" onclick="nav(this)" style="position:relative">
-      <svg viewBox="0 0 24 24" width="16" height="16"><circle cx="12" cy="12" r="9" fill="currentColor" opacity=".15"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" fill="none"/><ellipse cx="12" cy="12" rx="4" ry="9" stroke="currentColor" stroke-width="1" fill="none" opacity=".5"/><line x1="3" y1="9" x2="21" y2="9" stroke="currentColor" stroke-width="1" opacity=".5"/><line x1="3" y1="15" x2="21" y2="15" stroke="currentColor" stroke-width="1" opacity=".5"/></svg>
-      <span class="ni-lbl">Mercados</span><span class="nb nb-r" id="news-badge">4</span><span class="ni-tip">Mercados &amp; Noticias</span>
+    <button class="ni" data-s="markets" onclick="nav(this)">
+      <span class="material-symbols-outlined ms-ico" style="font-variation-settings:'FILL' 1,'wght' 400">language</span>
+      <span class="ni-lbl">Mercados</span>
+      <span class="nb nb-r" id="news-badge">4</span>
+      <span class="ni-tip">Mercados &amp; Noticias</span>
     </button>
     <div class="sg">Programa</div>
-    <button class="ni" data-s="affiliates" onclick="nav(this)" style="position:relative">
-      <svg viewBox="0 0 24 24" width="16" height="16"><circle cx="12" cy="5" r="2.5" fill="currentColor"/><circle cx="5" cy="17" r="2.5" fill="currentColor" opacity=".55"/><circle cx="19" cy="17" r="2.5" fill="currentColor" opacity=".55"/><line x1="12" y1="7.5" x2="5" y2="14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="7.5" x2="19" y2="14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="5" y1="17" x2="19" y2="17" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-dasharray="2 2" opacity=".5"/></svg>
-      <span class="ni-lbl">Afiliados</span><span class="nb nb-c">$$$</span><span class="ni-tip">Programa Afiliados</span>
+    <button class="ni" data-s="affiliates" onclick="nav(this)">
+      <span class="material-symbols-outlined ms-ico" style="font-variation-settings:'FILL' 1,'wght' 400">hub</span>
+      <span class="ni-lbl">Afiliados</span>
+      <span class="nb nb-c">$$$</span>
+      <span class="ni-tip">Programa Afiliados</span>
     </button>
     <div class="sg">Cuenta</div>
-    <button class="ni" data-s="profile" onclick="nav(this)" style="position:relative">
-      <svg viewBox="0 0 24 24" width="16" height="16"><circle cx="12" cy="8" r="4" fill="currentColor"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7" fill="currentColor" opacity=".35"/></svg>
-      <span class="ni-lbl">Mi Perfil</span><span class="ni-tip">Mi Perfil</span>
+    <button class="ni" data-s="profile" onclick="nav(this)">
+      <span class="material-symbols-outlined ms-ico" style="font-variation-settings:'FILL' 1,'wght' 400">account_circle</span>
+      <span class="ni-lbl">Mi Perfil</span>
+      <span class="ni-tip">Mi Perfil</span>
     </button>
   </nav>
   <div class="sb-foot">
     <div class="up-row" onclick="nav(document.querySelector('[data-s=profile]'))">
       <div class="uav" id="sb-av">JG</div>
-      <div class="u-info" style="flex:1;min-width:0"><div class="uname" id="sb-name">Javier G.</div><div class="uplan" id="sb-plan">UNLIMITED</div></div>
+      <div class="u-info" style="flex:1;min-width:0">
+        <div class="uname" id="sb-name">Javier G.</div>
+        <div class="uplan" id="sb-plan">UNLIMITED</div>
+      </div>
       <div class="ll"></div>
     </div>
     <div class="foot-btns">
       <button class="btn sm" style="flex:1" onclick="openPricing()">Ver planes</button>
-      <button class="btn br sm" style="flex:1" onclick="confirmLogout()">⏻ Salir</button>
+      <button class="btn br sm" style="flex:1" onclick="confirmLogout()">
+        <span class="material-symbols-outlined" style="font-size:13px;line-height:1;font-variation-settings:'FILL' 1">power_settings_new</span>
+        Salir
+      </button>
     </div>
     <div class="sb-legal-links">
       <a onclick="openLegal('privacidad')">Privacidad</a> · <a onclick="openLegal('terminos')">Términos</a> · <a onclick="openLegal('disclaimer')">Aviso legal</a>
@@ -4644,18 +5382,32 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 
 <div class="main">
   <div class="topbar">
-    <button id="mob-menu-btn" onclick="openMobSB()" title="Menú" style="margin-right:6px">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    <!-- Mobile menu -->
+    <button id="mob-menu-btn" onclick="openMobSB()" title="Menú" style="margin-right:4px;width:32px;height:32px;display:none;align-items:center;justify-content:center;border-radius:8px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.04);color:rgba(148,163,184,.7);cursor:pointer;flex-shrink:0">
+      <span class="material-symbols-outlined" style="font-size:18px;font-variation-settings:'wght' 400">menu</span>
     </button>
-    <button class="tbtn" onclick="toggleSB()" title="Colapsar/Expandir" style="margin-right:9px;font-size:15px;border:none">☰</button>
+    <!-- Collapse toggle (desktop) -->
+    <button class="tbtn tb-icon-btn" onclick="toggleSB()" title="Colapsar/Expandir" style="margin-right:8px;display:flex;align-items:center;justify-content:center">
+      <span class="material-symbols-outlined" style="font-size:18px;font-variation-settings:'wght' 300">left_panel_close</span>
+    </button>
+    <!-- Page title -->
     <div class="tb-t" id="ptitle">Dashboard</div>
-    <button onclick="openCMD()" style="display:flex;align-items:center;gap:8px;padding:5px 12px;background:var(--bg3);border:1px solid var(--b2);border-radius:7px;color:var(--tx3);font-size:11.5px;font-family:var(--sans);cursor:pointer;min-width:180px;margin:0 10px;transition:all .15s" onmouseover="this.style.borderColor='var(--b3)'" onmouseout="this.style.borderColor='var(--b2)'">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <span style="flex:1;text-align:left">Buscar o navegar…</span>
-      <kbd style="background:var(--bg2);border:1px solid var(--b2);border-radius:4px;padding:1px 5px;font-size:9px;font-family:var(--mono);color:var(--tx3)">⌘K</kbd>
-    </button>
+    <!-- Search bar -->
+    <div class="tb-search" onclick="openCMD()" style="cursor:pointer">
+      <span class="material-symbols-outlined" style="font-size:15px;color:rgba(148,163,184,.5);flex-shrink:0;font-variation-settings:'wght' 300">search</span>
+      <span style="flex:1;font-size:12px;color:rgba(148,163,184,.45);font-family:'DM Sans',sans-serif">Buscar o navegar…</span>
+      <kbd style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:5px;padding:1.5px 6px;font-size:9.5px;font-family:'DM Mono',monospace;color:rgba(148,163,184,.5);flex-shrink:0">⌘K</kbd>
+    </div>
+    <!-- Tickers -->
     <div class="tickers" id="tickers"></div>
-    <div class="tb-r">
+    <!-- Right actions -->
+    <div class="tb-r" style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+      <!-- Notification bell -->
+      <button class="tb-icon-btn" title="Notificaciones" style="position:relative;display:flex;align-items:center;justify-content:center;color:rgba(148,163,184,.65);cursor:pointer">
+        <span class="material-symbols-outlined" style="font-size:18px;font-variation-settings:'FILL' 0,'wght' 300">notifications</span>
+        <span style="position:absolute;top:6px;right:6px;width:6px;height:6px;border-radius:50%;background:#5B7CF7;box-shadow:0 0 6px rgba(91,124,247,.7);border:1.5px solid rgba(7,9,15,.9)"></span>
+      </button>
+      <!-- Theme toggle -->
       <button id="theme-btn" onclick="toggleTheme()" title="Cambiar a modo día / noche" style="width:52px;height:28px;border-radius:14px;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;position:relative;flex-shrink:0;padding:0">
   <!-- Track -->
   <span id="theme-track" style="display:flex;align-items:center;width:52px;height:28px;border-radius:14px;position:relative;transition:background .4s ease,box-shadow .4s ease;background:linear-gradient(135deg,#1e2a4a,#2d3a6b);box-shadow:0 0 0 1px rgba(91,124,247,.35),inset 0 1px 3px rgba(0,0,0,.4)">
@@ -4681,6 +5433,10 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 </button>
       <div class="ws-p ws-on" id="ws-pill" onclick="toggleWS()"><div class="ws-d"></div><span id="ws-lbl">EN VIVO</span></div>
       <div class="tb-clk" id="clk">--:--:--</div>
+      <!-- Avatar -->
+      <button class="tb-av-wrap" onclick="nav(document.querySelector('[data-s=profile]'))" title="Mi Perfil" style="display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#5B7CF7,#8B5CF6);border:none;cursor:pointer;flex-shrink:0;box-shadow:0 0 12px rgba(91,124,247,.3)">
+        <span style="font-size:11px;font-weight:800;color:#fff;font-family:'DM Sans',sans-serif;letter-spacing:.3px" id="tb-av-initials">JG</span>
+      </button>
     </div>
   </div>
   <div class="content">
@@ -4938,40 +5694,113 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 
 <!-- REPLICADOR — 5 MAESTRAS × 20 ESCLAVAS -->
 <div class="sec" id="sec-replicator">
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:11px">
-    <div><div style="font-size:14px;font-weight:700;color:var(--tx)">Replicador — 5 Maestras · Hasta 20 Esclavas cada una</div><div style="font-size:11px;color:var(--tx3);margin-top:1px">Réplica en tiempo real desde cada maestra a sus cuentas esclavas</div></div>
-    <div style="display:flex;align-items:center;gap:7px">
+
+  <!-- Header -->
+  <div class="rep2-head">
+    <div>
+      <div class="rep2-title">Replicador</div>
+      <div class="rep2-sub">5 Maestras · Hasta 20 Esclavas por maestra · Réplica en tiempo real</div>
+    </div>
+    <div class="rep2-acts">
       <span id="rep-tv-status" style="font-size:9px;padding:3px 9px;border-radius:12px;font-weight:600;display:none"></span>
-      <span style="font-size:10px;color:var(--tx3)">Lat: <span id="lat" class="up" style="font-family:var(--mono);font-weight:700">8ms</span></span>
-      <button class="btn br" id="rep-pause-btn" onclick="toggleRep()">⏸ Pausar todo</button>
+      <div class="rep2-lat">
+        <span class="dot"></span>
+        <span style="font-size:10px;color:var(--tx3)">Lat:</span>
+        <span id="lat" class="up" style="font-family:var(--mono);font-weight:700;font-size:11px">8ms</span>
+      </div>
+      <button class="btn br" id="rep-pause-btn" onclick="toggleRep()" style="font-size:11px;padding:5px 13px">⏸ Pausar todo</button>
     </div>
   </div>
-  <div class="g4" style="margin-bottom:11px">
-    <div class="mc"><div class="ml">Maestras activas</div><div class="mv cy" id="rep-mas">0/0</div><div class="ms gr">Sin cuentas</div></div>
-    <div class="mc"><div class="ml">Esclavas activas</div><div class="mv up" id="rep-sl-cnt">0/0</div><div class="ms gr">Total todas</div></div>
-    <div class="mc"><div class="ml">Trades replicados</div><div class="mv cy" id="rep-tc">0</div><div class="ms gr">Hoy</div></div>
-    <div class="mc"><div class="ml">P&amp;L total replicado</div><div class="mv up" id="rep-pnl">+$0</div><div class="ms gr">Todas</div></div>
+
+  <!-- KPI Strip -->
+  <div class="g4" style="margin-bottom:16px">
+    <div class="mc" style="padding:14px 16px">
+      <div class="ml" style="font-size:10px;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">Maestras activas</div>
+      <div class="mv cy" id="rep-mas" style="font-size:22px;font-weight:800;letter-spacing:-.5px">0/0</div>
+      <div class="ms gr" style="font-size:9.5px;margin-top:3px">Sin cuentas</div>
+    </div>
+    <div class="mc" style="padding:14px 16px">
+      <div class="ml" style="font-size:10px;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">Esclavas activas</div>
+      <div class="mv up" id="rep-sl-cnt" style="font-size:22px;font-weight:800;letter-spacing:-.5px">0/0</div>
+      <div class="ms gr" style="font-size:9.5px;margin-top:3px">Total todas</div>
+    </div>
+    <div class="mc" style="padding:14px 16px">
+      <div class="ml" style="font-size:10px;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">Trades replicados</div>
+      <div class="mv cy" id="rep-tc" style="font-size:22px;font-weight:800;letter-spacing:-.5px">0</div>
+      <div class="ms gr" style="font-size:9.5px;margin-top:3px">Hoy</div>
+    </div>
+    <div class="mc" style="padding:14px 16px">
+      <div class="ml" style="font-size:10px;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">P&amp;L total replicado</div>
+      <div class="mv up" id="rep-pnl" style="font-size:22px;font-weight:800;letter-spacing:-.5px">+$0</div>
+      <div class="ms gr" style="font-size:9.5px;margin-top:3px">Todas las cuentas</div>
+    </div>
   </div>
+
+  <!-- Master Tabs + Panel (JS-rendered) -->
   <div class="master-tabs" id="master-tabs"></div>
   <div id="master-panel"></div>
-  <div class="g2" style="margin-top:11px">
 
-    <!-- Conexión + Setup -->
-    <div class="card">
-      <div class="hd">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07M8.46 8.46a5 5 0 0 0 0 7.07"/></svg>
+  <!-- Stats Bar -->
+  <div class="rep2-stats-bar">
+    <div class="rep2-stat-item">
+      <div class="rep2-stat-ico" style="background:rgba(91,124,247,.1)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5B7CF7" stroke-width="2.2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+      <div>
+        <div class="rep2-stat-lbl">Trades hoy</div>
+        <div class="rep2-stat-val" id="rep-stats-tc">0</div>
+      </div>
+    </div>
+    <div class="rep2-divider"></div>
+    <div class="rep2-stat-item">
+      <div class="rep2-stat-ico" style="background:rgba(34,197,94,.08)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+      <div>
+        <div class="rep2-stat-lbl">Tasa éxito</div>
+        <div class="rep2-stat-val" id="rep-stats-wr" style="color:var(--gn)">100%</div>
+      </div>
+    </div>
+    <div class="rep2-divider"></div>
+    <div class="rep2-stat-item">
+      <div class="rep2-stat-ico" style="background:rgba(91,124,247,.08)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5B7CF7" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <div>
+        <div class="rep2-stat-lbl">Latencia media</div>
+        <div class="rep2-stat-val" id="rep-stats-lat" style="color:var(--cy)">—ms</div>
+      </div>
+    </div>
+    <div class="rep2-divider"></div>
+    <div class="rep2-stat-item" style="margin-left:auto">
+      <div>
+        <div class="rep2-stat-lbl" style="text-align:right">P&amp;L Total</div>
+        <div class="rep2-stat-val" id="rep-stats-pnl" style="font-size:20px;color:var(--gn)">+$0</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom 2-col grid -->
+  <div class="g2" style="margin-top:14px">
+
+    <!-- Conexión Tradovate -->
+    <div class="card" style="background:rgba(8,11,22,.7);border:1px solid rgba(255,255,255,.065);border-radius:14px">
+      <div class="hd" style="margin-bottom:14px">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07M8.46 8.46a5 5 0 0 0 0 7.07"/></svg>
         Conexión Tradovate
         <div class="hd-r" id="rep-conn-badge"></div>
       </div>
       <div id="rep-cfg"></div>
     </div>
 
-    <!-- Log en vivo + Railway setup -->
+    <!-- Right column: Log + Cloud Engine -->
     <div style="display:flex;flex-direction:column;gap:10px">
-      <div class="card">
-        <div class="hd">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-          Log en vivo
+
+      <!-- Live log -->
+      <div class="rep2-log-card">
+        <div class="hd" style="margin-bottom:10px">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#5B7CF7" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          <span style="color:var(--tx)">Log en vivo</span>
           <div class="hd-r">
             <span id="log-cnt" style="font-size:8.5px;color:var(--tx3)"></span>
             <button class="btn sm" style="font-size:9px" onclick="document.getElementById('rep-log').innerHTML='';repLogs=[];document.getElementById('log-cnt').textContent='0 eventos'">↺</button>
@@ -4983,77 +5812,45 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
         </div>
       </div>
 
-      <!-- Cloud Copier setup card -->
-      <div class="card" id="railway-setup-card">
-        <div class="hd">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
-          Motor de replicación autónomo
+      <!-- Cloud engine card -->
+      <div class="rep2-engine-card" id="railway-setup-card">
+        <div class="hd" style="margin-bottom:12px">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#5B7CF7" stroke-width="2.5"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
+          <span style="color:var(--tx)">Motor de replicación autónomo</span>
           <div class="hd-r">
-            <span id="railway-status-badge" style="font-size:8px;padding:2px 7px;border-radius:10px;font-weight:700;background:rgba(153,102,0,.1);color:var(--am);border:1px solid rgba(153,102,0,.28)">Pendiente de activar</span>
+            <span id="railway-status-badge" style="font-size:8px;padding:2px 8px;border-radius:10px;font-weight:700;background:rgba(153,102,0,.1);color:var(--am);border:1px solid rgba(153,102,0,.28)">Pendiente</span>
           </div>
         </div>
         <div style="font-size:10.5px;color:var(--tx2);line-height:1.7;margin-bottom:12px">
-          El motor monitoriza tu cuenta maestra cada <b style="color:var(--tx)">2.5 segundos</b> y replica operaciones automáticamente en tiempo real — sin intervención manual.
+          El motor monitoriza tu cuenta maestra cada <b style="color:var(--tx)">2.5 segundos</b> y replica operaciones automáticamente — sin intervención manual.
         </div>
 
-        <!-- CID explainer -->
-        <div style="padding:10px 12px;background:rgba(91,124,247,.07);border:1px solid rgba(91,124,247,.2);border-radius:8px;margin-bottom:12px">
+        <div style="padding:10px 12px;background:rgba(91,124,247,.06);border:1px solid rgba(91,124,247,.18);border-radius:9px;margin-bottom:12px">
           <div style="font-size:9.5px;font-weight:700;color:var(--cy);margin-bottom:5px">Credenciales API de Tradovate</div>
           <div style="font-size:9.5px;color:var(--tx2);line-height:1.7">
-            Necesitas un Client ID de Tradovate (gratuito, 5 minutos):<br>
-            1. Accede a <a onclick="window.open('https://trader.tradovate.com/account/developer','_blank')" style="color:var(--cy);cursor:pointer;text-decoration:underline">trader.tradovate.com/account/developer</a><br>
-            2. Crea una aplicación y copia el <code style="color:var(--cy)">Client ID</code> y el <code style="color:var(--cy)">Secret</code><br>
-            3. Añádelos como variables de entorno en tu configuración
+            Necesitas un Client ID (gratuito, 5 min):<br>
+            1. Ve a <a onclick="window.open('https://trader.tradovate.com/account/developer','_blank')" style="color:var(--cy);cursor:pointer;text-decoration:underline">trader.tradovate.com/account/developer</a><br>
+            2. Crea una aplicación y copia el <code style="color:var(--cy)">Client ID</code> y <code style="color:var(--cy)">Secret</code>
           </div>
         </div>
 
-        <!-- Deploy steps -->
-        <div style="font-size:9px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px">Activar el motor (una sola vez)</div>
+        <div style="font-size:9px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px">Activar (una sola vez)</div>
         <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px">
-          <div class="rep-step">
-            <div class="rep-step-n">1</div>
-            <div>
-              Añade las credenciales API en <b>Configuración → Variables de entorno</b>:<br>
-              <code class="rep-code">TRADOVATE_CID</code> y <code class="rep-code">TRADOVATE_SEC</code>
-            </div>
-          </div>
-          <div class="rep-step">
-            <div class="rep-step-n">2</div>
-            <div>
-              Despliega el motor de replicación desde tu repositorio en cualquier plataforma cloud compatible<br>
-              <span style="font-size:8.5px;color:var(--tx3)">Compatibe con Render, Fly.io, Google Cloud Run y similares</span>
-            </div>
-          </div>
-          <div class="rep-step">
-            <div class="rep-step-n">3</div>
-            <div>
-              Configura las variables de entorno del motor:
-              <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:5px">
-                <code class="rep-code">SUPABASE_URL</code>
-                <code class="rep-code">SUPABASE_SERVICE_KEY</code>
-                <code class="rep-code">TRADOVATE_CID</code>
-                <code class="rep-code">TRADOVATE_SEC</code>
-              </div>
-            </div>
-          </div>
-          <div class="rep-step">
-            <div class="rep-step-n">4</div>
-            <div>
-              El motor arranca automáticamente y comienza a replicar operaciones con latencia inferior a <b>3 segundos</b>
-            </div>
-          </div>
+          <div class="rep-step"><div class="rep-step-n">1</div><div>Añade <code class="rep-code">TRADOVATE_CID</code> y <code class="rep-code">TRADOVATE_SEC</code> como variables de entorno</div></div>
+          <div class="rep-step"><div class="rep-step-n">2</div><div>Despliega en Render, Fly.io o Google Cloud Run</div></div>
+          <div class="rep-step"><div class="rep-step-n">3</div><div>Configura <code class="rep-code">SUPABASE_URL</code> · <code class="rep-code">SUPABASE_SERVICE_KEY</code></div></div>
+          <div class="rep-step"><div class="rep-step-n">4</div><div>El motor arranca y replica con latencia <b style="color:var(--tx)">&lt;3s</b></div></div>
         </div>
 
-        <!-- User ID copy -->
         <div style="margin-bottom:10px">
-          <div style="font-size:8.5px;color:var(--tx3);margin-bottom:3px">Tu User ID <span style="font-weight:400">(necesario para la configuración del motor)</span></div>
+          <div style="font-size:8.5px;color:var(--tx3);margin-bottom:3px">Tu User ID <span style="font-weight:400">(para configurar el motor)</span></div>
           <div style="display:flex;gap:5px">
-            <input id="rep-uid-field" readonly value="Inicia sesión para ver tu ID" style="flex:1;font-size:8.5px;font-family:var(--mono);background:var(--bg3);border:1px solid var(--b1);border-radius:6px;padding:5px 8px;color:var(--tx2);outline:none;min-width:0">
+            <input id="rep-uid-field" readonly value="Inicia sesión para ver tu ID" style="flex:1;font-size:8.5px;font-family:var(--mono);background:rgba(8,11,22,.8);border:1px solid var(--b1);border-radius:7px;padding:6px 9px;color:var(--tx2);outline:none;min-width:0">
             <button class="btn sm" onclick="copyRepField('rep-uid-field','ID copiado')">Copiar</button>
           </div>
         </div>
 
-        <a href="mailto:legal@simpletrader.app?subject=Activar motor de replicación" class="btn bc" style="display:block;text-align:center;font-size:11px;text-decoration:none;padding:9px;border-radius:8px;font-weight:700">
+        <a href="mailto:legal@simpletrader.app?subject=Activar motor de replicación" class="btn bc" style="display:block;text-align:center;font-size:11px;text-decoration:none;padding:9px 0;border-radius:9px;font-weight:700">
           Contactar para activar el motor
         </a>
       </div>
@@ -6063,6 +6860,7 @@ function syncUI(){
   if(!U.name)return;
   const pts=U.name.split(' ');
   document.getElementById('sb-av').textContent=U.initials;
+  const tbAv=document.getElementById('tb-av-initials');if(tbAv)tbAv.textContent=U.initials;
   document.getElementById('sb-name').textContent=pts[0]+(pts[1]?' '+pts[1][0]+'.':'');
   document.getElementById('sb-plan').textContent=U.plan.toUpperCase();
   document.getElementById('pf-av-txt').textContent=U.initials;

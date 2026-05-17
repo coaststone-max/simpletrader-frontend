@@ -4,7 +4,8 @@
     {"source": "/apex-trade-copier", "destination": "/apex-trade-copier.html"},
     {"source": "/topstep-trade-copier", "destination": "/topstep-trade-copier.html"},
     {"source": "/tradovate-trade-copier", "destination": "/tradovate-trade-copier.html"},
-    {"source": "/prop-firm-trade-copier", "destination": "/prop-firm-trade-copier.html"}
+    {"source": "/prop-firm-trade-copier", "destination": "/prop-firm-trade-copier.html"},
+    {"source": "/pricing", "destination": "/pricing.html"}
   ],
   "headers": [
     {
