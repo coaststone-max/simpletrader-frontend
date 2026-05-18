@@ -4799,6 +4799,41 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 /* .tbtn hidden by default — tb-icon-btn variant shown via that class */
 .tbtn:not(.tb-icon-btn){display:none!important}
 
+/* ── SECTION HEADERS (Stitch premium) ── */
+.sec-hdr{
+  display:flex!important;align-items:flex-start!important;justify-content:space-between!important;
+  flex-wrap:wrap!important;gap:12px!important;
+  margin-bottom:20px!important;
+  padding-bottom:18px!important;
+  border-bottom:1px solid rgba(255,255,255,.045)!important;
+}
+.sec-hdr-left{display:flex!important;align-items:center!important;gap:14px!important}
+.sec-hdr-icon{
+  width:40px!important;height:40px!important;border-radius:12px!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  background:rgba(91,124,247,.12)!important;border:1px solid rgba(91,124,247,.22)!important;
+  flex-shrink:0!important;
+}
+.sec-hdr-icon .material-symbols-outlined{font-size:20px!important;color:#8AABFF!important;font-variation-settings:'FILL' 1,'wght' 400!important}
+.sec-hdr-title{
+  font-size:18px!important;font-weight:800!important;letter-spacing:-.3px!important;
+  background:linear-gradient(120deg,#EEF2FF 20%,rgba(138,171,255,.75) 100%)!important;
+  -webkit-background-clip:text!important;-webkit-text-fill-color:transparent!important;
+  background-clip:text!important;
+}
+.sec-hdr-sub{
+  font-size:11.5px!important;color:rgba(148,163,184,.55)!important;
+  margin-top:3px!important;font-weight:400!important;
+}
+.sec-hdr-badge{
+  display:inline-flex!important;align-items:center!important;gap:5px!important;
+  padding:3px 10px!important;border-radius:20px!important;
+  font-size:9.5px!important;font-weight:700!important;letter-spacing:.4px!important;text-transform:uppercase!important;
+}
+.sec-hdr-badge.live{background:rgba(34,197,94,.1)!important;border:1px solid rgba(34,197,94,.25)!important;color:#22C55E!important}
+.sec-hdr-badge.new{background:rgba(91,124,247,.1)!important;border:1px solid rgba(91,124,247,.25)!important;color:#8AABFF!important}
+.sec-hdr-badge.soon{background:rgba(245,158,11,.08)!important;border:1px solid rgba(245,158,11,.22)!important;color:#F59E0B!important}
+
 /* ── STITCH CARDS (global) ── */
 .card{
   background:rgba(8,11,22,0.82)!important;
@@ -5630,6 +5665,19 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 
 <!-- PORTFOLIO -->
 <div class="sec" id="sec-portfolio">
+  <div class="sec-hdr">
+    <div class="sec-hdr-left">
+      <div class="sec-hdr-icon"><span class="material-symbols-outlined">donut_large</span></div>
+      <div>
+        <div class="sec-hdr-title">Portfolio</div>
+        <div class="sec-hdr-sub">Capital distribuido y equity global de todas tus cuentas</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="sec-hdr-badge live"><span style="width:5px;height:5px;border-radius:50%;background:#22C55E;display:inline-block"></span>Live</span>
+      <button class="btn sm" onclick="nav(document.querySelector('[data-s=accounts]'))">Ver cuentas</button>
+    </div>
+  </div>
   <div class="g4" id="port-kpi"></div>
   <div class="g2">
     <div class="card"><div class="hd">Equity Global — Todas las cuentas</div><div id="port-equity-svg" style="padding:8px 4px 4px"></div></div>
@@ -5642,6 +5690,19 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 
 <!-- JOURNAL -->
 <div class="sec" id="sec-journal">
+  <div class="sec-hdr">
+    <div class="sec-hdr-left">
+      <div class="sec-hdr-icon"><span class="material-symbols-outlined">menu_book</span></div>
+      <div>
+        <div class="sec-hdr-title">Trading Journal</div>
+        <div class="sec-hdr-sub">Registro, análisis y estadísticas de todos tus trades</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <button class="btn sm bc" onclick="openAddTrade()"><span class="material-symbols-outlined" style="font-size:13px;vertical-align:middle;margin-right:3px">add</span>Nuevo Trade</button>
+      <button class="btn sm" onclick="openBrokerImport()"><span class="material-symbols-outlined" style="font-size:13px;vertical-align:middle;margin-right:3px">upload</span>Importar</button>
+    </div>
+  </div>
   <div class="g4" id="j-kpi-row">
     <div class="mc">
       <div class="mc-icon" style="background:rgba(91,124,247,.15)"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#7a9fff" stroke-width="2" stroke-linecap="round"><line x1="12" y1="2" x2="12" y2="6"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/><line x1="12" y1="18" x2="12" y2="22"/></svg></div>
@@ -5661,8 +5722,8 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
     </div>
   </div>
   <div id="j-view-tabs" style="display:flex;gap:5px;margin:0 0 11px">
-    <button class="fb act" id="jvt-journal" onclick="setJView('journal',this)">📋 Journal</button>
-    <button class="fb" id="jvt-analytics" onclick="setJView('analytics',this)">📊 Análisis</button>
+    <button class="fb act" id="jvt-journal" onclick="setJView('journal',this)"><span class="material-symbols-outlined" style="font-size:13px;vertical-align:middle;margin-right:4px;font-variation-settings:'FILL' 1">table_rows</span>Journal</button>
+    <button class="fb" id="jvt-analytics" onclick="setJView('analytics',this)"><span class="material-symbols-outlined" style="font-size:13px;vertical-align:middle;margin-right:4px;font-variation-settings:'FILL' 1">analytics</span>Análisis</button>
   </div>
   <div id="journal-grid" class="j-grid">
     <div>
@@ -5670,10 +5731,10 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
         <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:9px">
           <button class="fb act" onclick="jFilter('all',this)">Todos</button><button class="fb" onclick="jFilter('long',this)">LONG</button><button class="fb" onclick="jFilter('short',this)">SHORT</button><button class="fb" onclick="jFilter('win',this)">Ganados</button><button class="fb" onclick="jFilter('loss',this)">Perdidos</button>
           <input class="srch" placeholder="Buscar…" oninput="jSearch(this.value)">
-          <button class="btn sm bc" style="margin-left:auto" onclick="openAddTrade()">＋ Nuevo trade</button>
-          <button class="btn sm" onclick="openBrokerImport()" title="Importar extracto del broker">📥 Importar</button>
-          <button class="btn sm" onclick="exportCSV()">↓ CSV</button>
-          <button class="btn sm" onclick="exportPDF()" title="Exportar como PDF / Imprimir">🖨 PDF</button>
+          <button class="btn sm bc" style="margin-left:auto" onclick="openAddTrade()"><span class="material-symbols-outlined" style="font-size:12px;vertical-align:middle;margin-right:3px">add</span>Nuevo trade</button>
+          <button class="btn sm" onclick="openBrokerImport()" title="Importar extracto del broker"><span class="material-symbols-outlined" style="font-size:12px;vertical-align:middle;margin-right:3px">upload</span>Importar</button>
+          <button class="btn sm" onclick="exportCSV()"><span class="material-symbols-outlined" style="font-size:12px;vertical-align:middle;margin-right:3px">download</span>CSV</button>
+          <button class="btn sm" onclick="exportPDF()" title="Exportar como PDF / Imprimir"><span class="material-symbols-outlined" style="font-size:12px;vertical-align:middle;margin-right:3px">print</span>PDF</button>
         </div>
         <div class="tw"><table><thead><tr><th>#</th><th>Fecha</th><th>Instr.</th><th>Dir.</th><th>Ctrs.</th><th>Entrada</th><th>Salida</th><th>Ticks</th><th>Bruto</th><th>Comis.</th><th>Neto</th><th>R:R</th><th>⭐</th><th>Setup</th></tr></thead><tbody id="j-body"></tbody></table></div>
       </div>
@@ -5932,6 +5993,18 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 
 <!-- RIESGO -->
 <div class="sec" id="sec-risk">
+  <div class="sec-hdr">
+    <div class="sec-hdr-left">
+      <div class="sec-hdr-icon" style="background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.2)"><span class="material-symbols-outlined" style="color:#f87171">shield</span></div>
+      <div>
+        <div class="sec-hdr-title">Gestión de Riesgo</div>
+        <div class="sec-hdr-sub">Reglas automáticas de protección de capital y límites operativos</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <button class="btn sm bc" onclick="openAddRule()"><span class="material-symbols-outlined" style="font-size:13px;vertical-align:middle;margin-right:3px">add</span>Nueva Regla</button>
+    </div>
+  </div>
   <!-- Global Risk Status Banner -->
   <div class="risk-banner" id="risk-status-banner" style="background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.3)">
     <div class="risk-banner-icon" style="background:rgba(34,197,94,.15)">
@@ -5992,6 +6065,15 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 
 <!-- PLANNER -->
 <div class="sec" id="sec-planner">
+  <div class="sec-hdr">
+    <div class="sec-hdr-left">
+      <div class="sec-hdr-icon"><span class="material-symbols-outlined">event_note</span></div>
+      <div>
+        <div class="sec-hdr-title">Planner Diario</div>
+        <div class="sec-hdr-sub">Sesgo del mercado, niveles clave y mentalidad de sesión</div>
+      </div>
+    </div>
+  </div>
   <div class="g2">
     <div style="display:flex;flex-direction:column;gap:11px">
       <div class="card">
@@ -6022,6 +6104,16 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 
 <!-- MANAGER FINANCIERO — REDISEÑADO -->
 <div class="sec" id="sec-manager">
+  <div class="sec-hdr">
+    <div class="sec-hdr-left">
+      <div class="sec-hdr-icon" style="background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.2)"><span class="material-symbols-outlined" style="color:#22C55E">payments</span></div>
+      <div>
+        <div class="sec-hdr-title">Manager Financiero</div>
+        <div class="sec-hdr-sub">Control de ingresos, gastos y payouts de tus prop firms</div>
+      </div>
+    </div>
+    <span class="sec-hdr-badge new">Nuevo</span>
+  </div>
   <div class="g4" id="mgr-kpi" style="margin-bottom:14px"></div>
   <div style="display:grid;grid-template-columns:1fr 330px;gap:12px">
     <div>
@@ -6067,8 +6159,21 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 
 <!-- CUENTAS DE FONDEO — CON CREDENCIALES -->
 <div class="sec" id="sec-accounts">
-  <!-- Header -->
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:7px">
+  <div class="sec-hdr">
+    <div class="sec-hdr-left">
+      <div class="sec-hdr-icon"><span class="material-symbols-outlined">credit_card</span></div>
+      <div>
+        <div class="sec-hdr-title">Cuentas Fondeo</div>
+        <div class="sec-hdr-sub">Conecta y gestiona tus cuentas de Apex, Topstep, Elite, Rithmic y Tradovate</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="sec-hdr-badge live" id="accs-live-badge" style="display:none"><span style="width:5px;height:5px;border-radius:50%;background:#22C55E;display:inline-block"></span>Live</span>
+      <button class="btn sm bc" onclick="openAddAccount()"><span class="material-symbols-outlined" style="font-size:13px;vertical-align:middle;margin-right:3px">add</span>Añadir Cuenta</button>
+    </div>
+  </div>
+  <!-- Header (legacy, hidden) -->
+  <div style="display:none">
     <div>
       <div style="font-size:14px;font-weight:700;color:var(--tx)">Cuentas de Fondeo</div>
       <div style="font-size:11px;color:var(--tx3);margin-top:1px">La conexión real es con el broker (Rithmic / Tradovate) — la prop firm solo asigna la cuenta</div>
@@ -6129,6 +6234,16 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 
 <!-- CUENTAS LIVE MT4/MT5 — CONEXIÓN EN TIEMPO REAL -->
 <div class="sec" id="sec-live">
+  <div class="sec-hdr">
+    <div class="sec-hdr-left">
+      <div class="sec-hdr-icon"><span class="material-symbols-outlined">monitor</span></div>
+      <div>
+        <div class="sec-hdr-title">Cuentas Live MT4/MT5</div>
+        <div class="sec-hdr-sub">Conecta tus cuentas de broker directamente vía MT4/MT5</div>
+      </div>
+    </div>
+    <span class="sec-hdr-badge new">MT4/5</span>
+  </div>
   <!-- main live content rendered by renderLive() -->
   <div id="live-content"></div>
   <!-- connection wizard modal overlay -->
@@ -6140,7 +6255,16 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 <!-- MARKETS -->
 <!-- ═══════════════════ BACKTESTING ═══════════════════ -->
 <div class="sec" id="sec-backtesting">
-
+  <div class="sec-hdr">
+    <div class="sec-hdr-left">
+      <div class="sec-hdr-icon"><span class="material-symbols-outlined">candlestick_chart</span></div>
+      <div>
+        <div class="sec-hdr-title">Backtesting</div>
+        <div class="sec-hdr-sub">Prueba estrategias sobre datos históricos reales de futuros</div>
+      </div>
+    </div>
+    <span class="sec-hdr-badge new">Nuevo</span>
+  </div>
   <!-- ── Toolbar ── -->
   <div class="bt-topbar">
 
@@ -6348,6 +6472,16 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 <!-- ═══════════════════════════════════════════════════ -->
 
 <div class="sec" id="sec-markets">
+  <div class="sec-hdr">
+    <div class="sec-hdr-left">
+      <div class="sec-hdr-icon"><span class="material-symbols-outlined">language</span></div>
+      <div>
+        <div class="sec-hdr-title">Mercados &amp; Noticias</div>
+        <div class="sec-hdr-sub">Sesiones globales, economía macro y eventos de alto impacto</div>
+      </div>
+    </div>
+    <span class="sec-hdr-badge live" id="mkt-news-badge"><span style="width:5px;height:5px;border-radius:50%;background:#22C55E;display:inline-block"></span>Live</span>
+  </div>
   <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:11px" id="world-clocks"></div>
   <div class="card" style="margin-bottom:11px">
     <div class="hd" style="margin-bottom:9px">Sesiones — Hora Madrid</div>
@@ -6378,6 +6512,16 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 
 <!-- AFILIADOS -->
 <div class="sec" id="sec-affiliates">
+  <div class="sec-hdr">
+    <div class="sec-hdr-left">
+      <div class="sec-hdr-icon" style="background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.2)"><span class="material-symbols-outlined" style="color:#F59E0B">hub</span></div>
+      <div>
+        <div class="sec-hdr-title">Programa Afiliados</div>
+        <div class="sec-hdr-sub">Gana comisiones recurrentes refiriendo traders a SimpleTrader</div>
+      </div>
+    </div>
+    <span class="sec-hdr-badge" style="background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.22);color:#F59E0B">30% comisión</span>
+  </div>
   <!-- Hero + stats -->
   <div style="background:linear-gradient(135deg,rgba(0,119,204,.1),rgba(157,111,255,.08));border:1px solid rgba(0,119,204,.2);border-radius:12px;padding:18px 20px;margin-bottom:14px;display:flex;align-items:center;gap:18px">
     <div style="flex:1">
@@ -6504,6 +6648,15 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 
 <!-- PROFILE -->
 <div class="sec" id="sec-profile">
+  <div class="sec-hdr">
+    <div class="sec-hdr-left">
+      <div class="sec-hdr-icon"><span class="material-symbols-outlined">account_circle</span></div>
+      <div>
+        <div class="sec-hdr-title">Mi Perfil</div>
+        <div class="sec-hdr-sub">Configuración de cuenta, plan, notificaciones y preferencias</div>
+      </div>
+    </div>
+  </div>
   <div class="pg-grid">
     <div style="display:flex;flex-direction:column;gap:11px">
       <div class="card" style="text-align:center;padding:20px 16px">
