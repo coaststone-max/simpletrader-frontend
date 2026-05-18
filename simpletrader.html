@@ -4528,6 +4528,39 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
    STITCH DESIGN SYSTEM — Glass cards · Glows · Animations
    ═══════════════════════════════════════════════════════════ */
 
+/* ── KPI card top row: label left, icon right ── */
+.mc-top{
+  display:flex!important;
+  align-items:flex-start!important;
+  justify-content:space-between!important;
+  margin-bottom:12px!important;
+}
+.mc-top .ml{margin-bottom:0!important}
+.mc-top .mc-icon{margin-bottom:0!important;flex-shrink:0!important}
+.mc .mv{font-size:26px!important;font-weight:800!important;letter-spacing:-.5px!important;line-height:1!important;margin-bottom:5px!important}
+
+/* KPI ambient glow variants */
+.mc-glow-green::before{background:radial-gradient(circle at 80% 20%,rgba(34,197,94,.09) 0%,transparent 65%)!important;width:100%!important;height:100%!important;top:0!important;left:0!important}
+.mc-glow-blue::before{background:radial-gradient(circle at 80% 20%,rgba(91,124,247,.1) 0%,transparent 65%)!important;width:100%!important;height:100%!important;top:0!important;left:0!important}
+.mc-glow-green{border-color:rgba(34,197,94,.12)!important}
+.mc-glow-blue{border-color:rgba(91,124,247,.12)!important}
+.mc-glow-green:hover{border-color:rgba(34,197,94,.28)!important}
+.mc-glow-blue:hover{border-color:rgba(91,124,247,.28)!important}
+
+/* ── Rule chips (Stitch colored pills) ── */
+.rule-chip{
+  display:inline-flex!important;align-items:center!important;gap:6px!important;
+  padding:5px 12px 5px 9px!important;border-radius:20px!important;
+  background:var(--chip-bg)!important;
+  border:1px solid var(--chip-border)!important;
+  color:var(--chip-color)!important;
+  font-size:11px!important;font-weight:600!important;
+  font-family:'DM Sans',sans-serif!important;
+  white-space:nowrap!important;cursor:default!important;
+  transition:opacity .15s!important;
+}
+.rule-chip:hover{opacity:.85!important}
+
 /* Glass card — Stitch signature */
 .glass-card{
   background:rgba(8,11,22,0.85);
@@ -5242,7 +5275,7 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
   </div>
   <nav class="sb-nav">
     <div class="sg">Principal</div>
-    <button class="ni act" data-s="dashboard" onclick="nav(this)">
+    <button class="ni act" data-s="dashboard" onclick="nav(this)" style="position:relative">
       <span class="material-symbols-outlined ms-ico" style="font-variation-settings:'FILL' 1,'wght' 500">grid_view</span>
       <span class="ni-lbl">Dashboard</span>
       <span class="ni-tip">Dashboard</span>
@@ -5263,7 +5296,7 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
       <span class="ni-lbl">Journal</span>
       <span class="ni-tip">Journal</span>
     </button>
-    <div class="sg">Herramientas</div>
+    <div class="sg">Tools</div>
     <button class="ni" data-s="replicator" onclick="nav(this)">
       <span class="material-symbols-outlined ms-ico" style="font-variation-settings:'FILL' 1,'wght' 500">fork_right</span>
       <span class="ni-lbl">Replicador</span>
@@ -5287,7 +5320,7 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
       <span class="ni-lbl">Planner</span>
       <span class="ni-tip">Planner Diario</span>
     </button>
-    <div class="sg">Finanzas</div>
+    <div class="sg">Finance</div>
     <button class="ni" data-s="manager" onclick="nav(this)">
       <span class="material-symbols-outlined ms-ico" style="font-variation-settings:'FILL' 1,'wght' 400">payments</span>
       <span class="ni-lbl">Manager</span>
@@ -5305,21 +5338,21 @@ body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
       <span class="nb nb-g">MT4/5</span>
       <span class="ni-tip">Cuentas Live MT4/MT5</span>
     </button>
-    <div class="sg">Análisis</div>
+    <div class="sg">Analysis</div>
     <button class="ni" data-s="markets" onclick="nav(this)">
       <span class="material-symbols-outlined ms-ico" style="font-variation-settings:'FILL' 1,'wght' 400">language</span>
       <span class="ni-lbl">Mercados</span>
       <span class="nb nb-r" id="news-badge">4</span>
       <span class="ni-tip">Mercados &amp; Noticias</span>
     </button>
-    <div class="sg">Programa</div>
+    <div class="sg">Program</div>
     <button class="ni" data-s="affiliates" onclick="nav(this)">
       <span class="material-symbols-outlined ms-ico" style="font-variation-settings:'FILL' 1,'wght' 400">hub</span>
       <span class="ni-lbl">Afiliados</span>
       <span class="nb nb-c">$$$</span>
       <span class="ni-tip">Programa Afiliados</span>
     </button>
-    <div class="sg">Cuenta</div>
+    <div class="sg">Account</div>
     <button class="ni" data-s="profile" onclick="nav(this)">
       <span class="material-symbols-outlined ms-ico" style="font-variation-settings:'FILL' 1,'wght' 400">account_circle</span>
       <span class="ni-lbl">Mi Perfil</span>
@@ -12721,20 +12754,32 @@ function renderDashRules(){
   var el=document.getElementById('dash-rules');
   if(!el)return;
   var chips=[];
-  // Daily loss alerts across accounts
+  // DD alerts from connected accounts
   SAVED_ACCOUNTS.forEach(function(a){
     if(!a.maxDD||a.status!=='connected')return;
     var loss=Math.max(0,-(a.pnl||0));
     var pct=loss/a.maxDD*100;
-    if(pct>=80)chips.push({icon:'🔴',text:(a.accountNum||a.uid)+' DD '+pct.toFixed(0)+'%',cls:'be'});
-    else if(pct>=50)chips.push({icon:'🟡',text:(a.accountNum||a.uid)+' DD '+pct.toFixed(0)+'%',cls:'bof'});
+    if(pct>=80)chips.push({icon:'trending_down',text:(a.accountNum||a.uid)+' DD '+pct.toFixed(0)+'%',color:'#ef4444',bg:'rgba(239,68,68,.12)',border:'rgba(239,68,68,.25)'});
+    else if(pct>=50)chips.push({icon:'warning',text:(a.accountNum||a.uid)+' DD '+pct.toFixed(0)+'%',color:'#f59e0b',bg:'rgba(245,158,11,.1)',border:'rgba(245,158,11,.25)'});
   });
-  // Active pfRules alerts
-  pfRules.filter(function(r){return r.on;}).slice(0,4).forEach(function(r){
-    chips.push({icon:r.icon,text:r.lbl+': '+(r.type==='money'?'$':'')+r.val+(r.type==='percent'?'%':''),cls:'bb'});
+  // Active pfRules
+  var colors=[
+    {color:'#22c55e',bg:'rgba(34,197,94,.1)',border:'rgba(34,197,94,.25)',icon:'check_circle'},
+    {color:'#5B7CF7',bg:'rgba(91,124,247,.1)',border:'rgba(91,124,247,.25)',icon:'trending_down'},
+    {color:'#f59e0b',bg:'rgba(245,158,11,.1)',border:'rgba(245,158,11,.25)',icon:'contract'},
+    {color:'#8B5CF6',bg:'rgba(139,92,246,.1)',border:'rgba(139,92,246,.25)',icon:'notifications_off'}
+  ];
+  pfRules.filter(function(r){return r.on;}).slice(0,4).forEach(function(r,i){
+    var c=colors[i%colors.length];
+    chips.push({icon:c.icon,text:r.lbl+': '+(r.type==='money'?'$':'')+r.val+(r.type==='percent'?'%':''),color:c.color,bg:c.bg,border:c.border});
   });
   if(!chips.length){el.innerHTML='';return;}
-  el.innerHTML=chips.map(function(c){return '<span class="bdg '+c.cls+'" style="font-size:9.5px;padding:3px 9px">'+c.icon+' '+c.text+'</span>';}).join('');
+  el.innerHTML=chips.map(function(c){
+    return '<div class="rule-chip" style="--chip-color:'+c.color+';--chip-bg:'+c.bg+';--chip-border:'+c.border+'">'
+      +'<span class="material-symbols-outlined" style="font-size:13px;font-variation-settings:\'FILL\' 1">'+c.icon+'</span>'
+      +'<span>'+c.text+'</span>'
+      +'</div>';
+  }).join('');
 }
 /* ══ Latency ticker ══ */
 var _dbLatTimer=null;
@@ -12867,11 +12912,14 @@ function renderDashKPI(){
   const iconCap=mcIcon('rgba(91,124,247,.15)','<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#7a9fff" stroke-width="2" stroke-linecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2M12 12v4M10 14h4"/></svg>');
   const iconScore=mcIcon('rgba('+scoreColor.replace('var(--gn)','34,197,94').replace('var(--cy)','91,124,247').replace('var(--am)','245,158,11').replace('var(--rd)','239,68,68')+',.15)','<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="'+scoreColor+'" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg>');
   const iconWR=mcIcon(wr>=55?'rgba(34,197,94,.15)':'rgba(245,158,11,.15)','<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="'+(wr>=55?'#4ade80':'#fbbf24')+'" stroke-width="2" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>');
+  function mkCard(icon,label,value,valueCls,sub,glowCls){
+    return '<div class="mc '+(glowCls||'')+'"><div class="mc-top"><div class="ml">'+label+'</div>'+icon+'</div><div class="mv '+(valueCls||'')+'">'+value+'</div><div class="ms">'+sub+'</div></div>';
+  }
   el.innerHTML=
-    '<div class="mc">'+iconPnl+'<div class="ml">P&L Total Hoy</div><div class="mv '+(pnlUp?'up':'dn')+'">'+(pnlUp?'+':'')+' $'+Math.abs(totalPnl).toLocaleString('es-ES')+'</div><div class="ms">'+accs.length+' cuentas activas</div></div>'
-  +'<div class="mc">'+iconCap+'<div class="ml">Capital Gestionado</div><div class="mv cy">$'+(totalCap/1000).toFixed(1)+'K</div><div class="ms">'+accs.length+' broker'+(accs.length!==1?'s':'')+'</div></div>'
-  +'<div class="mc">'+iconScore+'<div class="ml">SimpleScore™</div><div class="mv" style="color:'+scoreColor+'">'+score+'</div><div class="ms" style="color:'+scoreColor+'">'+label+'</div></div>'
-  +'<div class="mc">'+iconWR+'<div class="ml">Win Rate Journal</div><div class="mv '+(wr>=55?'up':'am')+'">'+wr+'%</div><div class="ms">'+wins+'/'+trades+' trades</div></div>';
+    mkCard(iconPnl,'P&L Total Today',(pnlUp?'+':'')+' $'+Math.abs(totalPnl).toLocaleString('es-ES'),pnlUp?'up':'dn',accs.length+' cuentas activas','mc-glow-green')
+  +mkCard(iconCap,'Capital Managed','$'+(totalCap/1000).toFixed(1)+'K','cy',accs.length+' broker'+(accs.length!==1?'s':''),'mc-glow-blue')
+  +mkCard(iconScore,'SimpleScore™',score,'',label,'')
+  +mkCard(iconWR,'Win Rate Journal',wr+'%',wr>=55?'up':'am',wins+'/'+trades+' trades','');
 }
 function renderInstrBars() {
   var el = document.getElementById('instr-bars');
